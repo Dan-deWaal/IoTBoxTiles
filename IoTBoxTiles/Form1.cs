@@ -19,7 +19,8 @@ namespace IoTBoxTiles
         static HttpClient client = new HttpClient();
         static HttpResponseMessage heartbeatResponse, loginResponse;
         private static System.Timers.Timer heartbeatTimer;
-        int c = 0;
+        int c = 0; //heartbeat counter, not really necessary
+        List<Device> devices;
 
         public Form1()
         {
@@ -31,17 +32,28 @@ namespace IoTBoxTiles
             heartbeatTimer.Enabled = false;
             lbl_ServerStatus.Text = "Logging in...";
             await GetLoginAsync(txt_username.Text, txt_passwd.Text);
-            Console.WriteLine(await loginResponse.Content.ReadAsStringAsync());
-
-
-            //on success:
-            Form2 frm = new IoTBoxTiles.Form2();
-            frm.Show();
-            //this.Hide();
+            Console.WriteLine(await loginResponse.Content.ReadAsStringAsync()); // *************************
+            if (!loginResponse.IsSuccessStatusCode)
+            {   //not logged in
+                lbl_LoginStatus.Show();
+                Console.WriteLine("Not Success");
+                Err err = await loginResponse.Content.ReadAsAsync<Err>();
+                lbl_LoginStatus.Text = err.error;
+                //Console.WriteLine(err.error);
+            }
+            else
+            {   //success
+                //devices = await loginResponse.Content.ReadAsAsync<Device>();
+                Form2 frm = new IoTBoxTiles.Form2();
+                frm.Show();
+                this.Hide();
+            }
+            
         }
 
         static async Task GetLoginAsync(string email, string pass)
         {
+            client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("email", email);
             client.DefaultRequestHeaders.Add("password", pass);
             loginResponse = await client.GetAsync(@"https://iot.duality.co.nz/api/1/user/devices");
@@ -61,7 +73,7 @@ namespace IoTBoxTiles
         {
             //add links
             link_forgot.Links.Add(0,15, "https://iot.duality.co.nz/password-reset");
-            link_signup.Links.Add(0, 7, "https://iot.duality.co.nz/signup");
+            link_signup.Links.Add(0, 8, "https://iot.duality.co.nz/sign-up");
 
             //start timer
             heartbeatTimer = new System.Timers.Timer(1000);
@@ -128,5 +140,20 @@ namespace IoTBoxTiles
             }
         }
         
+    }
+    
+    public class Device
+    {
+        public bool connected { get; set; }
+        public int device_id { get; set; }
+        public string friendly_name { get; set; }
+        public int module_type { get; set; }
+        public bool online { get; set; }
+        public string url { get; set; }
+    }
+
+    public class Err
+    {
+        public string error { get; set; }
     }
 }
