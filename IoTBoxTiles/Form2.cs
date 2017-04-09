@@ -24,7 +24,11 @@ namespace IoTBoxTiles
 
         private void Form2_Load(object sender, EventArgs e)
         {
-
+            Console.WriteLine("Devices:");
+            foreach (var dev in Form1.devices)
+            {
+                Console.WriteLine(dev.friendly_name);
+            }
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)

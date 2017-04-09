@@ -11,7 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace IoTBoxTiles
@@ -22,14 +22,27 @@ namespace IoTBoxTiles
         static HttpResponseMessage heartbeatResponse, loginResponse;
         private static System.Timers.Timer heartbeatTimer;
         int c = 0; //heartbeat counter, not really necessary
-        List<Device> devices = null;
+        static public List<Device> devices = null;
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private void button1_Click(object sender, EventArgs e)
+        {
+            login();
+        }
+
+        private void OnKeyDownHandler(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                login();
+            }
+        }
+
+        private async void login()
         {
             heartbeatTimer.Enabled = false;
             lbl_ServerStatus.Text = "Logging in...";
@@ -42,17 +55,17 @@ namespace IoTBoxTiles
                 Err err = await loginResponse.Content.ReadAsAsync<Err>();
                 lbl_LoginStatus.Text = err.error;
                 //Console.WriteLine(err.error);
+                heartbeatTimer.Enabled = true;
             }
             else
             {   //success
                 var jsonString = await loginResponse.Content.ReadAsStringAsync();
                 devices = JsonConvert.DeserializeObject<List<Device>>(jsonString);
-                //Console.WriteLine(devices);
+                
                 Form2 frm = new IoTBoxTiles.Form2();
                 frm.Show();
                 this.Hide();
             }
-            
         }
 
         static async Task GetLoginAsync(string email, string pass)
@@ -87,7 +100,19 @@ namespace IoTBoxTiles
             //login stuff
             lbl_LoginStatus.Hide();
             btn_login.Enabled = false;
+
+            //ui stuff
+            //txt_username.KeyDown += new KeyEventHandler(txt_Enter);
+            //txt_username.PreviewKeyDown += txt_Enter;
         }
+
+        /*void txt_Enter(object sender, KeyEventHandler e)
+        {
+            if (e. == Keys.Enter)
+            {
+                login();
+            }
+        }*/
 
         private void HeartbeatTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
@@ -131,6 +156,7 @@ namespace IoTBoxTiles
                 btn_login.Enabled = false;
             }
         }
+
         // ************************************************************* remove ***
         private void pic_logo_Click(object sender, EventArgs e)                 //*
         {                                                                       //*      
@@ -150,6 +176,7 @@ namespace IoTBoxTiles
                 btn_login.Enabled = false;
             }
         }
+
         
     }
     
