@@ -11,6 +11,8 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace IoTBoxTiles
 {
@@ -20,7 +22,7 @@ namespace IoTBoxTiles
         static HttpResponseMessage heartbeatResponse, loginResponse;
         private static System.Timers.Timer heartbeatTimer;
         int c = 0; //heartbeat counter, not really necessary
-        List<Device> devices;
+        List<Device> devices = null;
 
         public Form1()
         {
@@ -43,7 +45,9 @@ namespace IoTBoxTiles
             }
             else
             {   //success
-                //devices = await loginResponse.Content.ReadAsAsync<Device>();
+                var jsonString = await loginResponse.Content.ReadAsStringAsync();
+                devices = JsonConvert.DeserializeObject<List<Device>>(jsonString);
+                //Console.WriteLine(devices);
                 Form2 frm = new IoTBoxTiles.Form2();
                 frm.Show();
                 this.Hide();
@@ -127,6 +131,13 @@ namespace IoTBoxTiles
                 btn_login.Enabled = false;
             }
         }
+        // ************************************************************* remove ***
+        private void pic_logo_Click(object sender, EventArgs e)                 //*
+        {                                                                       //*      
+            txt_username.Text = "hunter2@example.com";                          //*
+            txt_passwd.Text = "12345678";                                       //*
+        }                                                                       //*
+        // ************************************************************************
 
         private void txt_passwd_TextChanged_1(object sender, EventArgs e)
         {

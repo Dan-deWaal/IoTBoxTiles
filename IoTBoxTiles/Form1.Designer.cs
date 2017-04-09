@@ -182,6 +182,7 @@
             this.pic_logo.Size = new System.Drawing.Size(1045, 170);
             this.pic_logo.TabIndex = 1;
             this.pic_logo.TabStop = false;
+            this.pic_logo.Click += new System.EventHandler(this.pic_logo_Click);
             // 
             // statusStrip1
             // 
@@ -220,7 +221,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(794, 481);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "IoTTiles";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
