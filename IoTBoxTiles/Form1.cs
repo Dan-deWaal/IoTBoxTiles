@@ -62,7 +62,7 @@ namespace IoTBoxTiles
                 var jsonString = await loginResponse.Content.ReadAsStringAsync();
                 devices = JsonConvert.DeserializeObject<List<Device>>(jsonString);
                 
-                Form2 frm = new IoTBoxTiles.Form2();
+                Form2 frm = new IoTBoxTiles.Form2(devices);
                 frm.Show();
                 this.Hide();
             }

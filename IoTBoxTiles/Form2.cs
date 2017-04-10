@@ -12,22 +12,34 @@ namespace IoTBoxTiles
 {
     public partial class Form2 : Form
     {
-        public Form2()
+        List<Device> devices;
+        String[] devname = { "SmartPlug", "Bluetooth", "USB", "Infrared", "RS232", "Multiboard" };
+
+        public Form2(List<Device> devs)
         {
             InitializeComponent();
+            devices = devs;
         }
-
-        private void statusStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
+        
         private void Form2_Load(object sender, EventArgs e)
         {
             Console.WriteLine("Devices:");
-            foreach (var dev in Form1.devices)
+            foreach (var dev in devices)
             {
                 Console.WriteLine(dev.friendly_name);
+                ListViewItem lvi = new ListViewItem(dev.friendly_name);
+                if (dev.module_type >= 0 && dev.module_type < devname.Length)
+                {
+                    lvi.SubItems.Add(devname[dev.module_type]);
+                }
+                else
+                {
+                    lvi.SubItems.Add("unknown");
+                }
+                //Fix to Icons
+                lvi.SubItems.Add(dev.online.ToString());
+                lvi.SubItems.Add(dev.connected.ToString());
+                lv_deviceList.Items.Add(lvi);
             }
         }
 
@@ -41,6 +53,11 @@ namespace IoTBoxTiles
             //{
                 Application.Exit();
             //}
+        }
+
+        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
