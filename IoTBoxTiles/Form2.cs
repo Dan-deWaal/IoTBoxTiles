@@ -14,7 +14,7 @@ namespace IoTBoxTiles
     {
         List<Device> devices;
         List<GroupBox> groups = new List<GroupBox>();
-        String[] devname = { "SmartPlug", "Bluetooth", "USB", "Infrared", "RS232", "Multiboard" };
+        String[] devtype = { "unknown", "SmartPlug", "Bluetooth", "USB", "Infrared", "Industrial", "Multiboard" };
 
         public Form2(List<Device> devs)
         {
@@ -25,30 +25,66 @@ namespace IoTBoxTiles
         private void Form2_Load(object sender, EventArgs e)
         {
             Console.WriteLine("Devices:");
+            tv_DeviceList.BeginUpdate();
+            tv_DeviceList.Nodes.Add("Devices");
+            tv_DeviceList.Nodes[0].Tag = "Devices";
+            tv_DeviceList.Nodes[0].Nodes.Add("Online");
+            tv_DeviceList.Nodes[0].Nodes[0].Tag = "Online";
+            tv_DeviceList.Nodes[0].Nodes.Add("Offline");
+            tv_DeviceList.Nodes[0].Nodes[1].Tag = "Offline";
             foreach (var dev in devices)
             {
                 Console.WriteLine(dev.friendly_name);
-                ListViewItem lvi = new ListViewItem(dev.friendly_name);
-                if (dev.module_type >= 0 && dev.module_type < devname.Length)
+                Console.WriteLine(dev.device_id.ToString());
+                if (dev.online)
                 {
-                    lvi.SubItems.Add(devname[dev.module_type]);
+                    tv_DeviceList.Nodes[0].Nodes[0].Nodes.Add(dev.friendly_name);
+                    tv_DeviceList.Nodes[0].Nodes[0].LastNode.Tag = dev.device_id.ToString();
                 }
                 else
                 {
-                    lvi.SubItems.Add("unknown");
+                    tv_DeviceList.Nodes[0].Nodes[1].Nodes.Add(dev.friendly_name);
+                    tv_DeviceList.Nodes[0].Nodes[1].LastNode.Tag = dev.device_id.ToString();
                 }
-                //Fix to Icons
-                lvi.SubItems.Add(dev.online.ToString());
-                lvi.SubItems.Add(dev.connected.ToString());
-                lv_deviceList.Items.Add(lvi);
-
+                
                 GroupBox grp = new GroupBox();
+                //grp.Text = dev.friendly_name + "(" + devtype[dev.module_type] + ")";
                 grp.Text = dev.friendly_name;
                 grp.Name = dev.friendly_name;
+                grp.Width = 240;
+                grp.Height = 140;
                 grp.Click += new System.EventHandler(this.groupClick);
+                grp.Tag = dev.device_id;
+
+                GroupBox single = new GroupBox();
+                single.Text = dev.friendly_name;
+                single.Name = dev.friendly_name;
+                single.Dock = DockStyle.Fill;
+                single.Tag = dev.device_id;
+
+                switch (dev.module_type)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    default:
+                        break;
+                }
+
                 groups.Add(grp);
                 flowLayoutPanel1.Controls.Add(grp);
             }
+            tv_DeviceList.Nodes[0].ExpandAll();
+            tv_DeviceList.EndUpdate();
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
@@ -62,17 +98,16 @@ namespace IoTBoxTiles
                 Application.Exit();
             //}
         }
-
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-            //flowLayoutPanel1.Container.Add(new GroupBox());
-        }
-
+        
         private void groupClick(object sender, EventArgs e)
         {
             GroupBox grp = sender as GroupBox;
             Console.WriteLine(grp.Text);
+        }
+
+        private void tv_DeviceList_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            Console.WriteLine(e.Node.Tag);
         }
     }
 }
