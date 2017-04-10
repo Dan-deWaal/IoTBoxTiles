@@ -13,6 +13,7 @@ namespace IoTBoxTiles
     public partial class Form2 : Form
     {
         List<Device> devices;
+        List<GroupBox> groups = new List<GroupBox>();
         String[] devname = { "SmartPlug", "Bluetooth", "USB", "Infrared", "RS232", "Multiboard" };
 
         public Form2(List<Device> devs)
@@ -40,6 +41,13 @@ namespace IoTBoxTiles
                 lvi.SubItems.Add(dev.online.ToString());
                 lvi.SubItems.Add(dev.connected.ToString());
                 lv_deviceList.Items.Add(lvi);
+
+                GroupBox grp = new GroupBox();
+                grp.Text = dev.friendly_name;
+                grp.Name = dev.friendly_name;
+                grp.Click += new System.EventHandler(this.groupClick);
+                groups.Add(grp);
+                flowLayoutPanel1.Controls.Add(grp);
             }
         }
 
@@ -58,6 +66,13 @@ namespace IoTBoxTiles
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
+            //flowLayoutPanel1.Container.Add(new GroupBox());
+        }
+
+        private void groupClick(object sender, EventArgs e)
+        {
+            GroupBox grp = sender as GroupBox;
+            Console.WriteLine(grp.Text);
         }
     }
 }
