@@ -5,13 +5,12 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading;
-//using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace IoTBoxTiles
@@ -21,7 +20,6 @@ namespace IoTBoxTiles
         static HttpClient client = new HttpClient();
         static HttpResponseMessage heartbeatResponse, loginResponse;
         private static System.Timers.Timer heartbeatTimer;
-        int c = 0; //heartbeat counter, not really necessary
         static public List<Device> devices = null;
 
         public Form1()
@@ -118,7 +116,6 @@ namespace IoTBoxTiles
         {
             //throw new NotImplementedException();
             GetHeartbeatAsync();
-            c++;
             try
             {
                 if (heartbeatResponse.IsSuccessStatusCode)
