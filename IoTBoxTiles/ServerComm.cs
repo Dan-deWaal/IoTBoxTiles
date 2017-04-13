@@ -18,7 +18,7 @@ namespace IoTBoxTiles
         public string heartbeatURL { get; set; }
         public string heartbeat { get; set; }
 
-        ServerComm() {
+        public ServerComm() {
             client = new HttpClient();
             heartbeatURL = @"https://iot.duality.co.nz/api/1/heartbeat";
         }

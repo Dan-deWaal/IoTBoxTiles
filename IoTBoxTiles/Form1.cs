@@ -22,6 +22,8 @@ namespace IoTBoxTiles
         private static System.Timers.Timer heartbeatTimer;
         static public List<Device> devices = null;
 
+        private ServerComm servercomm = new ServerComm();
+
         public Form1()
         {
             InitializeComponent();
