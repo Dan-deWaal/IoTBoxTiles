@@ -14,7 +14,7 @@ namespace IoTBoxTiles
     class ServerComm
     {
         private HttpClient client;
-        private HttpResponseMessage heartbeatResponse, loginResponse;
+        public HttpResponseMessage heartbeatResponse, loginResponse;
         public string heartbeatURL { get; set; }
         public string loginURL { get; set; }
 

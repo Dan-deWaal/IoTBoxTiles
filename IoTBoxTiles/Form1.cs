@@ -18,7 +18,6 @@ namespace IoTBoxTiles
     public partial class Form1 : Form
     {
         static HttpClient client = new HttpClient();
-        static HttpResponseMessage loginResponse;
         static public List<Device> devices = null;
 
         private System.Windows.Forms.Timer timer;
@@ -74,38 +73,31 @@ namespace IoTBoxTiles
 
         private async void login()
         {
-            //heartbeatTimer.Enabled = false;
             lbl_ServerStatus.Text = "Logging in...";
-            await GetLoginAsync(txt_username.Text, txt_passwd.Text);
-            Console.WriteLine(await loginResponse.Content.ReadAsStringAsync()); // *************************
-            if (!loginResponse.IsSuccessStatusCode)
-            {   //not logged in
-                lbl_LoginStatus.Show();
-                Console.WriteLine("Not Success");
-                Err err = await loginResponse.Content.ReadAsAsync<Err>(); // surround with try catch block
-                lbl_LoginStatus.Text = err.error;
-                //Console.WriteLine(err.error);
-                //heartbeatTimer.Enabled = true;
-            }
-            else
-            {   //success
-                var jsonString = await loginResponse.Content.ReadAsStringAsync();
-                devices = JsonConvert.DeserializeObject<List<Device>>(jsonString);
-                
-                Form2 frm = new IoTBoxTiles.Form2(devices);
-                frm.Show();
-                this.Hide();
+            int loginstat = await servercomm.LoginAsync(txt_username.Text, txt_passwd.Text);
+            switch (loginstat)
+            {
+                case 0: //server not connected
+                    Console.WriteLine("Server Problem");
+                    break;
+                case 1: //success
+                    Console.WriteLine("Success");
+                    var jsonString = await servercomm.loginResponse.Content.ReadAsStringAsync();
+                    devices = JsonConvert.DeserializeObject<List<Device>>(jsonString);
+
+                    Form2 frm = new IoTBoxTiles.Form2(devices);
+                    frm.Show();
+                    this.Hide();
+                    break;
+                case 2: //fail
+                    lbl_LoginStatus.Show();
+                    Console.WriteLine("Not Success");
+                    Err err = await servercomm.loginResponse.Content.ReadAsAsync<Err>(); // should never throw excptn because caught in servercomm.LoginAsync()
+                    lbl_LoginStatus.Text = err.error;
+                    break;
             }
         }
-
-        static async Task GetLoginAsync(string email, string pass)
-        {
-            client.DefaultRequestHeaders.Clear();
-            client.DefaultRequestHeaders.Add("email", email);
-            client.DefaultRequestHeaders.Add("password", pass);
-            loginResponse = await client.GetAsync(@"https://iot.duality.co.nz/api/1/user/devices");
-        }
-
+        
         private void link_forgot_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(e.Link.LinkData.ToString());
@@ -118,7 +110,7 @@ namespace IoTBoxTiles
         
         private async void HeartbeatTimer(object sender, EventArgs e)
         {
-            var serverstat = await servercomm.GetHeartbeatAsync();
+            int serverstat = await servercomm.GetHeartbeatAsync();
             switch (serverstat)
             {
                 case 0:
