@@ -18,9 +18,10 @@ namespace IoTBoxTiles
     public partial class Form1 : Form
     {
         static HttpClient client = new HttpClient();
-        static HttpResponseMessage heartbeatResponse, loginResponse;
-        private static System.Timers.Timer heartbeatTimer;
+        static HttpResponseMessage loginResponse;
         static public List<Device> devices = null;
+
+        private System.Windows.Forms.Timer timer;
 
         private ServerComm servercomm = new ServerComm();
 
@@ -28,6 +29,35 @@ namespace IoTBoxTiles
         {
             InitializeComponent();
         }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            //add links
+            link_forgot.Links.Add(0, 15, "https://iot.duality.co.nz/password-reset");
+            link_signup.Links.Add(0, 8, "https://iot.duality.co.nz/sign-up");
+
+            //start timer
+            timer = new System.Windows.Forms.Timer();
+            timer.Interval = 1000;
+            timer.Tick += HeartbeatTimer;
+            timer.Start();
+
+            //login stuff
+            lbl_LoginStatus.Hide();
+            btn_login.Enabled = false;
+
+            //enter key
+            //txt_username.KeyDown += new KeyEventHandler(txt_Enter);
+            //txt_username.PreviewKeyDown += txt_Enter;
+        }
+
+        /*void txt_Enter(object sender, KeyEventHandler e)
+        {
+            if (e. == Keys.Enter)
+            {
+                login();
+            }
+        }*/
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -44,7 +74,7 @@ namespace IoTBoxTiles
 
         private async void login()
         {
-            heartbeatTimer.Enabled = false;
+            //heartbeatTimer.Enabled = false;
             lbl_ServerStatus.Text = "Logging in...";
             await GetLoginAsync(txt_username.Text, txt_passwd.Text);
             Console.WriteLine(await loginResponse.Content.ReadAsStringAsync()); // *************************
@@ -52,10 +82,10 @@ namespace IoTBoxTiles
             {   //not logged in
                 lbl_LoginStatus.Show();
                 Console.WriteLine("Not Success");
-                Err err = await loginResponse.Content.ReadAsAsync<Err>();
+                Err err = await loginResponse.Content.ReadAsAsync<Err>(); // surround with try catch block
                 lbl_LoginStatus.Text = err.error;
                 //Console.WriteLine(err.error);
-                heartbeatTimer.Enabled = true;
+                //heartbeatTimer.Enabled = true;
             }
             else
             {   //success
@@ -85,63 +115,22 @@ namespace IoTBoxTiles
         {
             System.Diagnostics.Process.Start(e.Link.LinkData.ToString());
         }
-
-        private void Form1_Load(object sender, EventArgs e)
+        
+        private async void HeartbeatTimer(object sender, EventArgs e)
         {
-            //add links
-            link_forgot.Links.Add(0,15, "https://iot.duality.co.nz/password-reset");
-            link_signup.Links.Add(0, 8, "https://iot.duality.co.nz/sign-up");
-
-            //start timer
-            heartbeatTimer = new System.Timers.Timer(1000);
-            heartbeatTimer.Elapsed += HeartbeatTimer_Elapsed;
-            heartbeatTimer.Enabled = true; //start timer
-
-            //login stuff
-            lbl_LoginStatus.Hide();
-            btn_login.Enabled = false;
-
-            //ui stuff
-            //txt_username.KeyDown += new KeyEventHandler(txt_Enter);
-            //txt_username.PreviewKeyDown += txt_Enter;
-        }
-
-        /*void txt_Enter(object sender, KeyEventHandler e)
-        {
-            if (e. == Keys.Enter)
+            var serverstat = await servercomm.GetHeartbeatAsync();
+            switch (serverstat)
             {
-                login();
-            }
-        }*/
-
-        private void HeartbeatTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            //throw new NotImplementedException();
-            GetHeartbeatAsync();
-            try
-            {
-                if (heartbeatResponse.IsSuccessStatusCode)
-                {
-                    //Console.WriteLine(c + ": Connected");
+                case 0:
+                    lbl_ServerStatus.Text = "Not Connected";
+                    break;
+                case 1:
                     lbl_ServerStatus.Text = "Connected";
-                }
-                else
-                {
-                    //Console.WriteLine(c + ": Server Failure");
+                    break;
+                case 2:
                     lbl_ServerStatus.Text = "Server Failure";
-                }
+                    break;
             }
-            catch
-            {
-                //Console.WriteLine(c + ": Not Connected");
-                lbl_ServerStatus.Text = "Not Connected";
-            }
-            
-        }
-
-        static async Task GetHeartbeatAsync()
-        {
-            heartbeatResponse = await client.GetAsync(@"https://iot.duality.co.nz/api/1/heartbeat");
         }
         
         private void txt_username_TextChanged(object sender, EventArgs e)
@@ -179,18 +168,4 @@ namespace IoTBoxTiles
         
     }
     
-    public class Device
-    {
-        public bool connected { get; set; }
-        public int device_id { get; set; }
-        public string friendly_name { get; set; }
-        public int module_type { get; set; }
-        public bool online { get; set; }
-        public string url { get; set; }
-    }
-
-    public class Err
-    {
-        public string error { get; set; }
-    }
 }
