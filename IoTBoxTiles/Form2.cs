@@ -29,6 +29,7 @@ namespace IoTBoxTiles
         private void Form2_Load(object sender, EventArgs e)
         {
             Console.WriteLine("Devices:");
+            //tv_ == treeview_
             tv_DeviceList.BeginUpdate();
             tv_DeviceList.Nodes.Add("Devices");
             tv_DeviceList.Nodes[0].Tag = "Devices";
@@ -69,17 +70,35 @@ namespace IoTBoxTiles
 
                 switch (dev.module_type)
                 {
-                    case 0:
+                    case 0: //unknown
                         break;
-                    case 1:
+                    case 1: //Smartplug only
+                        //Small: Power Toggle
+                        //Big: Current Consumption
                         break;
-                    case 2:
+                    case 2: //Bluetooth
+                        //Small: Power Toggle, Connect
+                        //Big: Current Consumption
                         break;
-                    case 3:
+                    case 3: //USB
+                        //Small: Power Toggle, Connect
+                        //Big: Current Consumption
                         break;
-                    case 4:
+                    case 4: //Infrared
+                        //Small: Power Toggle, Common buttons
+                        //Big: Current Consumption, Repeater Toggle, Change Common buttons, All buttons
                         break;
-                    case 5:
+                    case 5: //Industrial
+                        //Small: Power Toggle, Connect, COM Port
+                        //Big: Current Consumption, Serial Monitor, Monitor settings
+                        break;
+                    case 6: //Multiboard
+                        //Small: Power Toggle, 4 x Power Toggle w/ names
+                        //Big: Current Consumption, 5 x Current Consumption, Naming
+                        break;
+                    case 7: //Audio
+                        //Small: Power Toggle, Connect Speaker, Connect Mic
+                        //Big: Current Consumption, VU Meters, Connect to IoTBoxAudio, Connect to SIP
                         break;
                     default:
                         break;
@@ -92,17 +111,6 @@ namespace IoTBoxTiles
             tv_DeviceList.EndUpdate();
         }
 
-        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            //DialogResult result = MessageBox.Show("Really quit?", string.Empty, MessageBoxButtons.YesNo);
-            //if (result == DialogResult.No)
-            //{
-            //    e.Cancel = true;
-            //} else
-            //{
-            Application.Exit();
-            //}
-        }
 
         private void groupClick(object sender, EventArgs e)
         {
@@ -167,5 +175,18 @@ namespace IoTBoxTiles
             }
 
         }
+
+        private void Form2_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            //DialogResult result = MessageBox.Show("Really quit?", string.Empty, MessageBoxButtons.YesNo);
+            //if (result == DialogResult.No)
+            //{
+            //    e.Cancel = true;
+            //} else
+            //{
+            Application.Exit();
+            //}
+        }
+
     }
 }

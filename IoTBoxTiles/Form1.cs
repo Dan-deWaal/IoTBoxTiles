@@ -17,7 +17,6 @@ namespace IoTBoxTiles
 {
     public partial class Form1 : Form
     {
-        static HttpClient client = new HttpClient();
         static public List<Device> devices = null;
 
         private System.Windows.Forms.Timer timer;
@@ -82,7 +81,7 @@ namespace IoTBoxTiles
                     break;
                 case 1: //success
                     Console.WriteLine("Success");
-                    var jsonString = await servercomm.loginResponse.Content.ReadAsStringAsync();
+                    var jsonString = await servercomm.loginResponse.Content.ReadAsStringAsync(); // should never throw excptn because caught in servercomm.LoginAsync()
                     devices = JsonConvert.DeserializeObject<List<Device>>(jsonString);
 
                     Form2 frm = new IoTBoxTiles.Form2(devices);
