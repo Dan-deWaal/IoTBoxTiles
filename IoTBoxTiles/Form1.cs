@@ -73,15 +73,15 @@ namespace IoTBoxTiles
         private async void login()
         {
             lbl_ServerStatus.Text = "Logging in...";
-            int loginstat = await servercomm.LoginAsync(txt_username.Text, txt_passwd.Text);
-            switch (loginstat)
+            Tuple<int, HttpResponseMessage> loginstat = await servercomm.GetAsync(servercomm.urlBuilder("login"), txt_username.Text, txt_passwd.Text);
+            switch (loginstat.Item1)
             {
                 case 0: //server not connected
                     Console.WriteLine("Server Problem");
                     break;
                 case 1: //success
                     Console.WriteLine("Success");
-                    var jsonString = await servercomm.loginResponse.Content.ReadAsStringAsync(); // should never throw excptn because caught in servercomm.LoginAsync()
+                    var jsonString = await loginstat.Item2.Content.ReadAsStringAsync(); // should never throw excptn because caught in servercomm.LoginAsync()
                     devices = JsonConvert.DeserializeObject<List<Device>>(jsonString);
 
                     Form2 frm = new IoTBoxTiles.Form2(devices);
@@ -91,7 +91,7 @@ namespace IoTBoxTiles
                 case 2: //fail
                     lbl_LoginStatus.Show();
                     Console.WriteLine("Not Success");
-                    Err err = await servercomm.loginResponse.Content.ReadAsAsync<Err>(); // should never throw excptn because caught in servercomm.LoginAsync()
+                    Err err = await loginstat.Item2.Content.ReadAsAsync<Err>(); // should never throw excptn because caught in servercomm.LoginAsync()
                     lbl_LoginStatus.Text = err.error;
                     break;
             }
@@ -109,8 +109,8 @@ namespace IoTBoxTiles
         
         private async void HeartbeatTimer(object sender, EventArgs e)
         {
-            int serverstat = await servercomm.GetHeartbeatAsync();
-            switch (serverstat)
+            Tuple<int, HttpResponseMessage> serverstat = await servercomm.GetAsync(servercomm.urlBuilder("heartbeat"));
+            switch (serverstat.Item1)
             {
                 case 0:
                     lbl_ServerStatus.Text = "Not Connected";

@@ -14,61 +14,60 @@ namespace IoTBoxTiles
     class ServerComm
     {
         private HttpClient client;
-        public HttpResponseMessage heartbeatResponse, loginResponse;
-        public string heartbeatURL { get; set; }
-        public string loginURL { get; set; }
 
         public ServerComm() {
             client = new HttpClient();
-            heartbeatURL = @"https://iot.duality.co.nz/api/1/heartbeat";
-            loginURL     = @"https://iot.duality.co.nz/api/1/user/devices";
         }
 
-        public async Task<int> GetHeartbeatAsync()
+        public string urlBuilder(string req)
         {
-            int result = 0;
-            heartbeatResponse = await client.GetAsync(heartbeatURL);
-            try
+            string result = @"https://iot.duality.co.nz/api/1/device/"+req+@"/info";
+
+            if (req.Equals("heartbeat", StringComparison.OrdinalIgnoreCase))
             {
-                if (heartbeatResponse.IsSuccessStatusCode)
-                {
-                    result = 1;
-                }
-                else
-                {
-                    result = 2;
-                }
+                result = @"https://iot.duality.co.nz/api/1/heartbeat";
             }
-            catch
+            if (req.Equals("login", StringComparison.OrdinalIgnoreCase))
             {
-                result = 0;
+                result = @"https://iot.duality.co.nz/api/1/user/devices";
             }
-            return result; //0 = Not Connected,  1 = Connected,  2 = Server Failure.
+            return result;
         }
 
-        public async Task<int> LoginAsync(string email, string pass)
+        public async Task<Tuple<int, HttpResponseMessage>> GetAsync(string url, string email, string passwd)
         {
             int result = 0;
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("email", email);
-            client.DefaultRequestHeaders.Add("password", pass);
-            loginResponse = await client.GetAsync(loginURL);
+            client.DefaultRequestHeaders.Add("password", passwd);
+            HttpResponseMessage getResponse = await client.GetAsync(url);
             try
             {
-                if (loginResponse.IsSuccessStatusCode)
-                {
-                    result = 1;
-                }
-                else
-                {
-                    result = 2;
-                }
+                result = getResponse.IsSuccessStatusCode ? 1 : 2;
             }
             catch
             {
                 result = 0;
             }
-            return result; //0 = Not Connected,  1 = Connected,  2 = Server Failure.
+            //result:  0 = Not Connected,  1 = Connected,  2 = Server Failure.
+            return Tuple.Create(result, getResponse);
         }
+
+        public async Task<Tuple<int, HttpResponseMessage>> GetAsync(string url)
+        {
+            int result = 0;
+            client.DefaultRequestHeaders.Clear();
+            HttpResponseMessage getResponse = await client.GetAsync(url);
+            try
+            {
+                result = getResponse.IsSuccessStatusCode ? 1 : 2;
+            }
+            catch
+            {
+                result = 0;
+            }
+            return Tuple.Create(result, getResponse);
+        }
+        
     }
 }

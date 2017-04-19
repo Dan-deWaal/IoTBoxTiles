@@ -18,7 +18,7 @@ namespace IoTBoxTiles
         List<GroupBox> shownGroups = new List<GroupBox>();
 
         //this should be obtained from the server
-        String[] devtype = { "unknown", "SmartPlug", "Bluetooth", "USB", "Infrared", "Industrial", "Multiboard" };
+        String[] devtype = { "unknown", "SmartPlug", "Bluetooth", "USB", "Infrared", "Industrial", "Multiboard", "Audio" };
 
         public Form2(List<Device> devs)
         {

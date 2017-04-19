@@ -16,9 +16,12 @@ namespace IoTBoxTiles
         public bool online { get; set; }
         public string url { get; set; }
 
+        //local IP
+        //local Port
+
+
         //Unconnected (non-realtime) Data
         public bool power { get; set; }
-        public bool superconn { get; set; }
         public bool spkrconn { get; set; }
         public bool micconn { get; set; }
         public string IoTBoxAudio { get; set; }
