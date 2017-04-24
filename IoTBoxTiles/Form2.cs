@@ -41,6 +41,8 @@ namespace IoTBoxTiles
             {
                 Console.WriteLine(dev.friendly_name);
                 Console.WriteLine(dev.device_id.ToString());
+                Console.WriteLine(dev.url);
+                Console.WriteLine(dev.url.GetType());
                 if (dev.online)
                 {
                     tv_DeviceList.Nodes[0].Nodes[0].Nodes.Add(dev.friendly_name);

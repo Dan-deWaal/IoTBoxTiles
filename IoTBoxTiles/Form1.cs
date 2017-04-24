@@ -73,7 +73,7 @@ namespace IoTBoxTiles
         private async void login()
         {
             lbl_ServerStatus.Text = "Logging in...";
-            Tuple<int, HttpResponseMessage> loginstat = await servercomm.GetAsync(servercomm.urlBuilder("login"), txt_username.Text, txt_passwd.Text);
+            Tuple<int, HttpResponseMessage> loginstat = await servercomm.GetAsync(servercomm.login, txt_username.Text, txt_passwd.Text);
             switch (loginstat.Item1)
             {
                 case 0: //server not connected
@@ -109,7 +109,7 @@ namespace IoTBoxTiles
         
         private async void HeartbeatTimer(object sender, EventArgs e)
         {
-            Tuple<int, HttpResponseMessage> serverstat = await servercomm.GetAsync(servercomm.urlBuilder("heartbeat"));
+            Tuple<int, HttpResponseMessage> serverstat = await servercomm.GetAsync(servercomm.heartbeat);
             switch (serverstat.Item1)
             {
                 case 0:

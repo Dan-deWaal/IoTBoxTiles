@@ -14,26 +14,15 @@ namespace IoTBoxTiles
     class ServerComm
     {
         private HttpClient client;
+        public string heartbeat { get; set; }
+        public string login { get; set; }
 
         public ServerComm() {
             client = new HttpClient();
+            heartbeat = @"https://iot.duality.co.nz/api/1/heartbeat";
+            login = @"https://iot.duality.co.nz/api/1/user/devices";
         }
-
-        public string urlBuilder(string req)
-        {
-            string result = @"https://iot.duality.co.nz/api/1/device/"+req+@"/info";
-
-            if (req.Equals("heartbeat", StringComparison.OrdinalIgnoreCase))
-            {
-                result = @"https://iot.duality.co.nz/api/1/heartbeat";
-            }
-            if (req.Equals("login", StringComparison.OrdinalIgnoreCase))
-            {
-                result = @"https://iot.duality.co.nz/api/1/user/devices";
-            }
-            return result;
-        }
-
+        
         public async Task<Tuple<int, HttpResponseMessage>> GetAsync(string url, string email, string passwd)
         {
             int result = 0;
