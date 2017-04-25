@@ -30,10 +30,12 @@
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.lbl_status = new System.Windows.Forms.ToolStripStatusLabel();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tv_DeviceList = new System.Windows.Forms.TreeView();
+            this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.tableLayoutPanel1.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -58,11 +60,19 @@
             // statusStrip1
             // 
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.statusStrip1.Location = new System.Drawing.Point(0, 597);
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.lbl_status});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 594);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1189, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1189, 25);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
+            // 
+            // lbl_status
+            // 
+            this.lbl_status.Name = "lbl_status";
+            this.lbl_status.Size = new System.Drawing.Size(47, 20);
+            this.lbl_status.Text = "status";
             // 
             // splitContainer1
             // 
@@ -83,15 +93,6 @@
             this.splitContainer1.SplitterDistance = 325;
             this.splitContainer1.TabIndex = 1;
             // 
-            // flowLayoutPanel1
-            // 
-            this.flowLayoutPanel1.AutoScroll = true;
-            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(854, 583);
-            this.flowLayoutPanel1.TabIndex = 0;
-            // 
             // tv_DeviceList
             // 
             this.tv_DeviceList.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -103,6 +104,15 @@
             this.tv_DeviceList.Size = new System.Drawing.Size(325, 583);
             this.tv_DeviceList.TabIndex = 0;
             this.tv_DeviceList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_DeviceList_AfterSelect);
+            // 
+            // flowLayoutPanel1
+            // 
+            this.flowLayoutPanel1.AutoScroll = true;
+            this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            this.flowLayoutPanel1.Name = "flowLayoutPanel1";
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(854, 583);
+            this.flowLayoutPanel1.TabIndex = 0;
             // 
             // Form2
             // 
@@ -118,6 +128,8 @@
             this.Load += new System.EventHandler(this.Form2_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -133,5 +145,6 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.TreeView tv_DeviceList;
+        private System.Windows.Forms.ToolStripStatusLabel lbl_status;
     }
 }

@@ -18,9 +18,7 @@ namespace IoTBoxTiles
     public partial class Form1 : Form
     {
         static public List<Device> devices = null;
-
         private System.Windows.Forms.Timer timer;
-
         private ServerComm servercomm = new ServerComm();
 
         public Form1()
@@ -83,8 +81,8 @@ namespace IoTBoxTiles
                     Console.WriteLine("Success");
                     var jsonString = await loginstat.Item2.Content.ReadAsStringAsync(); // should never throw excptn because caught in servercomm.LoginAsync()
                     devices = JsonConvert.DeserializeObject<List<Device>>(jsonString);
-
-                    Form2 frm = new IoTBoxTiles.Form2(devices);
+                    
+                    Form2 frm = new IoTBoxTiles.Form2(devices, txt_username.Text, txt_passwd.Text);
                     frm.Show();
                     this.Hide();
                     break;
