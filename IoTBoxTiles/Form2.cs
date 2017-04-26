@@ -15,40 +15,122 @@ namespace IoTBoxTiles
 {
     public partial class Form2 : Form
     {
+        List<DeviceList> devicelist = new List<DeviceList>();
         List<Device> devices = new List<Device>();
-        List<IndDevice> ind_devices = new List<IndDevice>();
-        List<GroupBox> groups = new List<GroupBox>();
-        List<GroupBox> singles = new List<GroupBox>();
-        List<GroupBox> shownGroups = new List<GroupBox>();
         private ServerComm servercomm = new ServerComm();
         private string username, passwd;
 
         //this should be obtained from the server
         String[] devtype = { "unknown", "SmartPlug", "Bluetooth", "USB", "Infrared", "Industrial", "Multiboard", "Audio" };
 
-        public Form2(List<Device> devs, string u, string p)
+        public Form2(List<DeviceList> devs, string u, string p)
         {
             InitializeComponent();
-            devices = devs;
+            devicelist = devs;
             username = u;
             passwd = p;
         }
 
-        private async void Form2_Load(object sender, EventArgs e)
+        private void buildTreeView()
         {
-            Console.WriteLine("Devices:");
+            Console.WriteLine("Building TreeView...");
             //tv_ == treeview_
             tv_DeviceList.BeginUpdate();
+            tv_DeviceList.Nodes.Clear();
             tv_DeviceList.Nodes.Add("Devices");
             tv_DeviceList.Nodes[0].Tag = "Devices";
             tv_DeviceList.Nodes[0].Nodes.Add("Online");
             tv_DeviceList.Nodes[0].Nodes[0].Tag = "Online";
             tv_DeviceList.Nodes[0].Nodes.Add("Offline");
             tv_DeviceList.Nodes[0].Nodes[1].Tag = "Offline";
+            foreach (var dev in devicelist)
+            {
+                if (dev.online)
+                {
+                    tv_DeviceList.Nodes[0].Nodes[0].Nodes.Add(dev.friendly_name);
+                }
+                else
+                {
+                    tv_DeviceList.Nodes[0].Nodes[1].Nodes.Add(dev.friendly_name);
+                }
+            }
+            tv_DeviceList.Nodes[0].ExpandAll();
+            tv_DeviceList.EndUpdate();
+        }
 
-            lbl_status.Text = "Downloading devices..."; //maybe add a progress bar?
+        private void createDevices()
+        {
+            Console.WriteLine("Creating Device Objects...");
+            foreach (var dev in devicelist)
+            {
+                switch (dev.module_type)
+                {
+                    case 0: //unknown
+                        break;
+                    case 1: // *** Smartplug ***
+                        SmartPlug smartplug = new SmartPlug();
+                        devices.Add(smartplug);
+                        break;
+                    case 2: // *** Bluetooth ***
+                        Bluetooth bluetooth = new Bluetooth();
+                        devices.Add(bluetooth);
+                        break;
+                    case 3: // *** USB ***
+                        USB usb = new USB();
+                        devices.Add(usb);
+                        break;
+                    case 4: // *** Infrared ***
+                        Infrared infrared = new Infrared();
+                        devices.Add(infrared);
+                        break;
+                    case 5: // *** Industrial ***
+                        Industrial industrial = new Industrial();
+                        devices.Add(industrial);
+                        break;
+                    case 6: // *** Multiboard ***
+                        Multiboard multiboard = new Multiboard();
+                        devices.Add(multiboard);
+                        break;
+                    case 7: // *** Audio ***
+                        Audio audio = new Audio();
+                        devices.Add(audio);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
-            foreach (var dev in devices)
+        private async void updateBasicDetails()
+        {
+            lbl_status.Text = "Downloading devices...  ";
+            Tuple<int, HttpResponseMessage> devdetails = await servercomm.GetAsync(servercomm.details, username, passwd);
+            switch (devdetails.Item1)
+            {
+                case 0: //server not connected
+                    Console.WriteLine("Server Problem");
+                    lbl_status.Text = "Server Problem";
+                    break;
+                case 1: //success
+                    var jsonString = await devdetails.Item2.Content.ReadAsStringAsync();
+                    Console.WriteLine(jsonString);
+                    break;
+                case 2: //fail
+                    Console.WriteLine("Failed");
+                    lbl_status.Text = "Failed";
+                    break;
+            }
+        }
+
+        private async void Form2_Load(object sender, EventArgs e)
+        {
+            buildTreeView();
+            createDevices();
+            updateBasicDetails();
+
+            //lbl_status.Text = "Downloading devices..."; //maybe add a progress bar?
+
+            foreach (var dev in devicelist)
             {
                 Console.WriteLine(dev.friendly_name);
                 Console.WriteLine(dev.device_id.ToString());
@@ -56,16 +138,7 @@ namespace IoTBoxTiles
                 //Console.WriteLine("");
 
 
-                if (dev.online)
-                {
-                    tv_DeviceList.Nodes[0].Nodes[0].Nodes.Add(dev.friendly_name);
-                    tv_DeviceList.Nodes[0].Nodes[0].LastNode.Tag = dev.device_id.ToString();
-                }
-                else
-                {
-                    tv_DeviceList.Nodes[0].Nodes[1].Nodes.Add(dev.friendly_name);
-                    tv_DeviceList.Nodes[0].Nodes[1].LastNode.Tag = dev.device_id.ToString();
-                }
+                
 
                 GroupBox grp = new GroupBox();
                 grp.Text = dev.friendly_name + "(" + devtype[dev.module_type] + ")";
@@ -235,8 +308,7 @@ namespace IoTBoxTiles
                 groups.Add(grp);
                 singles.Add(single);
             }
-            tv_DeviceList.Nodes[0].ExpandAll();
-            tv_DeviceList.EndUpdate();
+            
 
             Console.WriteLine("");
             lbl_status.Text = "Ready.";

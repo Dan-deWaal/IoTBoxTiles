@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace IoTBoxTiles
 {
-    public class Device
+    public class DeviceList
     {
         //Initial Data
-        public bool connected { get; set; }
         public int device_id { get; set; }
         public string friendly_name { get; set; }
         public int module_type { get; set; }
@@ -17,37 +17,76 @@ namespace IoTBoxTiles
         public string url { get; set; }
     }
 
-    public class IndDevice
+    public class Device
     {
-        //Global Properties
-        public bool connected { get; set; }
-        public int? client_id { get; set; } //nullable int
+        //Initial Data
         public int device_id { get; set; }
-        public DateTime first_connected { get; set; }
         public string friendly_name { get; set; }
-        public string ip_address { get; set; } //convert to IP datatype be better?
-        public DateTime last_checked { get; set; }
         public int module_type { get; set; }
-        public int? port { get; set; }
-        public int user_id { get; set; }
+        public bool online { get; set; }
+        public string url { get; set; }
+
+        //Global Properties
+        public DateTime first_connected { get; set; }
+        public DateTime last_checked { get; set; }
         public bool plug_status { get; set; } //nullable int
         public float? current_consumption { get; set; } //nullable float
-    }
 
-    public class SmartPlug : IndDevice
+        //UI Elements
+        public Panel UI_small { get; set; }
+        public Panel UI_large { get; set; }
+        public bool show_small { get; set; }
+        public bool show_large { get; set; }
+
+        public Device()
+        {
+            // Small UI element
+            UI_small = new Panel();
+            UI_small.Width = 300;
+            UI_small.Height = 400;
+            show_small = false;
+            TableLayoutPanel table1 = new TableLayoutPanel();
+            table1.Name = "table";
+            table1.Dock = DockStyle.Fill;
+            table1.Controls.Add(new Label() { Name = "Name", Text = friendly_name }, 0, 0);
+            table1.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
+            table1.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
+            UI_small.Controls.Add(table1);
+
+            // Large UI element
+            UI_large = new Panel();
+            UI_large.Dock = DockStyle.Fill;
+            show_large = false;
+            TableLayoutPanel table2 = new TableLayoutPanel();
+            table2.Name = "table";
+            table2.Dock = DockStyle.Fill;
+            table2.Controls.Add(new Label() { Name = "Name", Text = friendly_name }, 0, 0);
+            table2.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
+            table2.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
+            table2.Controls.Add(new Label() { Name = "FirstConn", Text = "first_connected: " + first_connected.ToString() }, 0, 2);
+            table2.Controls.Add(new Label() { Name = "LastCheck", Text = "last_checked: " + last_checked.ToString() }, 0, 3);
+            UI_large.Controls.Add(table2);
+        }
+    }
+    
+    public class SmartPlug : Device
     {
         //unique properties
 
         public SmartPlug()
         {
-
+            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+            table.Controls.Add(new Label() { Name = "DeviceID", Text = "device_id: " + device_id.ToString() }, 0, 4);
         }
     }
 
-    public class Bluetooth : IndDevice
+    public class Bluetooth : Device
     {
         //unique properties
-        public bool conn { get; set; }
+        public bool connected { get; set; }
+        public int? client_id { get; set; } //nullable int
+        public string ip_address { get; set; } //convert to IP datatype be better?
+        public int? port { get; set; }
 
         public Bluetooth()
         {
@@ -55,10 +94,13 @@ namespace IoTBoxTiles
         }
     }
 
-    public class USB : IndDevice
+    public class USB : Device
     {
         //unique properties
-        public bool conn { get; set; }
+        public bool connected { get; set; }
+        public int? client_id { get; set; } //nullable int
+        public string ip_address { get; set; } //convert to IP datatype be better?
+        public int? port { get; set; }
 
         public USB()
         {
@@ -66,7 +108,7 @@ namespace IoTBoxTiles
         }
     }
 
-    public class Infrared : IndDevice
+    public class Infrared : Device
     {
         //unique properties
         //public List<Tuple> buttons(string_name, string_code, bool_quick) { get; set; }
@@ -79,7 +121,7 @@ namespace IoTBoxTiles
         }
     }
 
-    public class Industrial : IndDevice
+    public class Industrial : Device
     {
         //unique properties
         public bool conn { get; set; }
@@ -93,7 +135,7 @@ namespace IoTBoxTiles
         }
     }
 
-    public class Multiboard : IndDevice
+    public class Multiboard : Device
     {
         //unique properties
         //public List<Tuple> buttons(string_name, bool_power, float_curr) { get; set; }
@@ -106,14 +148,17 @@ namespace IoTBoxTiles
         }
     }
 
-    public class Audio : IndDevice
+    public class Audio : Device
     {
         //unique properties
-        public bool connect_speaker { get; set; }
-        public bool connect_mic { get; set; }
-        public float[] audioVUChannel { get; set; }
-        public string IoTBoxAudio { get; set; }
-        public string SIPServer { get; set; }
+        public bool connected { get; set; }
+        public int? client_id { get; set; } //nullable int
+        public string ip_address { get; set; } //convert to IP datatype be better?
+        public int? port { get; set; }
+        public bool speaker_status { get; set; }
+        public bool mic_status { get; set; }
+        public float speaker_VU { get; set; }
+        public float mic_VU { get; set; }
 
         public Audio()
         {
