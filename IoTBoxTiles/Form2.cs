@@ -43,15 +43,17 @@ namespace IoTBoxTiles
             tv_DeviceList.Nodes[0].Nodes[0].Tag = "Online";
             tv_DeviceList.Nodes[0].Nodes.Add("Offline");
             tv_DeviceList.Nodes[0].Nodes[1].Tag = "Offline";
-            foreach (var dev in devicelist)
+            foreach (var dev in devices)
             {
                 if (dev.online)
                 {
                     tv_DeviceList.Nodes[0].Nodes[0].Nodes.Add(dev.friendly_name);
+                    tv_DeviceList.Nodes[0].Nodes[0].LastNode.Tag = dev.friendly_name;
                 }
                 else
                 {
                     tv_DeviceList.Nodes[0].Nodes[1].Nodes.Add(dev.friendly_name);
+                    tv_DeviceList.Nodes[0].Nodes[1].LastNode.Tag = dev.friendly_name;
                 }
             }
             tv_DeviceList.Nodes[0].ExpandAll();
@@ -61,6 +63,7 @@ namespace IoTBoxTiles
         private void createDevices()
         {
             Console.WriteLine("Creating Device Objects...");
+            devices.Clear();
             foreach (var dev in devicelist)
             {
                 switch (dev.module_type)
@@ -70,30 +73,65 @@ namespace IoTBoxTiles
                     case 1: // *** Smartplug ***
                         SmartPlug smartplug = new SmartPlug();
                         devices.Add(smartplug);
+                        smartplug.device_id = dev.device_id;
+                        smartplug.friendly_name = dev.friendly_name;
+                        smartplug.module_type = dev.module_type;
+                        smartplug.online = dev.online;
+                        smartplug.url = dev.url;
                         break;
                     case 2: // *** Bluetooth ***
                         Bluetooth bluetooth = new Bluetooth();
                         devices.Add(bluetooth);
+                        bluetooth.device_id = dev.device_id;
+                        bluetooth.friendly_name = dev.friendly_name;
+                        bluetooth.module_type = dev.module_type;
+                        bluetooth.online = dev.online;
+                        bluetooth.url = dev.url;
                         break;
                     case 3: // *** USB ***
                         USB usb = new USB();
                         devices.Add(usb);
+                        usb.device_id = dev.device_id;
+                        usb.friendly_name = dev.friendly_name;
+                        usb.module_type = dev.module_type;
+                        usb.online = dev.online;
+                        usb.url = dev.url;
                         break;
                     case 4: // *** Infrared ***
                         Infrared infrared = new Infrared();
                         devices.Add(infrared);
+                        infrared.device_id = dev.device_id;
+                        infrared.friendly_name = dev.friendly_name;
+                        infrared.module_type = dev.module_type;
+                        infrared.online = dev.online;
+                        infrared.url = dev.url;
                         break;
                     case 5: // *** Industrial ***
                         Industrial industrial = new Industrial();
                         devices.Add(industrial);
+                        industrial.device_id = dev.device_id;
+                        industrial.friendly_name = dev.friendly_name;
+                        industrial.module_type = dev.module_type;
+                        industrial.online = dev.online;
+                        industrial.url = dev.url;
                         break;
                     case 6: // *** Multiboard ***
                         Multiboard multiboard = new Multiboard();
                         devices.Add(multiboard);
+                        multiboard.device_id = dev.device_id;
+                        multiboard.friendly_name = dev.friendly_name;
+                        multiboard.module_type = dev.module_type;
+                        multiboard.online = dev.online;
+                        multiboard.url = dev.url;
                         break;
                     case 7: // *** Audio ***
                         Audio audio = new Audio();
                         devices.Add(audio);
+                        audio.device_id = dev.device_id;
+                        audio.friendly_name = dev.friendly_name;
+                        audio.module_type = dev.module_type;
+                        audio.online = dev.online;
+                        audio.url = dev.url;
                         break;
                     default:
                         break;
@@ -122,262 +160,91 @@ namespace IoTBoxTiles
             }
         }
 
-        private async void Form2_Load(object sender, EventArgs e)
+        private void Form2_Load(object sender, EventArgs e)
         {
-            buildTreeView();
             createDevices();
-            updateBasicDetails();
-
-            //lbl_status.Text = "Downloading devices..."; //maybe add a progress bar?
-
-            foreach (var dev in devicelist)
-            {
-                Console.WriteLine(dev.friendly_name);
-                Console.WriteLine(dev.device_id.ToString());
-                Console.WriteLine(dev.url);
-                //Console.WriteLine("");
-
-
-                
-
-                GroupBox grp = new GroupBox();
-                grp.Text = dev.friendly_name + "(" + devtype[dev.module_type] + ")";
-                grp.Name = dev.friendly_name;
-                grp.Width = 240;
-                grp.Height = 140;
-                grp.Click += new System.EventHandler(this.groupClick);
-                grp.Tag = dev.online.ToString() + ":" + dev.device_id.ToString();
-
-                GroupBox single = new GroupBox();
-                //Panel single = new Panel();
-                single.Text = dev.friendly_name;
-                single.Name = dev.friendly_name;
-                //single.Dock = DockStyle.Fill;
-                single.Width = 300;
-                single.Height = 400;
-                single.Tag = dev.device_id;
-                
-                lbl_status.Text = "Downloading devices...  "+dev.friendly_name;
-                Tuple<int, HttpResponseMessage> inddevreq = await servercomm.GetAsync(dev.url, username, passwd);
-                switch (inddevreq.Item1)
-                {
-                    case 0: //server not connected
-                        Console.WriteLine("Server Problem");
-                        lbl_status.Text = "Server Problem";
-                        break;
-                    case 1: //success
-                        var jsonString = await inddevreq.Item2.Content.ReadAsStringAsync();
-                        switch (dev.module_type)
-                        {
-                            case 0: //unknown
-                                break;
-                            case 1: // *** Smartplug ***
-                                    //Small: Power Toggle
-                                    //Big: Current Consumption
-                                SmartPlug smartplug = JsonConvert.DeserializeObject<SmartPlug>(jsonString);
-                                ind_devices.Add(smartplug);
-                                TableLayoutPanel table1 = new TableLayoutPanel();
-                                table1.Dock = DockStyle.Fill;
-                                table1.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 0);
-                                table1.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 0);
-                                grp.Controls.Add(table1);
-                                TableLayoutPanel table2 = new TableLayoutPanel();
-                                table2.Dock = DockStyle.Fill;
-                                table2.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-                                table2.Controls.Add(new Label() { Name = "Title", Text = smartplug.friendly_name }, 0, 0);
-                                table2.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
-                                table2.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
-                                table2.Controls.Add(new Label() { Name = "DevId", Text = "device_id : " + smartplug.device_id.ToString() }, 0, 2);
-                                table2.Controls.Add(new Label() { Name = "FirstConn", Text = "first_connected : " + smartplug.first_connected.ToString() }, 0, 3);
-                                table2.Controls.Add(new Label() { Name = "IP", Text = "ip_address : " + smartplug.ip_address.ToString() }, 0, 4);
-                                table2.Controls.Add(new Label() { Name = "LastCheck", Text = "last_checked : " + smartplug.last_checked.ToString() }, 0, 5);
-                                table2.Controls.Add(new Label() { Name = "ModType", Text = "module_type : " + smartplug.module_type.ToString() }, 0, 6);
-                                table2.Controls.Add(new Label() { Name = "UserID", Text = "user_id : " + smartplug.user_id.ToString() }, 0, 7);
-                                single.Controls.Add(table2);
-                                break;
-                            case 2: // *** Bluetooth ***
-                                    //Small: Power Toggle, Connect
-                                    //Big: Current Consumption
-                                Bluetooth bluetooth = JsonConvert.DeserializeObject<Bluetooth>(jsonString);
-                                ind_devices.Add(bluetooth);
-                                TableLayoutPanel table3 = new TableLayoutPanel();
-                                table3.Dock = DockStyle.Fill;
-                                table3.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 0);
-                                table3.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 0);
-                                table3.Controls.Add(new CheckBox() { Name = "Connected", Text = "Connected" }, 0, 1);
-                                grp.Controls.Add(table3);
-                                TableLayoutPanel table4 = new TableLayoutPanel();
-                                table4.Dock = DockStyle.Fill;
-                                table4.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-                                table4.Controls.Add(new Label() { Name = "Title", Text = bluetooth.friendly_name }, 0, 0);
-                                table4.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
-                                table4.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
-                                table4.Controls.Add(new CheckBox() { Name = "Connected", Text = "Connected" }, 0, 2);
-                                table4.Controls.Add(new Label() { Name = "DevId", Text = "device_id : " + bluetooth.device_id.ToString() }, 0, 3);
-                                table4.Controls.Add(new Label() { Name = "FirstConn", Text = "first_connected : " + bluetooth.first_connected.ToString() }, 0, 4);
-                                table4.Controls.Add(new Label() { Name = "IP", Text = "ip_address : " + bluetooth.ip_address.ToString() }, 0, 5);
-                                table4.Controls.Add(new Label() { Name = "LastCheck", Text = "last_checked : " + bluetooth.last_checked.ToString() }, 0, 6);
-                                table4.Controls.Add(new Label() { Name = "ModType", Text = "module_type : " + bluetooth.module_type.ToString() }, 0, 7);
-                                table4.Controls.Add(new Label() { Name = "UserID", Text = "user_id : " + bluetooth.user_id.ToString() }, 0, 8);
-                                single.Controls.Add(table4);
-                                break;
-                            case 3: // *** USB ***
-                                    //Small: Power Toggle, Connect
-                                    //Big: Current Consumption
-                                USB usb = JsonConvert.DeserializeObject<USB>(jsonString);
-                                ind_devices.Add(usb);
-                                TableLayoutPanel table5 = new TableLayoutPanel();
-                                table5.Dock = DockStyle.Fill;
-                                table5.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 0);
-                                table5.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 0);
-                                table5.Controls.Add(new CheckBox() { Name = "Connected", Text = "Connected" }, 0, 1);
-                                grp.Controls.Add(table5);
-                                TableLayoutPanel table6 = new TableLayoutPanel();
-                                table6.Dock = DockStyle.Fill;
-                                table6.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-                                table6.Controls.Add(new Label() { Name = "Title", Text = usb.friendly_name }, 0, 0);
-                                table6.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
-                                table6.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
-                                table6.Controls.Add(new CheckBox() { Name = "Connected", Text = "Connected" }, 0, 2);
-                                table6.Controls.Add(new Label() { Name = "DevId", Text = "device_id : " + usb.device_id.ToString() }, 0, 3);
-                                table6.Controls.Add(new Label() { Name = "FirstConn", Text = "first_connected : " + usb.first_connected.ToString() }, 0, 4);
-                                table6.Controls.Add(new Label() { Name = "IP", Text = "ip_address : " + usb.ip_address.ToString() }, 0, 5);
-                                table6.Controls.Add(new Label() { Name = "LastCheck", Text = "last_checked : " + usb.last_checked.ToString() }, 0, 6);
-                                table6.Controls.Add(new Label() { Name = "ModType", Text = "module_type : " + usb.module_type.ToString() }, 0, 7);
-                                table6.Controls.Add(new Label() { Name = "UserID", Text = "user_id : " + usb.user_id.ToString() }, 0, 8);
-                                single.Controls.Add(table6);
-                                break;
-                            case 4: // *** Infrared ***
-                                    //Small: Power Toggle, Common buttons, Feedback
-                                    //Big: Current Consumption, Feedback, Repeater Toggle, Change Common buttons, All buttons
-                                Infrared infrared = JsonConvert.DeserializeObject<Infrared>(jsonString);
-                                ind_devices.Add(infrared);
-                                TableLayoutPanel table7 = new TableLayoutPanel();
-                                table7.Dock = DockStyle.Fill;
-                                table7.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 0);
-                                table7.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 0);
-                                table7.Controls.Add(new Label() { Name = "Feedback", Text = "Feedback: Off" }, 0, 1);
-                                table7.Controls.Add(new Button() { Name = "Button1", Text = "Button1" }, 0, 2);
-                                table7.Controls.Add(new Button() { Name = "Button2", Text = "Button2" }, 1, 2);
-                                table7.Controls.Add(new Button() { Name = "Button3", Text = "Button3" }, 0, 3);
-                                table7.Controls.Add(new Button() { Name = "Button4", Text = "Button4" }, 1, 3);
-                                grp.Controls.Add(table7);
-                                TableLayoutPanel table8 = new TableLayoutPanel();
-                                table8.Dock = DockStyle.Fill;
-                                table8.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-                                table8.Controls.Add(new Label() { Name = "Title", Text = infrared.friendly_name }, 0, 0);
-                                table8.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
-                                table8.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
-                                table8.Controls.Add(new CheckBox() { Name = "Repeater", Text = "Repeater" }, 0, 2);
-                                table8.Controls.Add(new Label() { Name = "Feedback", Text = "Feedback: Off" }, 1, 2);
-                                for (int i = 0; i < 12; i++)
-                                {
-                                    table8.Controls.Add(new Button() { Name = "Button"+i, Text = "Button"+i }, i % 3, (i / 3) + 3);
-                                }
-                                table8.Controls.Add(new Label() { Name = "DevId", Text = "device_id : " + infrared.device_id.ToString() }, 0, 7);
-                                table8.Controls.Add(new Label() { Name = "FirstConn", Text = "first_connected : " + infrared.first_connected.ToString() }, 0, 8);
-                                table8.Controls.Add(new Label() { Name = "IP", Text = "ip_address : " + infrared.ip_address.ToString() }, 0, 9);
-                                table8.Controls.Add(new Label() { Name = "LastCheck", Text = "last_checked : " + infrared.last_checked.ToString() }, 0, 10);
-                                table8.Controls.Add(new Label() { Name = "ModType", Text = "module_type : " + infrared.module_type.ToString() }, 0, 11);
-                                table8.Controls.Add(new Label() { Name = "UserID", Text = "user_id : " + infrared.user_id.ToString() }, 0, 12);
-                                single.Controls.Add(table8);
-                                break;
-                            case 5: // *** Industrial ***
-                                    //Small: Power Toggle, Connect, COM Port
-                                    //Big: Current Consumption, Serial Monitor, Monitor settings
-                                break;
-                            case 6: // *** Multiboard ***
-                                    //Small: Power Toggle, 4 x Power Toggle w/ names
-                                    //Big: Current Consumption, 5 x Current Consumption, Naming
-                                break;
-                            case 7: // *** Audio ***
-                                    //Small: Power Toggle, Connect Speaker, Connect Mic
-                                    //Big: Current Consumption, VU Meters, Connect to IoTBoxAudio, Connect to SIP
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case 2: //fail
-                        Console.WriteLine("Failed");
-                        lbl_status.Text = "Failed";
-                        break;
-                }
-                
-
-                groups.Add(grp);
-                singles.Add(single);
-            }
+            buildTreeView();
+            //updateBasicDetails();
             
-
-            Console.WriteLine("");
             lbl_status.Text = "Ready.";
-        }
-        
-        private void groupClick(object sender, EventArgs e)
-        {
-            GroupBox grp = sender as GroupBox;
-            Console.WriteLine(grp.Text);
         }
 
         private void tv_DeviceList_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            shownGroups.Clear();
             //Console.WriteLine(e.Node.Tag);
             String tag = e.Node.Tag.ToString();
             if (tag.Equals("Devices"))
             {
-                foreach (GroupBox gb in groups)
+                foreach (var dev in devices)
                 {
-                    shownGroups.Add(gb);
-                    //Console.WriteLine("Added: " + gb.Tag.ToString());
+                    dev.show_small = true;
+                    dev.show_large = false;
                 }
             }
             else if (tag.Equals("Online"))
             {
-                //Console.WriteLine("Online::");
-                foreach (GroupBox gb in groups)
+                foreach (var dev in devices)
                 {
-                    int i = gb.Tag.ToString().IndexOf(":");
-                    if (gb.Tag.ToString().Substring(0, i).Equals("True"))
+                    if (dev.online)
                     {
-                        shownGroups.Add(gb);
-                        //Console.WriteLine("Added: " + gb.Tag.ToString());
+                        dev.show_small = true;
                     }
+                    else
+                    {
+                        dev.show_small = false;
+                    }
+                    dev.show_large = false;
                 }
             }
             else if (tag.Equals("Offline"))
             {
-                //Console.WriteLine("Offline::");
-                foreach (GroupBox gb in groups)
+                foreach (var dev in devices)
                 {
-                    int i = gb.Tag.ToString().IndexOf(":");
-                    if (gb.Tag.ToString().Substring(0, i).Equals("False"))
+                    if (dev.online)
                     {
-                        shownGroups.Add(gb);
+                        dev.show_small = false;
                     }
+                    else
+                    {
+                        dev.show_small = true;
+                    }
+                    dev.show_large = false;
                 }
             }
             else
             {
-                //Console.WriteLine("Single");
-                foreach (GroupBox s in singles)
+                foreach (var dev in devices)
                 {
-                    //Console.WriteLine(tag + " == " + s.Tag.ToString());
-                    if (tag.Equals(s.Tag.ToString()))
+                    if (tag.Equals(dev.friendly_name))
                     {
-                        shownGroups.Add(s);
+                        dev.show_large = true;
                     }
+                    else
+                    {
+                        dev.show_large = false;
+                    }
+                    dev.show_small = false;
                 }
             }
-            flowLayoutPanel1.Controls.Clear();
-            foreach (GroupBox gb in shownGroups)
-            {
-                flowLayoutPanel1.Controls.Add(gb);
-            }
-
+            updatePanels();
         }
-        
+
+        private void updatePanels()
+        {
+            flowLayoutPanel1.Controls.Clear();
+            foreach (var dev in devices)
+            {
+                if (dev.show_large)
+                {
+                    flowLayoutPanel1.Controls.Add(dev.UI_large);
+                }
+                if (dev.show_small)
+                {
+                    flowLayoutPanel1.Controls.Add(dev.UI_small);
+                }
+            }
+        }
+
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             //DialogResult result = MessageBox.Show("Really quit?", string.Empty, MessageBoxButtons.YesNo);
