@@ -19,6 +19,7 @@ namespace IoTBoxTiles
         List<Device> devices = new List<Device>();
         private ServerComm servercomm = new ServerComm();
         private string username, passwd;
+        private bool large_ui;
 
         //this should be obtained from the server
         String[] devtype = { "unknown", "SmartPlug", "Bluetooth", "USB", "Infrared", "Industrial", "Multiboard", "Audio" };
@@ -175,6 +176,7 @@ namespace IoTBoxTiles
             String tag = e.Node.Tag.ToString();
             if (tag.Equals("Devices"))
             {
+                large_ui = false;
                 foreach (var dev in devices)
                 {
                     dev.show_small = true;
@@ -183,6 +185,7 @@ namespace IoTBoxTiles
             }
             else if (tag.Equals("Online"))
             {
+                large_ui = false;
                 foreach (var dev in devices)
                 {
                     if (dev.online)
@@ -198,6 +201,7 @@ namespace IoTBoxTiles
             }
             else if (tag.Equals("Offline"))
             {
+                large_ui = false;
                 foreach (var dev in devices)
                 {
                     if (dev.online)
@@ -213,6 +217,7 @@ namespace IoTBoxTiles
             }
             else
             {
+                large_ui = true;
                 foreach (var dev in devices)
                 {
                     if (tag.Equals(dev.friendly_name))
@@ -241,6 +246,24 @@ namespace IoTBoxTiles
                 if (dev.show_small)
                 {
                     flowLayoutPanel1.Controls.Add(dev.UI_small);
+                }
+            }
+        }
+
+        private void flowLayoutPanel1_Resize(object sender, EventArgs e)
+        {
+            Control control = (Control)sender;
+            if (large_ui)
+            {
+                try
+                {
+                    Panel large_panel = (Panel)tableLayoutPanel1.Controls.Find("UILargePanel", true).First();
+                    large_panel.Width = control.Size.Width - 20;
+                    large_panel.Height = control.Size.Height - 20;
+                }
+                catch
+                {
+
                 }
             }
         }

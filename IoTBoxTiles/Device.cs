@@ -42,25 +42,30 @@ namespace IoTBoxTiles
         {
             // Small UI element
             UI_small = new Panel();
-            UI_small.Width = 300;
-            UI_small.Height = 400;
+            UI_small.Width = 200;
+            UI_small.Height = 180;
+            UI_small.BorderStyle = BorderStyle.Fixed3D;
             show_small = false;
             TableLayoutPanel table1 = new TableLayoutPanel();
             table1.Name = "table";
             table1.Dock = DockStyle.Fill;
-            table1.Controls.Add(new Label() { Name = "Name", Text = friendly_name }, 0, 0);
+            table1.Controls.Add(new Label() { Name = "Name", Text = "Name" }, 0, 0); //friendly_name
             table1.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
             table1.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
             UI_small.Controls.Add(table1);
 
             // Large UI element
             UI_large = new Panel();
-            UI_large.Dock = DockStyle.Fill;
+            UI_large.Name = "UILargePanel";
+            UI_large.Width = 400;
+            UI_large.Height = 580;
+            //UI_large.Dock = DockStyle.Fill;
+            UI_large.BorderStyle = BorderStyle.Fixed3D;
             show_large = false;
             TableLayoutPanel table2 = new TableLayoutPanel();
             table2.Name = "table";
             table2.Dock = DockStyle.Fill;
-            table2.Controls.Add(new Label() { Name = "Name", Text = friendly_name }, 0, 0);
+            table2.Controls.Add(new Label() { Name = "Name", Text = "Name" }, 0, 0); //friendly_name
             table2.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
             table2.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
             table2.Controls.Add(new Label() { Name = "FirstConn", Text = "first_connected: " + first_connected.ToString() }, 0, 2);
