@@ -166,6 +166,7 @@ namespace IoTBoxTiles
             createDevices();
             buildTreeView();
             //updateBasicDetails();
+            refresh();
             
             lbl_status.Text = "Ready.";
         }
