@@ -83,6 +83,32 @@ namespace IoTBoxTiles
             TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
             table.Controls.Add(new Label() { Name = "DeviceID", Text = "device_id: " + device_id.ToString() }, 0, 4);
         }
+
+        public void updateLargeUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
+            Label first_lbl = (Label)table.Controls.Find("FirstConn", true).First();
+            first_lbl.Text = first_connected.ToString();
+            Label last_lbl = (Label)table.Controls.Find("LastCheck", true).First();
+            last_lbl.Text = last_checked.ToString();
+        }
+
+        public void updateSmallUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
+        }
     }
 
     public class Bluetooth : Device
@@ -96,6 +122,32 @@ namespace IoTBoxTiles
         public Bluetooth()
         {
 
+        }
+
+        public void updateLargeUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
+            Label first_lbl = (Label)table.Controls.Find("FirstConn", true).First();
+            first_lbl.Text = first_connected.ToString();
+            Label last_lbl = (Label)table.Controls.Find("LastCheck", true).First();
+            last_lbl.Text = last_checked.ToString();
+        }
+
+        public void updateSmallUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
         }
     }
 
@@ -111,6 +163,32 @@ namespace IoTBoxTiles
         {
 
         }
+
+        public void updateLargeUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
+            Label first_lbl = (Label)table.Controls.Find("FirstConn", true).First();
+            first_lbl.Text = first_connected.ToString();
+            Label last_lbl = (Label)table.Controls.Find("LastCheck", true).First();
+            last_lbl.Text = last_checked.ToString();
+        }
+
+        public void updateSmallUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
+        }
     }
 
     public class Infrared : Device
@@ -123,6 +201,32 @@ namespace IoTBoxTiles
         public Infrared()
         {
 
+        }
+
+        public void updateLargeUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
+            Label first_lbl = (Label)table.Controls.Find("FirstConn", true).First();
+            first_lbl.Text = first_connected.ToString();
+            Label last_lbl = (Label)table.Controls.Find("LastCheck", true).First();
+            last_lbl.Text = last_checked.ToString();
+        }
+
+        public void updateSmallUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
         }
     }
 
@@ -138,6 +242,32 @@ namespace IoTBoxTiles
         {
 
         }
+
+        public void updateLargeUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
+            Label first_lbl = (Label)table.Controls.Find("FirstConn", true).First();
+            first_lbl.Text = first_connected.ToString();
+            Label last_lbl = (Label)table.Controls.Find("LastCheck", true).First();
+            last_lbl.Text = last_checked.ToString();
+        }
+
+        public void updateSmallUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
+        }
     }
 
     public class Multiboard : Device
@@ -150,6 +280,32 @@ namespace IoTBoxTiles
         public Multiboard()
         {
 
+        }
+
+        public void updateLargeUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
+            Label first_lbl = (Label)table.Controls.Find("FirstConn", true).First();
+            first_lbl.Text = first_connected.ToString();
+            Label last_lbl = (Label)table.Controls.Find("LastCheck", true).First();
+            last_lbl.Text = last_checked.ToString();
+        }
+
+        public void updateSmallUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
         }
     }
 
@@ -168,6 +324,32 @@ namespace IoTBoxTiles
         public Audio()
         {
 
+        }
+
+        public void updateLargeUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
+            Label first_lbl = (Label)table.Controls.Find("FirstConn", true).First();
+            first_lbl.Text = first_connected.ToString();
+            Label last_lbl = (Label)table.Controls.Find("LastCheck", true).First();
+            last_lbl.Text = last_checked.ToString();
+        }
+
+        public void updateSmallUI()
+        {
+            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
+            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
+            name_lbl.Text = friendly_name;
+            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
+            power_cb.Checked = plug_status;
+            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
+            current_lbl.Text = current_consumption.ToString();
         }
     }
 

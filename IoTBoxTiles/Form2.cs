@@ -268,6 +268,60 @@ namespace IoTBoxTiles
             }
         }
 
+        private void refresh()
+        {
+            foreach (var dev in devices)
+            {
+                switch (dev.module_type)
+                {
+                    case 0:
+                        break;
+                    case 1:
+                        SmartPlug sm = (SmartPlug)dev;
+                        sm.updateLargeUI();
+                        sm.updateSmallUI();
+                        break;
+                    case 2:
+                        Bluetooth bt = (Bluetooth)dev;
+                        bt.updateLargeUI();
+                        bt.updateSmallUI();
+                        break;
+                    case 3:
+                        USB usb = (USB)dev;
+                        usb.updateLargeUI();
+                        usb.updateSmallUI();
+                        break;
+                    case 4:
+                        Infrared ir = (Infrared)dev;
+                        ir.updateLargeUI();
+                        ir.updateSmallUI();
+                        break;
+                    case 5:
+                        Industrial ind = (Industrial)dev;
+                        ind.updateLargeUI();
+                        ind.updateSmallUI();
+                        break;
+                    case 6:
+                        Multiboard mb = (Multiboard)dev;
+                        mb.updateLargeUI();
+                        mb.updateSmallUI();
+                        break;
+                    case 7:
+                        Audio au = (Audio)dev;
+                        au.updateLargeUI();
+                        au.updateSmallUI();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
+        {
+            refresh();
+        }
+
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             //DialogResult result = MessageBox.Show("Really quit?", string.Empty, MessageBoxButtons.YesNo);

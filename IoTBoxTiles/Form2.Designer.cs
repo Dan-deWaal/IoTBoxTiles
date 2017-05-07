@@ -54,7 +54,7 @@
             this.tableLayoutPanel1.Controls.Add(this.splitContainer1, 0, 0);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -87,7 +87,7 @@
             // 
             this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Control;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(771, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(740, 17);
             this.toolStripStatusLabel1.Spring = true;
             // 
             // toolStripDropDownButton1
@@ -99,6 +99,7 @@
             this.toolStripDropDownButton1.ShowDropDownArrow = false;
             this.toolStripDropDownButton1.Size = new System.Drawing.Size(50, 20);
             this.toolStripDropDownButton1.Text = "Refresh";
+            this.toolStripDropDownButton1.Click += new System.EventHandler(this.toolStripDropDownButton1_Click);
             // 
             // toolStripStatusLabel2
             // 
@@ -110,7 +111,7 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(2, 2);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -134,7 +135,7 @@
             this.tv_DeviceList.FullRowSelect = true;
             this.tv_DeviceList.HideSelection = false;
             this.tv_DeviceList.Location = new System.Drawing.Point(0, 0);
-            this.tv_DeviceList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tv_DeviceList.Margin = new System.Windows.Forms.Padding(2);
             this.tv_DeviceList.Name = "tv_DeviceList";
             this.tv_DeviceList.Size = new System.Drawing.Size(320, 475);
             this.tv_DeviceList.TabIndex = 0;
@@ -145,7 +146,7 @@
             this.flowLayoutPanel1.AutoScroll = true;
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(2);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(565, 475);
             this.flowLayoutPanel1.TabIndex = 0;
