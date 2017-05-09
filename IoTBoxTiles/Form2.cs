@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using IoTBoxTiles.Devices;
 
 namespace IoTBoxTiles
 {
