@@ -28,12 +28,13 @@ namespace IoTBoxTiles
         public async Task<Tuple<int, HttpResponseMessage>> GetAsync(string url, string email, string passwd)
         {
             int result = 0;
+            HttpResponseMessage getResponse = null;
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("email", email);
             client.DefaultRequestHeaders.Add("password", passwd);
-            HttpResponseMessage getResponse = await client.GetAsync(url);
             try
             {
+                getResponse = await client.GetAsync(url);
                 result = getResponse.IsSuccessStatusCode ? 1 : 2;
             }
             catch
@@ -47,10 +48,11 @@ namespace IoTBoxTiles
         public async Task<Tuple<int, HttpResponseMessage>> GetAsync(string url)
         {
             int result = 0;
+            HttpResponseMessage getResponse = null;
             client.DefaultRequestHeaders.Clear();
-            HttpResponseMessage getResponse = await client.GetAsync(url);
             try
             {
+                getResponse = await client.GetAsync(url);
                 result = getResponse.IsSuccessStatusCode ? 1 : 2;
             }
             catch

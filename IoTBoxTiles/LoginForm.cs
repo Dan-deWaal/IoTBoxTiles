@@ -15,17 +15,17 @@ using Newtonsoft.Json;
 
 namespace IoTBoxTiles
 {
-    public partial class Form1 : Form
+    public partial class LoginForm : Form
     {
         private System.Windows.Forms.Timer timer;
         private ServerComm servercomm = new ServerComm();
 
-        public Form1()
+        public LoginForm()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void LoginForm_Load(object sender, EventArgs e)
         {
             //add links
             link_forgot.Links.Add(0, 15, "https://iot.duality.co.nz/password-reset");
@@ -45,26 +45,10 @@ namespace IoTBoxTiles
             //txt_username.KeyDown += new KeyEventHandler(txt_Enter);
             //txt_username.PreviewKeyDown += txt_Enter;
         }
-
-        /*void txt_Enter(object sender, KeyEventHandler e)
-        {
-            if (e. == Keys.Enter)
-            {
-                login();
-            }
-        }*/
-
-        private void button1_Click(object sender, EventArgs e)
+        
+        private void btnLogin_Click(object sender, EventArgs e)
         {
             login();
-        }
-
-        private void OnKeyDownHandler(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                login();
-            }
         }
 
         private async void login()
@@ -79,11 +63,12 @@ namespace IoTBoxTiles
                 case 1: //success
                     Console.WriteLine("Success");
                     var jsonString = await loginstat.Item2.Content.ReadAsStringAsync(); // should never throw excptn because caught in servercomm.LoginAsync()
-                    List<DeviceList> devices = JsonConvert.DeserializeObject<List<DeviceList>>(jsonString);
+                    List<DeviceBase> devices = JsonConvert.DeserializeObject<List<DeviceBase>>(jsonString);
                     
-                    Form2 frm = new IoTBoxTiles.Form2(devices, txt_username.Text, txt_passwd.Text);
-                    frm.Show();
+                    DevicesForm frm = new IoTBoxTiles.DevicesForm(devices, txt_username.Text, txt_passwd.Text);
                     this.Hide();
+                    frm.ShowDialog();
+                    this.Close();
                     break;
                 case 2: //fail
                     lbl_LoginStatus.Show();
@@ -94,16 +79,11 @@ namespace IoTBoxTiles
             }
         }
         
-        private void link_forgot_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(e.Link.LinkData.ToString());
         }
 
-        private void link_signup_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            System.Diagnostics.Process.Start(e.Link.LinkData.ToString());
-        }
-        
         private async void HeartbeatTimer(object sender, EventArgs e)
         {
             Tuple<int, HttpResponseMessage> serverstat = await servercomm.GetAsync(servercomm.heartbeat);
@@ -120,17 +100,10 @@ namespace IoTBoxTiles
                     break;
             }
         }
-        
-        private void txt_username_TextChanged(object sender, EventArgs e)
+
+        private void login_text_changed(object sender, EventArgs e)
         {
-            if (txt_username.Text.Length > 0 && txt_passwd.Text.Length > 0)
-            {
-                btn_login.Enabled = true;
-            }
-            else
-            {
-                btn_login.Enabled = false;
-            }
+            btn_login.Enabled = txt_username.Text.Length > 0 && txt_passwd.Text.Length > 0;
         }
 
         // ************************************************************* remove ***
@@ -140,20 +113,5 @@ namespace IoTBoxTiles
             txt_passwd.Text = "12345678";                                       //*
         }                                                                       //*
         // ************************************************************************
-
-        private void txt_passwd_TextChanged_1(object sender, EventArgs e)
-        {
-            if (txt_username.Text.Length > 0 && txt_passwd.Text.Length > 0)
-            {
-                btn_login.Enabled = true;
-            }
-            else
-            {
-                btn_login.Enabled = false;
-            }
-        }
-
-        
     }
-    
 }

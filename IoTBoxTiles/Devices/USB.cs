@@ -29,15 +29,15 @@ namespace IoTBoxTiles.Devices
         public void updateLargeUI()
         {
             TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
-            updateLargeCommonUI(table);
-            updateLargeConnectUI(table, client_id, ip_address, port);
+            UpdateLargeCommonUI(table);
+            UpdateLargeConnectUI(table, client_id, ip_address, port);
         }
 
         public void updateSmallUI()
         {
             TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
-            updateSmallCommonUI(table);
-            updateSmallConnectUI(table);
+            UpdateSmallCommonUI(table);
+            UpdateSmallConnectUI(table);
         }
     }
 }

@@ -14,23 +14,25 @@ using IoTBoxTiles.Devices;
 
 namespace IoTBoxTiles
 {
-    public partial class Form2 : Form
+    public partial class DevicesForm : Form
     {
-        List<DeviceList> devicelist = new List<DeviceList>();
-        List<Device> devices = new List<Device>();
-        private ServerComm servercomm = new ServerComm();
-        private string username, passwd;
-        private bool large_ui;
+        List<Device> _devices = new List<Device>();
+        private ServerComm _serv_comm = new ServerComm();
+        private string _username, _password;
+        private bool _large_ui;
 
         //this should be obtained from the server
-        String[] devtype = { "unknown", "SmartPlug", "Bluetooth", "USB", "Infrared", "Industrial", "Multiboard", "Audio" };
+        String[] dev_types;
 
-        public Form2(List<DeviceList> devs, string u, string p)
+        public DevicesForm(List<DeviceBase> device_list, string username, string password)
         {
             InitializeComponent();
-            devicelist = devs;
-            username = u;
-            passwd = p;
+            foreach (var dev in device_list)
+            {
+                _devices.Add(new Device(dev));
+            }
+            _username = username;
+            _password = password;
         }
 
         private void buildTreeView()
@@ -45,17 +47,17 @@ namespace IoTBoxTiles
             tv_DeviceList.Nodes[0].Nodes[0].Tag = "Online";
             tv_DeviceList.Nodes[0].Nodes.Add("Offline");
             tv_DeviceList.Nodes[0].Nodes[1].Tag = "Offline";
-            foreach (var dev in devices)
+            foreach (var dev in _devices)
             {
                 if (dev.online)
                 {
                     tv_DeviceList.Nodes[0].Nodes[0].Nodes.Add(dev.friendly_name);
-                    tv_DeviceList.Nodes[0].Nodes[0].LastNode.Tag = dev.friendly_name;
+                    tv_DeviceList.Nodes[0].Nodes[0].LastNode.Tag = "user_" + dev.friendly_name;
                 }
                 else
                 {
                     tv_DeviceList.Nodes[0].Nodes[1].Nodes.Add(dev.friendly_name);
-                    tv_DeviceList.Nodes[0].Nodes[1].LastNode.Tag = dev.friendly_name;
+                    tv_DeviceList.Nodes[0].Nodes[1].LastNode.Tag = "user_" + dev.friendly_name;
                 }
             }
             tv_DeviceList.Nodes[0].ExpandAll();
@@ -65,8 +67,8 @@ namespace IoTBoxTiles
         private void createDevices()
         {
             Console.WriteLine("Creating Device Objects...");
-            devices.Clear();
-            foreach (var dev in devicelist)
+            List<Device> new_devices = new List<Device>();
+            foreach (var dev in _devices)
             {
                 switch (dev.module_type)
                 {
@@ -74,7 +76,7 @@ namespace IoTBoxTiles
                         break;
                     case 1: // *** Smartplug ***
                         SmartPlug smartplug = new SmartPlug();
-                        devices.Add(smartplug);
+                        new_devices.Add(smartplug);
                         smartplug.device_id = dev.device_id;
                         smartplug.friendly_name = dev.friendly_name;
                         smartplug.module_type = dev.module_type;
@@ -83,7 +85,7 @@ namespace IoTBoxTiles
                         break;
                     case 2: // *** Bluetooth ***
                         Bluetooth bluetooth = new Bluetooth();
-                        devices.Add(bluetooth);
+                        new_devices.Add(bluetooth);
                         bluetooth.device_id = dev.device_id;
                         bluetooth.friendly_name = dev.friendly_name;
                         bluetooth.module_type = dev.module_type;
@@ -92,7 +94,7 @@ namespace IoTBoxTiles
                         break;
                     case 3: // *** USB ***
                         USB usb = new USB();
-                        devices.Add(usb);
+                        new_devices.Add(usb);
                         usb.device_id = dev.device_id;
                         usb.friendly_name = dev.friendly_name;
                         usb.module_type = dev.module_type;
@@ -101,7 +103,7 @@ namespace IoTBoxTiles
                         break;
                     case 4: // *** Infrared ***
                         Infrared infrared = new Infrared();
-                        devices.Add(infrared);
+                        new_devices.Add(infrared);
                         infrared.device_id = dev.device_id;
                         infrared.friendly_name = dev.friendly_name;
                         infrared.module_type = dev.module_type;
@@ -110,7 +112,7 @@ namespace IoTBoxTiles
                         break;
                     case 5: // *** Industrial ***
                         Industrial industrial = new Industrial();
-                        devices.Add(industrial);
+                        new_devices.Add(industrial);
                         industrial.device_id = dev.device_id;
                         industrial.friendly_name = dev.friendly_name;
                         industrial.module_type = dev.module_type;
@@ -119,7 +121,7 @@ namespace IoTBoxTiles
                         break;
                     case 6: // *** Multiboard ***
                         Multiboard multiboard = new Multiboard();
-                        devices.Add(multiboard);
+                        new_devices.Add(multiboard);
                         multiboard.device_id = dev.device_id;
                         multiboard.friendly_name = dev.friendly_name;
                         multiboard.module_type = dev.module_type;
@@ -128,23 +130,27 @@ namespace IoTBoxTiles
                         break;
                     case 7: // *** Audio ***
                         Audio audio = new Audio();
-                        devices.Add(audio);
+                        new_devices.Add(audio);
                         audio.device_id = dev.device_id;
                         audio.friendly_name = dev.friendly_name;
                         audio.module_type = dev.module_type;
                         audio.online = dev.online;
                         audio.url = dev.url;
+                        // audio.CreateDevice();
                         break;
                     default:
                         break;
                 }
             }
+            _devices.Clear();
+            _devices.AddRange(new_devices);
         }
 
         private async void updateBasicDetails()
         {
             lbl_status.Text = "Downloading devices...  ";
-            Tuple<int, HttpResponseMessage> devdetails = await servercomm.GetAsync(servercomm.details, username, passwd);
+            Tuple<int, HttpResponseMessage> devdetails = await 
+                _serv_comm.GetAsync(_serv_comm.details, _username, _password);
             switch (devdetails.Item1)
             {
                 case 0: //server not connected
@@ -162,24 +168,42 @@ namespace IoTBoxTiles
             }
         }
 
-        private void Form2_Load(object sender, EventArgs e)
+        private async void Form2_LoadAsync(object sender, EventArgs e)
         {
+            var result = await _serv_comm.GetAsync("https://iot.duality.co.nz/api/1/device/types");
+            if (result.Item1 != 1)
+            {
+                // should be handled better
+                MessageBox.Show("Server disconnected during intialisation.");
+                this.Close();
+            }
+            var json_str = await result.Item2.Content.ReadAsStringAsync();
+            dev_types = JsonConvert.DeserializeObject<string[]>(json_str);
             createDevices();
             buildTreeView();
             //updateBasicDetails();
             refresh();
-            
+
             lbl_status.Text = "Ready.";
         }
 
         private void tv_DeviceList_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            //Console.WriteLine(e.Node.Tag);
             String tag = e.Node.Tag.ToString();
-            if (tag.Equals("Devices"))
+
+            if (tag.StartsWith("user_"))
             {
-                large_ui = false;
-                foreach (var dev in devices)
+                _large_ui = true;
+                foreach (var dev in _devices)
+                {
+                    dev.show_large = tag.Substring(5) == dev.friendly_name;
+                    dev.show_small = false;
+                }
+            }
+            else if (tag.Equals("Devices"))
+            {
+                _large_ui = false;
+                foreach (var dev in _devices)
                 {
                     dev.show_small = true;
                     dev.show_large = false;
@@ -187,50 +211,20 @@ namespace IoTBoxTiles
             }
             else if (tag.Equals("Online"))
             {
-                large_ui = false;
-                foreach (var dev in devices)
+                _large_ui = false;
+                foreach (var dev in _devices)
                 {
-                    if (dev.online)
-                    {
-                        dev.show_small = true;
-                    }
-                    else
-                    {
-                        dev.show_small = false;
-                    }
+                    dev.show_small = dev.online;
                     dev.show_large = false;
                 }
             }
             else if (tag.Equals("Offline"))
             {
-                large_ui = false;
-                foreach (var dev in devices)
+                _large_ui = false;
+                foreach (var dev in _devices)
                 {
-                    if (dev.online)
-                    {
-                        dev.show_small = false;
-                    }
-                    else
-                    {
-                        dev.show_small = true;
-                    }
+                    dev.show_small = !dev.online;
                     dev.show_large = false;
-                }
-            }
-            else
-            {
-                large_ui = true;
-                foreach (var dev in devices)
-                {
-                    if (tag.Equals(dev.friendly_name))
-                    {
-                        dev.show_large = true;
-                    }
-                    else
-                    {
-                        dev.show_large = false;
-                    }
-                    dev.show_small = false;
                 }
             }
             updatePanels();
@@ -238,16 +232,16 @@ namespace IoTBoxTiles
 
         private void updatePanels()
         {
-            flowLayoutPanel1.Controls.Clear();
-            foreach (var dev in devices)
+            deviceFlowLayout.Controls.Clear();
+            foreach (var dev in _devices)
             {
                 if (dev.show_large)
                 {
-                    flowLayoutPanel1.Controls.Add(dev.UI_large);
+                    deviceFlowLayout.Controls.Add(dev.UI_large);
                 }
                 if (dev.show_small)
                 {
-                    flowLayoutPanel1.Controls.Add(dev.UI_small);
+                    deviceFlowLayout.Controls.Add(dev.UI_small);
                 }
             }
         }
@@ -255,24 +249,20 @@ namespace IoTBoxTiles
         private void flowLayoutPanel1_Resize(object sender, EventArgs e)
         {
             Control control = (Control)sender;
-            if (large_ui)
+            if (_large_ui)
             {
-                try
-                {
-                    Panel large_panel = (Panel)tableLayoutPanel1.Controls.Find("UILargePanel", true).First();
-                    large_panel.Width = control.Size.Width - 20;
-                    large_panel.Height = control.Size.Height - 20;
-                }
-                catch
-                {
+                Panel large_panel = (Panel)deviceTableLayout.Controls.Find("UILargePanel", true).FirstOrDefault();
+                if (large_panel == null)
+                    return;
 
-                }
+                large_panel.Width = control.Size.Width - 20;
+                large_panel.Height = control.Size.Height - 20;
             }
         }
 
         private void refresh()
         {
-            foreach (var dev in devices)
+            foreach (var dev in _devices)
             {
                 switch (dev.module_type)
                 {
@@ -310,8 +300,8 @@ namespace IoTBoxTiles
                         break;
                     case 7:
                         Audio au = (Audio)dev;
-                        au.updateLargeUI();
-                        au.updateSmallUI();
+                        // au.UpdateLargeUI();
+                        au.UpdateSmallUI();
                         break;
                     default:
                         break;

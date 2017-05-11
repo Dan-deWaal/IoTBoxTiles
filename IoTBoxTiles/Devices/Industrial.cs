@@ -30,7 +30,7 @@ namespace IoTBoxTiles.Devices
         public void updateLargeUI()
         {
             TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
-            updateLargeCommonUI(table);
+            UpdateLargeCommonUI(table);
             CheckBox conn_cb = (CheckBox)table.Controls.Find("Connect", true).First();
             conn_cb.Checked = plug_status;
             Label com_lbl = (Label)table.Controls.Find("COMPort", true).First();
@@ -44,7 +44,7 @@ namespace IoTBoxTiles.Devices
         public void updateSmallUI()
         {
             TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
-            updateSmallCommonUI(table);
+            UpdateSmallCommonUI(table);
             CheckBox conn_cb = (CheckBox)table.Controls.Find("Connect", true).First();
             conn_cb.Checked = plug_status;
             Label com_lbl = (Label)table.Controls.Find("COMPort", true).First();
