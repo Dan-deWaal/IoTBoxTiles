@@ -28,75 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.friendlyNameLbl = new System.Windows.Forms.Label();
-            this.powerChkBox = new System.Windows.Forms.CheckBox();
-            this.connectChkBox = new System.Windows.Forms.CheckBox();
-            this.alreadyConnLbl = new System.Windows.Forms.Label();
-            this.disconnectBtn = new System.Windows.Forms.Button();
             this.speakerChkBox = new System.Windows.Forms.CheckBox();
             this.micChkBox = new System.Windows.Forms.CheckBox();
             this.speakerScrollBar = new System.Windows.Forms.VScrollBar();
             this.micScrollBar = new System.Windows.Forms.VScrollBar();
+            this.plugTitleCtrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
+            this.connectPart1 = new IoTBoxTiles.Devices.Controls.Parts.ConnectPart();
             this.SuspendLayout();
-            // 
-            // friendlyNameLbl
-            // 
-            this.friendlyNameLbl.AutoSize = true;
-            this.friendlyNameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.friendlyNameLbl.Location = new System.Drawing.Point(40, 55);
-            this.friendlyNameLbl.Name = "friendlyNameLbl";
-            this.friendlyNameLbl.Size = new System.Drawing.Size(377, 39);
-            this.friendlyNameLbl.TabIndex = 0;
-            this.friendlyNameLbl.Text = "{audio_friendly_name}";
-            // 
-            // powerChkBox
-            // 
-            this.powerChkBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.powerChkBox.Appearance = System.Windows.Forms.Appearance.Button;
-            this.powerChkBox.Location = new System.Drawing.Point(492, 18);
-            this.powerChkBox.Name = "powerChkBox";
-            this.powerChkBox.Size = new System.Drawing.Size(128, 114);
-            this.powerChkBox.TabIndex = 2;
-            this.powerChkBox.Text = "pow";
-            this.powerChkBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.powerChkBox.UseVisualStyleBackColor = true;
-            this.powerChkBox.CheckedChanged += new System.EventHandler(this.powerChkBox_CheckedChanged);
-            // 
-            // connectChkBox
-            // 
-            this.connectChkBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.connectChkBox.Appearance = System.Windows.Forms.Appearance.Button;
-            this.connectChkBox.Location = new System.Drawing.Point(17, 138);
-            this.connectChkBox.Name = "connectChkBox";
-            this.connectChkBox.Size = new System.Drawing.Size(603, 90);
-            this.connectChkBox.TabIndex = 2;
-            this.connectChkBox.Text = "Connect";
-            this.connectChkBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.connectChkBox.UseVisualStyleBackColor = true;
-            // 
-            // alreadyConnLbl
-            // 
-            this.alreadyConnLbl.AutoSize = true;
-            this.alreadyConnLbl.Location = new System.Drawing.Point(11, 240);
-            this.alreadyConnLbl.Name = "alreadyConnLbl";
-            this.alreadyConnLbl.Size = new System.Drawing.Size(271, 32);
-            this.alreadyConnLbl.TabIndex = 0;
-            this.alreadyConnLbl.Text = "connected to {client}";
-            this.alreadyConnLbl.Visible = false;
-            // 
-            // disconnectBtn
-            // 
-            this.disconnectBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.disconnectBtn.AutoSize = true;
-            this.disconnectBtn.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.disconnectBtn.Location = new System.Drawing.Point(458, 234);
-            this.disconnectBtn.Name = "disconnectBtn";
-            this.disconnectBtn.Size = new System.Drawing.Size(162, 42);
-            this.disconnectBtn.TabIndex = 3;
-            this.disconnectBtn.Text = "disconnect";
-            this.disconnectBtn.UseVisualStyleBackColor = true;
-            this.disconnectBtn.Visible = false;
             // 
             // speakerChkBox
             // 
@@ -146,37 +84,53 @@
             this.micScrollBar.Size = new System.Drawing.Size(43, 165);
             this.micScrollBar.TabIndex = 4;
             // 
+            // plugTitleCtrl
+            // 
+            this.plugTitleCtrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.plugTitleCtrl.FriendlyName = "{audio_name}";
+            this.plugTitleCtrl.Location = new System.Drawing.Point(3, 15);
+            this.plugTitleCtrl.Name = "plugTitleCtrl";
+            this.plugTitleCtrl.PowerChecked = false;
+            this.plugTitleCtrl.Size = new System.Drawing.Size(634, 101);
+            this.plugTitleCtrl.TabIndex = 5;
+            this.plugTitleCtrl.PowerCheckedChanged += new System.EventHandler(this.plugTitleCtrl_PowerCheckedChanged);
+            // 
+            // connectPart1
+            // 
+            this.connectPart1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.connectPart1.Client = null;
+            this.connectPart1.ConnectChecked = false;
+            this.connectPart1.Location = new System.Drawing.Point(3, 122);
+            this.connectPart1.Name = "connectPart1";
+            this.connectPart1.Size = new System.Drawing.Size(634, 162);
+            this.connectPart1.TabIndex = 6;
+            this.connectPart1.ConnectCheckedChanged += new System.EventHandler(this.connectPart1_ConnectCheckedChanged);
+            this.connectPart1.DisconnectBtnClick += new System.EventHandler(this.connectPart1_DisconnectBtnClick);
+            // 
             // AudioSmall
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.connectPart1);
+            this.Controls.Add(this.plugTitleCtrl);
             this.Controls.Add(this.micScrollBar);
             this.Controls.Add(this.speakerScrollBar);
-            this.Controls.Add(this.disconnectBtn);
-            this.Controls.Add(this.connectChkBox);
             this.Controls.Add(this.micChkBox);
             this.Controls.Add(this.speakerChkBox);
-            this.Controls.Add(this.powerChkBox);
-            this.Controls.Add(this.alreadyConnLbl);
-            this.Controls.Add(this.friendlyNameLbl);
             this.Name = "AudioSmall";
             this.Size = new System.Drawing.Size(640, 480);
             this.Load += new System.EventHandler(this.AudioSmall_Load);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label friendlyNameLbl;
-        private System.Windows.Forms.CheckBox powerChkBox;
-        private System.Windows.Forms.CheckBox connectChkBox;
-        private System.Windows.Forms.Label alreadyConnLbl;
-        private System.Windows.Forms.Button disconnectBtn;
         private System.Windows.Forms.CheckBox speakerChkBox;
         private System.Windows.Forms.CheckBox micChkBox;
         private System.Windows.Forms.VScrollBar speakerScrollBar;
         private System.Windows.Forms.VScrollBar micScrollBar;
+        private Parts.PlugTitle plugTitleCtrl;
+        private Parts.ConnectPart connectPart1;
     }
 }

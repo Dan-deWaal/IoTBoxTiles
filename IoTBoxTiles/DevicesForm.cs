@@ -16,13 +16,13 @@ namespace IoTBoxTiles
 {
     public partial class DevicesForm : Form
     {
-        List<Device> _devices = new List<Device>();
+        private List<Device> _devices = new List<Device>();
         private ServerComm _serv_comm = new ServerComm();
         private string _username, _password;
         private bool _large_ui;
 
         //this should be obtained from the server
-        String[] dev_types;
+        String[] _dev_types;
 
         public DevicesForm(List<DeviceBase> device_list, string username, string password)
         {
@@ -129,14 +129,8 @@ namespace IoTBoxTiles
                         multiboard.url = dev.url;
                         break;
                     case 7: // *** Audio ***
-                        Audio audio = new Audio();
+                        Audio audio = new Audio(dev);
                         new_devices.Add(audio);
-                        audio.device_id = dev.device_id;
-                        audio.friendly_name = dev.friendly_name;
-                        audio.module_type = dev.module_type;
-                        audio.online = dev.online;
-                        audio.url = dev.url;
-                        // audio.CreateDevice();
                         break;
                     default:
                         break;
@@ -178,7 +172,7 @@ namespace IoTBoxTiles
                 this.Close();
             }
             var json_str = await result.Item2.Content.ReadAsStringAsync();
-            dev_types = JsonConvert.DeserializeObject<string[]>(json_str);
+            _dev_types = JsonConvert.DeserializeObject<string[]>(json_str);
             createDevices();
             buildTreeView();
             //updateBasicDetails();

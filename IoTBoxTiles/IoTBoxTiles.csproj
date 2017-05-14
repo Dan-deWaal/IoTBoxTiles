@@ -60,11 +60,29 @@
     <Compile Include="DeviceBase.cs" />
     <Compile Include="Devices\Audio.cs" />
     <Compile Include="Devices\Bluetooth.cs" />
+    <Compile Include="Devices\Controls\AudioLarge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\AudioLarge.Designer.cs">
+      <DependentUpon>AudioLarge.cs</DependentUpon>
+    </Compile>
     <Compile Include="Devices\Controls\AudioSmall.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Devices\Controls\AudioSmall.Designer.cs">
       <DependentUpon>AudioSmall.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Controls\Parts\ConnectPart.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\Parts\ConnectPart.Designer.cs">
+      <DependentUpon>ConnectPart.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Controls\Parts\PlugTitle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\Parts\PlugTitle.Designer.cs">
+      <DependentUpon>PlugTitle.cs</DependentUpon>
     </Compile>
     <Compile Include="Devices\Device.cs" />
     <Compile Include="Devices\Industrial.cs" />
@@ -87,8 +105,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServerComm.cs" />
     <Compile Include="Devices\SmartPlug.cs" />
+    <EmbeddedResource Include="Devices\Controls\AudioLarge.resx">
+      <DependentUpon>AudioLarge.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\AudioSmall.resx">
       <DependentUpon>AudioSmall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\Parts\ConnectPart.resx">
+      <DependentUpon>ConnectPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\Parts\PlugTitle.resx">
+      <DependentUpon>PlugTitle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
@@ -119,6 +146,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
