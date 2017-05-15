@@ -1,6 +1,6 @@
 ﻿namespace IoTBoxTiles.Devices.Controls
 {
-    partial class USBLarge
+    partial class SmartPlugLarge
     {
         /// <summary> 
         /// Required designer variable.
@@ -29,13 +29,10 @@
         private void InitializeComponent()
         {
             this.plugTitleCtrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
-            this.connectPart1 = new IoTBoxTiles.Devices.Controls.Parts.ConnectPart();
             this.SuspendLayout();
             // 
             // plugTitleCtrl
             // 
-            this.plugTitleCtrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.plugTitleCtrl.FriendlyName = "name";
             this.plugTitleCtrl.Location = new System.Drawing.Point(0, 0);
             this.plugTitleCtrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
@@ -43,24 +40,15 @@
             this.plugTitleCtrl.PowerChecked = false;
             this.plugTitleCtrl.Size = new System.Drawing.Size(478, 48);
             this.plugTitleCtrl.TabIndex = 0;
+            this.plugTitleCtrl.PowerCheckedChanged += new System.EventHandler(this.plugTitleCtrl_PowerCheckedChanged);
+            this.plugTitleCtrl.Load += new System.EventHandler(this.plugTitleCtrl_Load);
             // 
-            // connectPart1
-            // 
-            this.connectPart1.Client = null;
-            this.connectPart1.ConnectChecked = false;
-            this.connectPart1.Location = new System.Drawing.Point(0, 52);
-            this.connectPart1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.connectPart1.Name = "connectPart1";
-            this.connectPart1.Size = new System.Drawing.Size(318, 64);
-            this.connectPart1.TabIndex = 1;
-            // 
-            // USBLarge
+            // SmartPlugLarge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.connectPart1);
             this.Controls.Add(this.plugTitleCtrl);
-            this.Name = "USBLarge";
+            this.Name = "SmartPlugLarge";
             this.Size = new System.Drawing.Size(480, 460);
             this.ResumeLayout(false);
 
@@ -69,6 +57,5 @@
         #endregion
 
         private Parts.PlugTitle plugTitleCtrl;
-        private Parts.ConnectPart connectPart1;
     }
 }

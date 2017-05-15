@@ -22,15 +22,9 @@ namespace IoTBoxTiles.Devices.Controls
 
         public void UpdateUI()
         {
-            // only enable controls if they're online
-            foreach (Control control in Controls)
-                control.Enabled = _device.online;
-
-            // if device is online, update info
-            if (_device.online)
-            {
-                //
-            }
+            plugTitleCtrl.FriendlyName = _device.friendly_name;
+            plugTitleCtrl.PowerChecked = _device.plug_status;
+            connectPart1.ConnectChecked = _device.connected;
         }
 
         private void AudioSmall_Load(object sender, EventArgs e)

@@ -23,12 +23,14 @@ namespace IoTBoxTiles.Devices.Controls
 
         public void UpdateUI()
         {
-            // placeholder
+            plugTitleCtrl.FriendlyName = _device.friendly_name;
+            plugTitleCtrl.PowerChecked = _device.plug_status;
+            //connectPart1.ConnectChecked = _device.connected;
         }
 
         private void AudioLarge_Load(object sender, EventArgs e)
         {
-            plugTitleCtrl.FriendlyName = "gogogo";
+            UpdateUI();
         }
     }
 }

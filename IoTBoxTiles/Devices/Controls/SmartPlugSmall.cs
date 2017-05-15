@@ -10,23 +10,32 @@ using System.Windows.Forms;
 
 namespace IoTBoxTiles.Devices.Controls
 {
-    public partial class USBLarge : UserControl
+    public partial class SmartPlugSmall : UserControl
     {
-        private USB _device;
+        private SmartPlug _device;
 
-        public USBLarge(USB usb_device)
+        public SmartPlugSmall(SmartPlug sm_device)
         {
             InitializeComponent();
 
-            _device = usb_device;
+            _device = sm_device;
         }
 
         public void UpdateUI()
         {
             plugTitleCtrl.FriendlyName = _device.friendly_name;
             plugTitleCtrl.PowerChecked = _device.plug_status;
-            connectPart1.ConnectChecked = _device.connected;
         }
 
+        private void plugTitleCtrl_Load(object sender, EventArgs e)
+        {
+            UpdateUI();
+        }
+
+        private void plugTitleCtrl_PowerCheckedChanged(object sender, EventArgs e)
+        {
+            // TODO: do stuff
+            ((CheckBox)sender).Text = plugTitleCtrl.PowerChecked ? "POW" : "pow";
+        }
     }
 }

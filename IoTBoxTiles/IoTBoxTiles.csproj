@@ -84,6 +84,18 @@
     <Compile Include="Devices\Controls\Parts\PlugTitle.Designer.cs">
       <DependentUpon>PlugTitle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devices\Controls\SmartPlugLarge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\SmartPlugLarge.Designer.cs">
+      <DependentUpon>SmartPlugLarge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Controls\SmartPlugSmall.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\SmartPlugSmall.Designer.cs">
+      <DependentUpon>SmartPlugSmall.cs</DependentUpon>
+    </Compile>
     <Compile Include="Devices\Controls\USBLarge.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -128,6 +140,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\Parts\PlugTitle.resx">
       <DependentUpon>PlugTitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\SmartPlugLarge.resx">
+      <DependentUpon>SmartPlugLarge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\SmartPlugSmall.resx">
+      <DependentUpon>SmartPlugSmall.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\USBLarge.resx">
       <DependentUpon>USBLarge.cs</DependentUpon>
