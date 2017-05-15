@@ -72,6 +72,18 @@
     <Compile Include="Devices\Controls\AudioSmall.Designer.cs">
       <DependentUpon>AudioSmall.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devices\Controls\BluetoothLarge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\BluetoothLarge.Designer.cs">
+      <DependentUpon>BluetoothLarge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Controls\BluetoothSmall.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\BluetoothSmall.Designer.cs">
+      <DependentUpon>BluetoothSmall.cs</DependentUpon>
+    </Compile>
     <Compile Include="Devices\Controls\Parts\ConnectPart.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -134,6 +146,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\AudioSmall.resx">
       <DependentUpon>AudioSmall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\BluetoothLarge.resx">
+      <DependentUpon>BluetoothLarge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\BluetoothSmall.resx">
+      <DependentUpon>BluetoothSmall.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\Parts\ConnectPart.resx">
       <DependentUpon>ConnectPart.cs</DependentUpon>

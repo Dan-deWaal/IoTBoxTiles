@@ -79,13 +79,8 @@ namespace IoTBoxTiles
                         new_devices.Add(smartplug);
                         break;
                     case 2: // *** Bluetooth ***
-                        Bluetooth bluetooth = new Bluetooth();
+                        Bluetooth bluetooth = new Bluetooth(dev);
                         new_devices.Add(bluetooth);
-                        bluetooth.device_id = dev.device_id;
-                        bluetooth.friendly_name = dev.friendly_name;
-                        bluetooth.module_type = dev.module_type;
-                        bluetooth.online = dev.online;
-                        bluetooth.url = dev.url;
                         break;
                     case 3: // *** USB ***
                         USB usb = new USB(dev);
