@@ -4,28 +4,46 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IoTBoxTiles.Devices.Controls;
 
 namespace IoTBoxTiles.Devices
 {
-    class SmartPlug : Device
+    public class SmartPlug : Device
     {
         //unique properties
 
-        public SmartPlug()
+        public SmartPlug(Device old_device) : base(old_device)
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+        }
+
+        public override void CreateDevice()
+        {
+            UI_small = new Panel()
+            {
+                Name = "UISmallPanel",
+                Width = 270,
+                Height = 200,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            UI_small.Controls.Add(new SmartPlugSmall(this));
+
+            UI_large = new SmartPlugLarge(this)
+            {
+                Name = "UILarge",
+                Width = 400,
+                Height = 600,
+                BorderStyle = BorderStyle.FixedSingle,
+            };
         }
 
         public void updateLargeUI()
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
-            UpdateLargeCommonUI(table);
+            ((SmartPlugLarge)UI_large).UpdateUI();
         }
 
         public void updateSmallUI()
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
-            UpdateSmallCommonUI(table);
+            ((SmartPlugSmall)UI_small.Controls[0]).UpdateUI();
         }
     }
 }

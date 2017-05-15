@@ -23,6 +23,9 @@ namespace IoTBoxTiles.Devices.Controls
         
         public void UpdateUI()
         {
+            plugTitleCtrl.FriendlyName = _device.friendly_name;
+            plugTitleCtrl.PowerChecked = _device.plug_status;
+            connectPart1.ConnectChecked = _device.connected;
             // only enable controls if they're online
             foreach (Control control in Controls)
                 control.Enabled = _device.online;

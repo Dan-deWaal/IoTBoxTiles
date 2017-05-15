@@ -1,6 +1,6 @@
 ﻿namespace IoTBoxTiles.Devices.Controls
 {
-    partial class USBLarge
+    partial class BluetoothLarge
     {
         /// <summary> 
         /// Required designer variable.
@@ -43,6 +43,8 @@
             this.plugTitleCtrl.PowerChecked = false;
             this.plugTitleCtrl.Size = new System.Drawing.Size(478, 48);
             this.plugTitleCtrl.TabIndex = 0;
+            this.plugTitleCtrl.PowerCheckedChanged += new System.EventHandler(this.plugTitleCtrl_PowerCheckedChanged);
+            this.plugTitleCtrl.Load += new System.EventHandler(this.plugTitleCtrl_Load);
             // 
             // connectPart1
             // 
@@ -51,16 +53,17 @@
             this.connectPart1.Location = new System.Drawing.Point(0, 52);
             this.connectPart1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.connectPart1.Name = "connectPart1";
-            this.connectPart1.Size = new System.Drawing.Size(318, 64);
+            this.connectPart1.Size = new System.Drawing.Size(317, 64);
             this.connectPart1.TabIndex = 1;
+            this.connectPart1.ConnectCheckedChanged += new System.EventHandler(this.connectPart1_ConnectCheckedChanged);
             // 
-            // USBLarge
+            // BluetoothLarge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.connectPart1);
             this.Controls.Add(this.plugTitleCtrl);
-            this.Name = "USBLarge";
+            this.Name = "BluetoothLarge";
             this.Size = new System.Drawing.Size(480, 460);
             this.ResumeLayout(false);
 

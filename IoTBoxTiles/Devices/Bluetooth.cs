@@ -4,10 +4,12 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IoTBoxTiles.Devices.Controls.Parts;
+using IoTBoxTiles.Devices.Controls;
 
 namespace IoTBoxTiles.Devices
 {
-    class Bluetooth : Device
+    public class Bluetooth : Device
     {
         //unique properties
         public bool connected { get; set; }
@@ -15,40 +17,39 @@ namespace IoTBoxTiles.Devices
         public string ip_address { get; set; } //convert to IP datatype be better?
         public int? port { get; set; }
 
-        public Bluetooth()
+        public Bluetooth(Device old_device) : base(old_device)
         {
-            TableLayoutPanel tableSmall = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
-            var t = new CheckBox() { Name = "Connect", Text = "Connected" };
-            t.CheckStateChanged += new EventHandler(connectToggle);
-            tableSmall.Controls.Add(t, 0, 2);
-
-            TableLayoutPanel tableLarge = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
-            tableLarge.Controls.Add(new CheckBox() { Name = "Connect", Text = "Connected" }, 0, 5);
-            tableLarge.Controls.Add(new Label() { Name = "Client", Text = "client_id: " }, 0, 6);
-            tableLarge.Controls.Add(new Label() { Name = "IP", Text = "IP: " }, 0, 7);
-            tableLarge.Controls.Add(new Label() { Name = "Port", Text = "port: " }, 1, 7);
         }
 
-        public void connectToggle(object sender, EventArgs e)
+        public override void CreateDevice()
         {
-            Console.WriteLine(sender.ToString());
-            CheckBox blah = (CheckBox)sender;
-            string message = "State = " + blah.Checked.ToString();
-            MessageBox.Show(message);
+            UI_small = new Panel()
+            {
+                Name = "UISmallPanel",
+                Width = 270,
+                Height = 200,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            UI_small.Controls.Add(new BluetoothSmall(this));
+
+            UI_large = new BluetoothLarge(this)
+            {
+                Name = "UILarge",
+                Width = 400,
+                Height = 600,
+                BorderStyle = BorderStyle.FixedSingle,
+            };
         }
 
         public void updateLargeUI()
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
-            UpdateLargeCommonUI(table);
-            UpdateLargeConnectUI(table, client_id, ip_address, port);
+            ((BluetoothLarge)UI_large).UpdateUI();
         }
 
         public void updateSmallUI()
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
-            UpdateSmallCommonUI(table);
-            UpdateSmallConnectUI(table);
+            ((BluetoothSmall)UI_small.Controls[0]).UpdateUI();
         }
     }
 }
+

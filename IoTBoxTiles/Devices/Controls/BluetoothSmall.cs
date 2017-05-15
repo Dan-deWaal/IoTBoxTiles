@@ -8,16 +8,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace IoTBoxTiles.Devices.Controls
+namespace IoTBoxTiles.Devices.Controls.Parts
 {
-    public partial class USBSmall : UserControl
+    public partial class BluetoothSmall : UserControl
     {
-        private USB _device;
+        private Bluetooth _device;
 
-        public USBSmall(USB usb_device)
+        public BluetoothSmall(Bluetooth bt_device)
         {
             InitializeComponent();
-            _device = usb_device;
+            _device = bt_device;
         }
 
         public void UpdateUI()
@@ -27,7 +27,7 @@ namespace IoTBoxTiles.Devices.Controls
             connectPart1.ConnectChecked = _device.connected;
         }
 
-        private void AudioSmall_Load(object sender, EventArgs e)
+        private void plugTitleCtrl_Load(object sender, EventArgs e)
         {
             UpdateUI();
         }
@@ -40,14 +40,7 @@ namespace IoTBoxTiles.Devices.Controls
 
         private void connectPart1_ConnectCheckedChanged(object sender, EventArgs e)
         {
-            // TODO: replace with working code
-            connectPart1.Client = "test";
-        }
 
-        private void connectPart1_DisconnectBtnClick(object sender, EventArgs e)
-        {
-            // TODO: replace with working code
-            connectPart1.Client = null;
         }
     }
 }
