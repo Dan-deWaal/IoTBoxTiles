@@ -226,7 +226,7 @@ namespace IoTBoxTiles
         {
             if (_large_ui)
             {
-                UserControl large_control = (UserControl)deviceTableLayout.Controls.Find("UILarge", true).FirstOrDefault();
+                UserControl large_control = (UserControl)Controls.Find("UILarge", true).FirstOrDefault();
                 if (large_control == null)
                     return;
                 large_control.Width = deviceFlowLayout.ClientSize.Width - 2;

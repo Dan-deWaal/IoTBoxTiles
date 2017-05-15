@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DevicesForm));
-            this.deviceTableLayout = new System.Windows.Forms.TableLayoutPanel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.lbl_status = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -38,29 +37,12 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tv_DeviceList = new System.Windows.Forms.TreeView();
             this.deviceFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
-            this.deviceTableLayout.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // deviceTableLayout
-            // 
-            this.deviceTableLayout.ColumnCount = 1;
-            this.deviceTableLayout.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.deviceTableLayout.Controls.Add(this.statusStrip1, 0, 1);
-            this.deviceTableLayout.Controls.Add(this.splitContainer1, 0, 0);
-            this.deviceTableLayout.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.deviceTableLayout.Location = new System.Drawing.Point(0, 0);
-            this.deviceTableLayout.Margin = new System.Windows.Forms.Padding(5);
-            this.deviceTableLayout.Name = "deviceTableLayout";
-            this.deviceTableLayout.RowCount = 2;
-            this.deviceTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.deviceTableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 57F));
-            this.deviceTableLayout.Size = new System.Drawing.Size(2379, 1199);
-            this.deviceTableLayout.TabIndex = 0;
             // 
             // statusStrip1
             // 
@@ -110,7 +92,7 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(5, 5);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(5);
             this.splitContainer1.Name = "splitContainer1";
             // 
@@ -123,9 +105,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.deviceFlowLayout);
             this.splitContainer1.Panel2MinSize = 320;
-            this.splitContainer1.Size = new System.Drawing.Size(2369, 1132);
-            this.splitContainer1.SplitterDistance = 616;
-            this.splitContainer1.SplitterWidth = 16;
+            this.splitContainer1.Size = new System.Drawing.Size(2379, 1152);
+            this.splitContainer1.SplitterDistance = 618;
             this.splitContainer1.TabIndex = 1;
             // 
             // tv_DeviceList
@@ -137,7 +118,7 @@
             this.tv_DeviceList.Location = new System.Drawing.Point(0, 0);
             this.tv_DeviceList.Margin = new System.Windows.Forms.Padding(5);
             this.tv_DeviceList.Name = "tv_DeviceList";
-            this.tv_DeviceList.Size = new System.Drawing.Size(616, 1132);
+            this.tv_DeviceList.Size = new System.Drawing.Size(618, 1152);
             this.tv_DeviceList.TabIndex = 0;
             this.tv_DeviceList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_DeviceList_AfterSelect);
             // 
@@ -148,7 +129,7 @@
             this.deviceFlowLayout.Location = new System.Drawing.Point(0, 0);
             this.deviceFlowLayout.Margin = new System.Windows.Forms.Padding(5);
             this.deviceFlowLayout.Name = "deviceFlowLayout";
-            this.deviceFlowLayout.Size = new System.Drawing.Size(1737, 1132);
+            this.deviceFlowLayout.Size = new System.Drawing.Size(1757, 1152);
             this.deviceFlowLayout.TabIndex = 0;
             this.deviceFlowLayout.Resize += new System.EventHandler(this.flowLayoutPanel1_Resize);
             // 
@@ -157,15 +138,14 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2379, 1199);
-            this.Controls.Add(this.deviceTableLayout);
+            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.statusStrip1);
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.MinimumSize = new System.Drawing.Size(1547, 827);
             this.Name = "DevicesForm";
             this.Text = "IoTTiles";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
             this.Load += new System.EventHandler(this.Form2_LoadAsync);
-            this.deviceTableLayout.ResumeLayout(false);
-            this.deviceTableLayout.PerformLayout();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
@@ -173,12 +153,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.TableLayoutPanel deviceTableLayout;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.FlowLayoutPanel deviceFlowLayout;
