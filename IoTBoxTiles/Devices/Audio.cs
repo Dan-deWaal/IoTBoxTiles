@@ -51,7 +51,7 @@ namespace IoTBoxTiles.Devices
 
         public void UpdateSmallUI()
         {
-            ((AudioSmall)UI_small.Controls[0]).UpdateUI(UI_small.Width, UI_small.Height);
+            ((AudioSmall)UI_small.Controls[0]).UpdateUI();
         }
     }
 }

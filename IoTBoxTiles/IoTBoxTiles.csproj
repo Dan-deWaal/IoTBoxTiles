@@ -84,6 +84,18 @@
     <Compile Include="Devices\Controls\Parts\PlugTitle.Designer.cs">
       <DependentUpon>PlugTitle.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devices\Controls\USBLarge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\USBLarge.Designer.cs">
+      <DependentUpon>USBLarge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Controls\USBSmall.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\USBSmall.Designer.cs">
+      <DependentUpon>USBSmall.cs</DependentUpon>
+    </Compile>
     <Compile Include="Devices\Device.cs" />
     <Compile Include="Devices\Industrial.cs" />
     <Compile Include="Devices\Infrared.cs" />
@@ -116,6 +128,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\Parts\PlugTitle.resx">
       <DependentUpon>PlugTitle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\USBLarge.resx">
+      <DependentUpon>USBLarge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\USBSmall.resx">
+      <DependentUpon>USBSmall.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
