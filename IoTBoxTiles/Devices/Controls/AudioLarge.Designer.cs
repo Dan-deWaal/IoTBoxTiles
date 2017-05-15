@@ -49,7 +49,7 @@
             this.connectPartCtrl.ConnectChecked = false;
             this.connectPartCtrl.Location = new System.Drawing.Point(3, 111);
             this.connectPartCtrl.Name = "connectPartCtrl";
-            this.connectPartCtrl.Size = new System.Drawing.Size(675, 64);
+            this.connectPartCtrl.Size = new System.Drawing.Size(513, 64);
             this.connectPartCtrl.TabIndex = 1;
             // 
             // AudioLarge
