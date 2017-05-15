@@ -4,31 +4,69 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IoTBoxTiles.Devices.Controls;
 
 namespace IoTBoxTiles.Devices
 {
-    class Infrared : Device
+    public class Infrared : Device
     {
         //unique properties
-        //public List<Tuple> buttons(string_name, string_code, bool_quick) { get; set; }
-        public bool repeater { get; set; }
-        public bool feedback { get; set; }
+        public bool _repeater { get; set; }
+        public bool[] _feedback { get; set; }
+        public List<IRButton> _buttons { get; set; }
 
-        public Infrared()
+        public Infrared(Device old_device) : base(old_device)
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+            _feedback = new bool[4];
+            _buttons = new List<IRButton>();
+            // *** fake buttons ***
+            _buttons.Add(new IRButton());
+            _buttons.First().id = 1;
+            _buttons.First().name = "Bob";
+            // **   remove!!   **
+        }
+
+        public override void CreateDevice()
+        {
+            UI_small = new Panel()
+            {
+                Name = "UISmallPanel",
+                Width = 270,
+                Height = 200,
+                BorderStyle = BorderStyle.FixedSingle
+            };
+            UI_small.Controls.Add(new InfraredSmall(this));
+
+            UI_large = new InfraredLarge(this)
+            {
+                Name = "UILarge",
+                Width = 400,
+                Height = 600,
+                BorderStyle = BorderStyle.FixedSingle,
+            };
         }
 
         public void updateLargeUI()
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
-            UpdateLargeCommonUI(table);
+            ((InfraredLarge)UI_large).UpdateUI();
         }
 
         public void updateSmallUI()
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
-            UpdateSmallCommonUI(table);
+            ((InfraredSmall)UI_small.Controls[0]).UpdateUI();
+        }
+
+        public class IRButton
+        {
+            public int? id { get; set; }
+            public int? icon { get; set; }
+            public string name { get; set; }
+            public bool? continuous { get; set; }
+            public int? num_pulses { get; set; }
+            public IRButton()
+            {
+            }
+
         }
     }
 }

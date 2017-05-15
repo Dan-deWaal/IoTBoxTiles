@@ -84,6 +84,18 @@
     <Compile Include="Devices\Controls\BluetoothSmall.Designer.cs">
       <DependentUpon>BluetoothSmall.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devices\Controls\InfraredLarge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\InfraredLarge.Designer.cs">
+      <DependentUpon>InfraredLarge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Controls\InfraredSmall.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\InfraredSmall.Designer.cs">
+      <DependentUpon>InfraredSmall.cs</DependentUpon>
+    </Compile>
     <Compile Include="Devices\Controls\Parts\ConnectPart.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -152,6 +164,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\BluetoothSmall.resx">
       <DependentUpon>BluetoothSmall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\InfraredLarge.resx">
+      <DependentUpon>InfraredLarge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\InfraredSmall.resx">
+      <DependentUpon>InfraredSmall.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\Parts\ConnectPart.resx">
       <DependentUpon>ConnectPart.cs</DependentUpon>

@@ -87,13 +87,8 @@ namespace IoTBoxTiles
                         new_devices.Add(usb);
                         break;
                     case 4: // *** Infrared ***
-                        Infrared infrared = new Infrared();
+                        Infrared infrared = new Infrared(dev);
                         new_devices.Add(infrared);
-                        infrared.device_id = dev.device_id;
-                        infrared.friendly_name = dev.friendly_name;
-                        infrared.module_type = dev.module_type;
-                        infrared.online = dev.online;
-                        infrared.url = dev.url;
                         break;
                     case 5: // *** Industrial ***
                         Industrial industrial = new Industrial();
