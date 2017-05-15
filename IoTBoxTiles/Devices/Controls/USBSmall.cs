@@ -10,35 +10,26 @@ using System.Windows.Forms;
 
 namespace IoTBoxTiles.Devices.Controls
 {
-    public partial class AudioSmall : UserControl
+    public partial class USBSmall : UserControl
     {
-        private Audio _device;
+        private USB _device;
 
-        public AudioSmall(Audio audio_device)
+        public USBSmall(USB usb_device)
         {
             InitializeComponent();
-
-            _device = audio_device;
+            _device = usb_device;
         }
-        
+
         public void UpdateUI()
         {
             // only enable controls if they're online
             foreach (Control control in Controls)
                 control.Enabled = _device.online;
-            
+
             // if device is online, update info
             if (_device.online)
             {
-                speakerChkBox.Enabled = _device.connected;
-                speakerChkBox.Checked = _device.connected && _device.speaker_status;
-                speakerScrollBar.Enabled = false;
-                speakerScrollBar.Value = _device.connected ? _device.speaker_VU : 0;
-
-                micChkBox.Enabled = _device.connected;
-                micChkBox.Checked = _device.connected && _device.mic_status;
-                micScrollBar.Enabled = false;
-                micScrollBar.Value = _device.connected ? _device.mic_VU : 0;
+                //
             }
         }
 

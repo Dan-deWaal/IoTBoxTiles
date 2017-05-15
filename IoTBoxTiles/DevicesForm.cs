@@ -93,13 +93,8 @@ namespace IoTBoxTiles
                         bluetooth.url = dev.url;
                         break;
                     case 3: // *** USB ***
-                        USB usb = new USB();
+                        USB usb = new USB(dev);
                         new_devices.Add(usb);
-                        usb.device_id = dev.device_id;
-                        usb.friendly_name = dev.friendly_name;
-                        usb.module_type = dev.module_type;
-                        usb.online = dev.online;
-                        usb.url = dev.url;
                         break;
                     case 4: // *** Infrared ***
                         Infrared infrared = new Infrared();
