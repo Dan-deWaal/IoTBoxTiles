@@ -62,6 +62,7 @@ namespace IoTBoxTiles
             }
             tv_DeviceList.Nodes[0].ExpandAll();
             tv_DeviceList.EndUpdate();
+            tv_DeviceList.SelectedNode = tv_DeviceList.Nodes[0];
         }
 
         private void createDevices()
@@ -294,15 +295,11 @@ namespace IoTBoxTiles
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
-            //DialogResult result = MessageBox.Show("Really quit?", string.Empty, MessageBoxButtons.YesNo);
-            //if (result == DialogResult.No)
-            //{
-            //    e.Cancel = true;
-            //} else
-            //{
-            Application.Exit();
-            //}
+            DialogResult result = MessageBox.Show("Really quit?", string.Empty, MessageBoxButtons.YesNo);
+            if (result != DialogResult.Yes)
+            {
+                e.Cancel = true;
+            }
         }
-
     }
 }
