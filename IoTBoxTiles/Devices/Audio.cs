@@ -28,25 +28,25 @@ namespace IoTBoxTiles.Devices
         {
             UI_small = new Panel()
             {
+                Name = "UISmallPanel",
                 Width = 270,
                 Height = 200,
                 BorderStyle = BorderStyle.FixedSingle
             };
             UI_small.Controls.Add(new AudioSmall(this));
 
-            UI_large = new Panel()
+            UI_large = new AudioLarge(this)
             {
+                Name = "UILarge",
                 Width = 400,
                 Height = 600,
                 BorderStyle = BorderStyle.FixedSingle,
-                // Dock = DockStyle.Fill
             };
-            UI_large.Controls.Add(new AudioLarge(this));
         }
 
         public void UpdateLargeUI()
         {
-            ((AudioLarge)UI_large.Controls[0]).UpdateUI(UI_large.Width, UI_large.Height);
+            ((AudioLarge)UI_large).UpdateUI();
         }
 
         public void UpdateSmallUI()

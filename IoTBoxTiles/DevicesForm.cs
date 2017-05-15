@@ -194,31 +194,17 @@ namespace IoTBoxTiles
                     dev.show_small = false;
                 }
             }
-            else if (tag.Equals("Devices"))
+            else
             {
                 _large_ui = false;
                 foreach (var dev in _devices)
                 {
-                    dev.show_small = true;
+                    dev.show_small = false;
                     dev.show_large = false;
-                }
-            }
-            else if (tag.Equals("Online"))
-            {
-                _large_ui = false;
-                foreach (var dev in _devices)
-                {
-                    dev.show_small = dev.online;
-                    dev.show_large = false;
-                }
-            }
-            else if (tag.Equals("Offline"))
-            {
-                _large_ui = false;
-                foreach (var dev in _devices)
-                {
-                    dev.show_small = !dev.online;
-                    dev.show_large = false;
+                    if (tag == "Devices" 
+                        || (tag == "Online" && dev.online)
+                        || (tag == "Offline" && !dev.online))
+                        dev.show_small = true;
                 }
             }
             updatePanels();
@@ -242,15 +228,13 @@ namespace IoTBoxTiles
 
         private void flowLayoutPanel1_Resize(object sender, EventArgs e)
         {
-            Control control = (Control)sender;
             if (_large_ui)
             {
-                Panel large_panel = (Panel)deviceTableLayout.Controls.Find("UILargePanel", true).FirstOrDefault();
-                if (large_panel == null)
+                UserControl large_control = (UserControl)deviceTableLayout.Controls.Find("UILarge", true).FirstOrDefault();
+                if (large_control == null)
                     return;
-
-                large_panel.Width = control.Size.Width - 20;
-                large_panel.Height = control.Size.Height - 20;
+                large_control.Width = deviceFlowLayout.ClientSize.Width - 2;
+                large_control.Height = deviceFlowLayout.ClientSize.Height - 2;
             }
         }
 
@@ -294,7 +278,7 @@ namespace IoTBoxTiles
                         break;
                     case 7:
                         Audio au = (Audio)dev;
-                        // au.UpdateLargeUI();
+                        au.UpdateLargeUI();
                         au.UpdateSmallUI();
                         break;
                     default:

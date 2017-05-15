@@ -21,11 +21,6 @@ namespace IoTBoxTiles.Devices.Controls
             _device = audio_device;
         }
 
-        public void UpdateUI(int width, int height)
-        {
-            UpdateUI();
-        }
-
         public void UpdateUI()
         {
             // placeholder
@@ -33,7 +28,7 @@ namespace IoTBoxTiles.Devices.Controls
 
         private void AudioLarge_Load(object sender, EventArgs e)
         {
-            // plugTitleCtrl.FriendlyName = "gogogo";
+            plugTitleCtrl.FriendlyName = "gogogo";
         }
     }
 }

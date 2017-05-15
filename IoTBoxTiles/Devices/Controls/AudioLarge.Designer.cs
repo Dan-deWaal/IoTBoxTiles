@@ -28,31 +28,47 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.plugTitle1 = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
+            this.plugTitleCtrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
+            this.connectPartCtrl = new IoTBoxTiles.Devices.Controls.Parts.ConnectPart();
             this.SuspendLayout();
             // 
-            // plugTitle1
+            // plugTitleCtrl
             // 
-            this.plugTitle1.FriendlyName = "name";
-            this.plugTitle1.Location = new System.Drawing.Point(3, 3);
-            this.plugTitle1.Name = "plugTitle1";
-            this.plugTitle1.PowerChecked = false;
-            this.plugTitle1.Size = new System.Drawing.Size(843, 139);
-            this.plugTitle1.TabIndex = 0;
+            this.plugTitleCtrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.plugTitleCtrl.FriendlyName = "name";
+            this.plugTitleCtrl.Location = new System.Drawing.Point(3, 3);
+            this.plugTitleCtrl.Name = "plugTitleCtrl";
+            this.plugTitleCtrl.PowerChecked = false;
+            this.plugTitleCtrl.Size = new System.Drawing.Size(955, 48);
+            this.plugTitleCtrl.TabIndex = 0;
+            // 
+            // connectPartCtrl
+            // 
+            this.connectPartCtrl.Client = null;
+            this.connectPartCtrl.ConnectChecked = false;
+            this.connectPartCtrl.Location = new System.Drawing.Point(3, 111);
+            this.connectPartCtrl.Name = "connectPartCtrl";
+            this.connectPartCtrl.Size = new System.Drawing.Size(675, 64);
+            this.connectPartCtrl.TabIndex = 1;
             // 
             // AudioLarge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.plugTitle1);
+            this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.connectPartCtrl);
+            this.Controls.Add(this.plugTitleCtrl);
             this.Name = "AudioLarge";
-            this.Size = new System.Drawing.Size(849, 885);
+            this.Size = new System.Drawing.Size(961, 892);
+            this.Load += new System.EventHandler(this.AudioLarge_Load);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private Parts.PlugTitle plugTitle1;
+        private Parts.PlugTitle plugTitleCtrl;
+        private Parts.ConnectPart connectPartCtrl;
     }
 }

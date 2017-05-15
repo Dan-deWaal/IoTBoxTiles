@@ -117,15 +117,15 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.tv_DeviceList);
-            this.splitContainer1.Panel1MinSize = 320;
+            this.splitContainer1.Panel1MinSize = 180;
             // 
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.deviceFlowLayout);
             this.splitContainer1.Panel2MinSize = 320;
             this.splitContainer1.Size = new System.Drawing.Size(2369, 1132);
-            this.splitContainer1.SplitterDistance = 853;
-            this.splitContainer1.SplitterWidth = 8;
+            this.splitContainer1.SplitterDistance = 616;
+            this.splitContainer1.SplitterWidth = 16;
             this.splitContainer1.TabIndex = 1;
             // 
             // tv_DeviceList
@@ -137,7 +137,7 @@
             this.tv_DeviceList.Location = new System.Drawing.Point(0, 0);
             this.tv_DeviceList.Margin = new System.Windows.Forms.Padding(5);
             this.tv_DeviceList.Name = "tv_DeviceList";
-            this.tv_DeviceList.Size = new System.Drawing.Size(853, 1132);
+            this.tv_DeviceList.Size = new System.Drawing.Size(616, 1132);
             this.tv_DeviceList.TabIndex = 0;
             this.tv_DeviceList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_DeviceList_AfterSelect);
             // 
@@ -148,7 +148,7 @@
             this.deviceFlowLayout.Location = new System.Drawing.Point(0, 0);
             this.deviceFlowLayout.Margin = new System.Windows.Forms.Padding(5);
             this.deviceFlowLayout.Name = "deviceFlowLayout";
-            this.deviceFlowLayout.Size = new System.Drawing.Size(1508, 1132);
+            this.deviceFlowLayout.Size = new System.Drawing.Size(1737, 1132);
             this.deviceFlowLayout.TabIndex = 0;
             this.deviceFlowLayout.Resize += new System.EventHandler(this.flowLayoutPanel1_Resize);
             // 

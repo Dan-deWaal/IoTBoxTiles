@@ -16,8 +16,8 @@ namespace IoTBoxTiles.Devices
         public float? current_consumption { get; set; } // nullable float
 
         //UI Elements
-        public Panel UI_small { get; set; }
-        public Panel UI_large { get; set; }
+        public Control UI_small { get; set; }
+        public Control UI_large { get; set; }
         public bool show_small { get; set; }
         public bool show_large { get; set; }
 
