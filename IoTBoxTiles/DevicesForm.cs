@@ -20,8 +20,7 @@ namespace IoTBoxTiles
         private ServerComm _servComm = ServerComm.Instance;
         private string _username, _password;
         private bool _largeUi;
-
-        //this should be obtained from the server
+        
         String[] _devTypes;
 
         public DevicesForm(List<DeviceBase> device_list, string username, string password)

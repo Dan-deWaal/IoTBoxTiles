@@ -35,7 +35,6 @@ namespace IoTBoxTiles.Devices.Controls
                 buttonLayout.Enabled = true;
                 for (int i = 0; i<9; i++)
                 {
-                    Console.WriteLine(i.ToString());
                     foreach (Infrared.IRButton butt in _device._buttons)
                     {
                         if (butt.id == i)
