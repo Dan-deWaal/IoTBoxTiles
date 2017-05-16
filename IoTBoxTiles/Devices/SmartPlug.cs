@@ -36,12 +36,12 @@ namespace IoTBoxTiles.Devices
             };
         }
 
-        public void updateLargeUI()
+        public override void UpdateLargeUI()
         {
             ((SmartPlugLarge)UI_large).UpdateUI();
         }
 
-        public void updateSmallUI()
+        public override void UpdateSmallUI()
         {
             ((SmartPlugSmall)UI_small.Controls[0]).UpdateUI();
         }

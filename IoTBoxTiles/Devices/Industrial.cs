@@ -27,7 +27,7 @@ namespace IoTBoxTiles.Devices
             tableLarge.Controls.Add(new Label() { Name = "Monitor", Text = "Monitor : " }, 0, 8);
         }
 
-        public void updateLargeUI()
+        public override void UpdateLargeUI()
         {
             TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
             UpdateLargeCommonUI(table);
@@ -41,7 +41,7 @@ namespace IoTBoxTiles.Devices
             mon_lbl.Text = "Monitor : " + ser_mon;
         }
 
-        public void updateSmallUI()
+        public override void UpdateSmallUI()
         {
             TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
             UpdateSmallCommonUI(table);

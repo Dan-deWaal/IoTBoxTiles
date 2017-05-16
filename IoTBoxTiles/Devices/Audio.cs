@@ -44,12 +44,12 @@ namespace IoTBoxTiles.Devices
             };
         }
 
-        public void UpdateLargeUI()
+        public override void UpdateLargeUI()
         {
             ((AudioLarge)UI_large).UpdateUI();
         }
 
-        public void UpdateSmallUI()
+        public override void UpdateSmallUI()
         {
             ((AudioSmall)UI_small.Controls[0]).UpdateUI();
         }
