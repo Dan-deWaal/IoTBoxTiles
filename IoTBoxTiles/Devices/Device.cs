@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
+using Newtonsoft.Json.Linq;
 
 namespace IoTBoxTiles.Devices
 {
@@ -12,7 +13,19 @@ namespace IoTBoxTiles.Devices
     public class Device : DeviceBase
     {
         private ServerComm _serverComm = ServerComm.Instance;
-        
+
+        public bool SameDevice(object o)
+        {
+            JObject dev = o as JObject;
+            if (dev == null)
+                throw new ArgumentException("device is not castable to JObject");
+
+            if ((int)dev["device_id"] == device_id
+                && (int)dev["module_type"] == module_type)
+                return true;
+            return false;
+        }
+
         //Global Properties
         public DateTime first_connected { get; set; }
         public DateTime last_checked { get; set; }
@@ -41,6 +54,14 @@ namespace IoTBoxTiles.Devices
             CreateDevice();
         }
 
+        // convert from JSON.net 'JObject'
+        // gross but necessary unless we restructure the JSON response
+        public Device(JObject device)
+        {
+            UpdateDevice(device);
+            CreateDevice();
+        }
+
         public Device(Device old_device)
         {
             // from device base
@@ -57,6 +78,20 @@ namespace IoTBoxTiles.Devices
             current_consumption = old_device.current_consumption;
 
             CreateDevice();
+        }
+
+        public virtual void UpdateDevice(JObject device)
+        {
+            device_id = (int)device["device_id"];
+            friendly_name = (string)device["friendly_name"];
+            module_type = (int)device["module_type"];
+            online = (bool)device["online"];
+            url = (string)device["url"];
+
+            first_connected = (DateTime)device["first_connected"];
+            last_checked = (DateTime)device["last_checked"];
+            plug_status = (bool)device["plug_status"];
+            current_consumption = (float?)device["current_consumption"];
         }
 
         public virtual void CreateDevice()

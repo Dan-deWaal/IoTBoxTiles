@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IoTBoxTiles.Devices.Controls;
+using Newtonsoft.Json.Linq;
 
 namespace IoTBoxTiles.Devices
 {
@@ -31,6 +32,10 @@ namespace IoTBoxTiles.Devices
             _buttons.First().name = "Bob";
             
             // **   remove!!   **
+        }
+
+        public Infrared(JObject device) : base(device)
+        {
         }
 
         public override void CreateDevice()

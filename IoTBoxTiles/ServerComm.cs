@@ -17,21 +17,16 @@ namespace IoTBoxTiles
         private static readonly Lazy<ServerComm> lazy =
             new Lazy<ServerComm>(() => new ServerComm());
         public static ServerComm Instance { get { return lazy.Value; } }
-
         private HttpClient client;
-        public string Root { get; set; }
-        public string Heartbeat { get; set; }
-        public string Login { get; set; }
-        public string Details { get; set; }
+
+        public string Root = @"https://iot.duality.co.nz/api/1";
+
         public string Email { private get;  set; }
         public string Password { private get; set; }
 
-        private ServerComm() {
+        private ServerComm()
+        {
             client = new HttpClient();
-            Root = @"https://iot.duality.co.nz/api/1";
-            Heartbeat = Root + @"/heartbeat";
-            Login = Root + @"/user/devices/list";
-            Details = Root + @"/user/devices/details";
         }
         
         public async Task<Tuple<ServerResponse, HttpResponseMessage>> GetAsync(

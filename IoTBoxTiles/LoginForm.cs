@@ -36,14 +36,11 @@ namespace IoTBoxTiles
             _timer.Interval = 5000;
             _timer.Tick += HeartbeatTimer;
             _timer.Start();
-
+            HeartbeatTimer(null, null);
+            
             //login stuff
             lbl_LoginStatus.Hide();
             btn_login.Enabled = false;
-
-            //enter key
-            //txt_username.KeyDown += new KeyEventHandler(txt_Enter);
-            //txt_username.PreviewKeyDown += txt_Enter;
         }
         
         private void btnLogin_Click(object sender, EventArgs e)
@@ -57,7 +54,7 @@ namespace IoTBoxTiles
             lbl_ServerStatus.Text = "Logging in...";
             _serverComm.Email = txt_username.Text;
             _serverComm.Password = txt_passwd.Text;
-            var loginstat = await _serverComm.GetAsync(_serverComm.Login);
+            var loginstat = await _serverComm.GetAsync(_serverComm.Root + "/user/devices/list");
             switch (loginstat.Item1)
             {
                 case ServerResponse.NotConnected: //server not connected
@@ -68,7 +65,8 @@ namespace IoTBoxTiles
                     var jsonString = await loginstat.Item2.Content.ReadAsStringAsync(); // should never throw excptn because caught in servercomm.LoginAsync()
                     List<DeviceBase> devices = JsonConvert.DeserializeObject<List<DeviceBase>>(jsonString);
                     
-                    DevicesForm frm = new IoTBoxTiles.DevicesForm(devices, txt_username.Text, txt_passwd.Text);
+                    DevicesForm frm = new DevicesForm(devices);
+                    _timer.Stop();
                     this.Hide();
                     frm.ShowDialog();
                     this.Close();
@@ -90,7 +88,7 @@ namespace IoTBoxTiles
 
         private async void HeartbeatTimer(object sender, EventArgs e)
         {
-            var serverstat = await _serverComm.GetAsync(_serverComm.Heartbeat, false);
+            var serverstat = await _serverComm.GetAsync(_serverComm.Root + "/heartbeat", false);
             switch (serverstat.Item1)
             {
                 case ServerResponse.NotConnected:

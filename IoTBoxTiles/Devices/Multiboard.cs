@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace IoTBoxTiles.Devices
 {
@@ -17,6 +18,10 @@ namespace IoTBoxTiles.Devices
         public Multiboard()
         {
             TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+        }
+
+        public Multiboard(JObject device) : base(device)
+        {
         }
 
         public override void UpdateLargeUI()

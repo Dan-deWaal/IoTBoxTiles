@@ -5,15 +5,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IoTBoxTiles.Devices.Controls;
+using Newtonsoft.Json.Linq;
 
 namespace IoTBoxTiles.Devices
 {
     public class Audio : Device
     {
-        public Audio(Device old_device) : base(old_device)
-        {
-        }
-
         //unique properties
         public bool connected { get; set; }
         public int? client_id { get; set; } //nullable int
@@ -23,6 +20,27 @@ namespace IoTBoxTiles.Devices
         public bool mic_status { get; set; }
         public int speaker_VU { get; set; }
         public int mic_VU { get; set; }
+
+        public Audio(Device old_device) : base(old_device)
+        {
+        }
+
+        public Audio(JObject device) : base(device)
+        {
+        }
+    
+        public override void UpdateDevice(JObject device)
+        {
+            base.UpdateDevice(device);
+            connected = (bool)device["connected"];
+            client_id = (int?)device["client_id"];
+            ip_address = (string)device["ip_address"];
+            port = (int?)device["port"];
+            speaker_status = (bool)device["speaker_status"];
+            mic_status = (bool)device["mic_status"];
+            speaker_VU = (int)device["speaker_VU"];
+            mic_VU = (int)device["mic_VU"];
+        }
 
         public override void CreateDevice()
         {

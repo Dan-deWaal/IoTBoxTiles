@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace IoTBoxTiles.Devices
 {
@@ -25,6 +26,10 @@ namespace IoTBoxTiles.Devices
             tableLarge.Controls.Add(new Label() { Name = "COMPort", Text = "COM : " }, 0, 6);
             tableLarge.Controls.Add(new Label() { Name = "Settings", Text = "Serial Settings : " }, 0, 7);
             tableLarge.Controls.Add(new Label() { Name = "Monitor", Text = "Monitor : " }, 0, 8);
+        }
+
+        public Industrial(JObject device) : base(device)
+        {
         }
 
         public override void UpdateLargeUI()

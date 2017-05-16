@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using IoTBoxTiles.Devices.Controls.Parts;
 using IoTBoxTiles.Devices.Controls;
+using Newtonsoft.Json.Linq;
 
 namespace IoTBoxTiles.Devices
 {
@@ -18,6 +19,10 @@ namespace IoTBoxTiles.Devices
         public int? port { get; set; }
 
         public Bluetooth(Device old_device) : base(old_device)
+        {
+        }
+
+        public Bluetooth(JObject device) : base(device)
         {
         }
 

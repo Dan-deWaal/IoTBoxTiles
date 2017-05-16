@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using IoTBoxTiles.Devices;
+using Newtonsoft.Json.Linq;
 
 namespace IoTBoxTiles
 {
@@ -18,20 +19,17 @@ namespace IoTBoxTiles
     {
         private List<Device> _devices = new List<Device>();
         private ServerComm _servComm = ServerComm.Instance;
-        private string _username, _password;
         private bool _largeUi;
         
         String[] _devTypes;
 
-        public DevicesForm(List<DeviceBase> device_list, string username, string password)
+        public DevicesForm(List<DeviceBase> device_list)
         {
             InitializeComponent();
             foreach (var dev in device_list)
             {
                 _devices.Add(new Device(dev));
             }
-            _username = username;
-            _password = password;
         }
 
         private void buildTreeView()
@@ -120,27 +118,79 @@ namespace IoTBoxTiles
             _devices.AddRange(new_devices);
         }
 
-        private async void updateBasicDetails()
+        private async void UpdateDeviceDetails()
         {
             lbl_status.Text = "Downloading devices...  ";
-            var devdetails = await 
-                _servComm.GetAsync(_servComm.Details);
-            switch (devdetails.Item1)
+            string jsonStr = null;
+            var devDetails = await _servComm.GetAsync(_servComm.Root + "/user/devices/details");
+
+            switch (devDetails.Item1)
             {
                 case ServerResponse.NotConnected: //server not connected
                     Console.WriteLine("Server Problem");
                     lbl_status.Text = "Server Problem";
                     break;
                 case ServerResponse.Connected: //success
-                    var jsonString = await devdetails.Item2.Content.ReadAsStringAsync();
-                    Console.WriteLine(jsonString);
+                    jsonStr = await devDetails.Item2.Content.ReadAsStringAsync();
+                    Console.WriteLine(jsonStr);
                     break;
                 case ServerResponse.ServerFailure: //fail
                     Console.WriteLine("Failed");
                     lbl_status.Text = "Failed";
                     break;
             }
+            if (jsonStr == null)
+                return;
+            
+            List<JObject> newDevs = JsonConvert.DeserializeObject<List<JObject>>(jsonStr);
+
+            _devices.RemoveAll( dev => !newDevs.Exists(dev.SameDevice) );
+            var addedDevs = new List<Device>();
+            foreach (var dev in _devices)
+            {
+                int i = newDevs.FindIndex(dev.SameDevice);
+                if (i != -1)
+                {
+                    dev.UpdateDevice(newDevs[i]);
+                }
+                else
+                {
+                    // i hate this
+                    switch ((int)newDevs[i]["module_type"])
+                    {
+                        case 1:
+                            addedDevs.Add(new SmartPlug(newDevs[i]));
+                            break;
+                        case 2:
+                            addedDevs.Add(new Bluetooth(newDevs[i]));
+                            break;
+                        case 3:
+                            addedDevs.Add(new USB(newDevs[i]));
+                            break;
+                        case 4:
+                            addedDevs.Add(new Infrared(newDevs[i]));
+                            break;
+                        case 5:
+                            addedDevs.Add(new Industrial(newDevs[i]));
+                            break;
+                        case 6:
+                            addedDevs.Add(new Multiboard(newDevs[i]));
+                            break;
+                        case 7:
+                            addedDevs.Add(new Audio(newDevs[i]));
+                            break;
+                        case 0: //unknown
+                        default:
+                            break;
+                    }
+                }
+            }
+            _devices.AddRange(addedDevs);
+            foreach (var dev in _devices)
+                dev.UpdateUI();
+            lbl_status.Text = "Ready.";
         }
+
 
         private async void Form2_LoadAsync(object sender, EventArgs e)
         {
@@ -155,8 +205,8 @@ namespace IoTBoxTiles
             _devTypes = JsonConvert.DeserializeObject<string[]>(json_str);
             createDevices();
             buildTreeView();
-            //updateBasicDetails();
-            refresh();
+            UpdateDeviceDetails();
+            Refresh();
 
             lbl_status.Text = "Ready.";
         }
@@ -189,22 +239,18 @@ namespace IoTBoxTiles
                         dev.DisplayState = DisplayStates.None;
                 }
             }
-            updatePanels();
+            UpdatePanels();
         }
 
-        private void updatePanels()
+        private void UpdatePanels()
         {
             deviceFlowLayout.Controls.Clear();
             foreach (var dev in _devices)
             {
                 if (dev.DisplayState == DisplayStates.Large)
-                {
                     deviceFlowLayout.Controls.Add(dev.UI_large);
-                }
                 else if (dev.DisplayState == DisplayStates.Small)
-                {
                     deviceFlowLayout.Controls.Add(dev.UI_small);
-                }
             }
         }
 
@@ -220,26 +266,16 @@ namespace IoTBoxTiles
             }
         }
 
-        private void refresh()
-        {
-            foreach (var dev in _devices)
-            {
-                dev.UpdateUI();
-            }
-        }
-
         private void toolStripDropDownButton1_Click(object sender, EventArgs e)
         {
-            refresh();
+            UpdateDeviceDetails();
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
             DialogResult result = MessageBox.Show("Really quit?", "Confirm Quit", MessageBoxButtons.YesNo);
             if (result != DialogResult.Yes)
-            {
                 e.Cancel = true;
-            }
         }
     }
 }

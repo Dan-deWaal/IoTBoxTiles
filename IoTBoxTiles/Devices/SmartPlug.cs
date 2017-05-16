@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IoTBoxTiles.Devices.Controls;
+using Newtonsoft.Json.Linq;
 
 namespace IoTBoxTiles.Devices
 {
@@ -13,6 +14,10 @@ namespace IoTBoxTiles.Devices
         //unique properties
 
         public SmartPlug(Device old_device) : base(old_device)
+        {
+        }
+
+        public SmartPlug(JObject device) : base(device)
         {
         }
 

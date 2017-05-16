@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using IoTBoxTiles.Devices.Controls;
+using Newtonsoft.Json.Linq;
 
 namespace IoTBoxTiles.Devices
 {
@@ -17,6 +18,10 @@ namespace IoTBoxTiles.Devices
         public int? port { get; set; }
 
         public USB(Device old_device) : base(old_device)
+        {
+        }
+
+        public USB(JObject device) : base(device)
         {
         }
 
