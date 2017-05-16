@@ -275,7 +275,7 @@ namespace IoTBoxTiles
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
         {
-            DialogResult result = MessageBox.Show("Really quit?", string.Empty, MessageBoxButtons.YesNo);
+            DialogResult result = MessageBox.Show("Really quit?", "Confirm Quit", MessageBoxButtons.YesNo);
             if (result != DialogResult.Yes)
             {
                 e.Cancel = true;

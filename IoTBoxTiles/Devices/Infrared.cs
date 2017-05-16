@@ -12,17 +12,24 @@ namespace IoTBoxTiles.Devices
     {
         //unique properties
         public bool _repeater { get; set; }
-        public bool[] _feedback { get; set; }
+        public List<KeyValuePair<string, bool>> _feedback { get; set; }
         public List<IRButton> _buttons { get; set; }
 
         public Infrared(Device old_device) : base(old_device)
         {
-            _feedback = new bool[4];
+            _feedback = new List<KeyValuePair<string, bool>>() {
+                new KeyValuePair<string, bool>("1",true),
+                new KeyValuePair<string, bool>("2",false),
+                new KeyValuePair<string, bool>("3",true),
+                new KeyValuePair<string, bool>("4",false)
+            };
             _buttons = new List<IRButton>();
+
             // *** fake buttons ***
             _buttons.Add(new IRButton());
             _buttons.First().id = 1;
             _buttons.First().name = "Bob";
+            
             // **   remove!!   **
         }
 
