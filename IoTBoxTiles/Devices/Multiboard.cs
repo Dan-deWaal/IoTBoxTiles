@@ -19,13 +19,13 @@ namespace IoTBoxTiles.Devices
             TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
         }
 
-        public void updateLargeUI()
+        public override void UpdateLargeUI()
         {
             TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
             UpdateLargeCommonUI(table);
         }
 
-        public void updateSmallUI()
+        public override void UpdateSmallUI()
         {
             TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
             UpdateSmallCommonUI(table);

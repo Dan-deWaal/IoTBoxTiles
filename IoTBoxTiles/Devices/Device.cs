@@ -9,6 +9,8 @@ namespace IoTBoxTiles.Devices
 {
     public class Device : DeviceBase
     {
+        private ServerComm _serverComm = ServerComm.Instance;
+
         //Global Properties
         public DateTime first_connected { get; set; }
         public DateTime last_checked { get; set; }
@@ -65,7 +67,7 @@ namespace IoTBoxTiles.Devices
                 Height = 200,
                 BorderStyle = BorderStyle.FixedSingle
             };
-            
+
             TableLayoutPanel deviceSmallTable = new TableLayoutPanel()
             {
                 Name = "table",
@@ -84,7 +86,7 @@ namespace IoTBoxTiles.Devices
                 //UI_large.Dock = DockStyle.Fill;
                 BorderStyle = BorderStyle.Fixed3D
             };
-            
+
             TableLayoutPanel deviceLargeTable = new TableLayoutPanel()
             {
                 Name = "table",
@@ -99,6 +101,15 @@ namespace IoTBoxTiles.Devices
             UI_large.Controls.Add(deviceLargeTable);
             show_large = false;
         }
+
+        public void UpdateUI()
+        {
+            UpdateLargeUI();
+            UpdateSmallUI();
+        }
+
+        public virtual void UpdateLargeUI() { }
+        public virtual void UpdateSmallUI() { }
 
         public void UpdateLargeCommonUI(TableLayoutPanel table)
         {
@@ -144,6 +155,23 @@ namespace IoTBoxTiles.Devices
         {
             CheckBox conn_cb = (CheckBox)table.Controls.Find("Connect", true).First();
             conn_cb.Checked = plug_status;
+        }
+
+        public void ChangePower(bool on)
+        {
+            StringBuilder deviceUri = new StringBuilder(_serverComm.Root);
+            deviceUri.Append("/device/");
+            deviceUri.Append(device_id);
+            deviceUri.Append("/power");
+            if (on)
+                deviceUri.Append("/on");
+            else
+                deviceUri.Append("/off");
+
+            if (on)
+            {
+                // _serverComm.PostAsync(deviceUri.ToString(), email: );
+            }
         }
     }
 }

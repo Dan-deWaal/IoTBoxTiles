@@ -17,8 +17,8 @@ namespace IoTBoxTiles
 {
     public partial class LoginForm : Form
     {
-        private System.Windows.Forms.Timer timer;
-        private ServerComm servercomm = new ServerComm();
+        private System.Windows.Forms.Timer _timer;
+        private ServerComm _serverComm = ServerComm.Instance;
 
         public LoginForm()
         {
@@ -32,10 +32,10 @@ namespace IoTBoxTiles
             link_signup.Links.Add(0, 8, "https://iot.duality.co.nz/sign-up");
 
             //start timer
-            timer = new System.Windows.Forms.Timer();
-            timer.Interval = 1000;
-            timer.Tick += HeartbeatTimer;
-            timer.Start();
+            _timer = new System.Windows.Forms.Timer();
+            _timer.Interval = 1000;
+            _timer.Tick += HeartbeatTimer;
+            _timer.Start();
 
             //login stuff
             lbl_LoginStatus.Hide();
@@ -54,7 +54,9 @@ namespace IoTBoxTiles
         private async void login()
         {
             lbl_ServerStatus.Text = "Logging in...";
-            Tuple<int, HttpResponseMessage> loginstat = await servercomm.GetAsync(servercomm.login, txt_username.Text, txt_passwd.Text);
+            _serverComm.Email = txt_username.Text;
+            _serverComm.Password = txt_passwd.Text;
+            Tuple<int, HttpResponseMessage> loginstat = await _serverComm.GetAsync(_serverComm.Login);
             switch (loginstat.Item1)
             {
                 case 0: //server not connected
@@ -86,7 +88,7 @@ namespace IoTBoxTiles
 
         private async void HeartbeatTimer(object sender, EventArgs e)
         {
-            Tuple<int, HttpResponseMessage> serverstat = await servercomm.GetAsync(servercomm.heartbeat);
+            Tuple<int, HttpResponseMessage> serverstat = await _serverComm.GetAsync(_serverComm.Heartbeat, false);
             switch (serverstat.Item1)
             {
                 case 0:

@@ -13,25 +13,37 @@ namespace IoTBoxTiles
 {
     class ServerComm
     {
-        private HttpClient client;
-        public string heartbeat { get; set; }
-        public string login { get; set; }
-        public string details { get; set; }
+        private static readonly Lazy<ServerComm> lazy =
+            new Lazy<ServerComm>(() => new ServerComm());
+        public static ServerComm Instance { get { return lazy.Value; } }
 
-        public ServerComm() {
+        private HttpClient client;
+        public string Root { get; set; }
+        public string Heartbeat { get; set; }
+        public string Login { get; set; }
+        public string Details { get; set; }
+        public string Email { private get;  set; }
+        public string Password { private get; set; }
+
+        private ServerComm() {
             client = new HttpClient();
-            heartbeat = @"https://iot.duality.co.nz/api/1/heartbeat";
-            login = @"https://iot.duality.co.nz/api/1/user/devices/list";
-            details = @"https://iot.duality.co.nz/api/1/user/devices/details";
+            Root = @"https://iot.duality.co.nz/api/1";
+            Heartbeat = Root + @"/heartbeat";
+            Login = Root + @"/user/devices/list";
+            Details = Root + @"/user/devices/details";
         }
         
-        public async Task<Tuple<int, HttpResponseMessage>> GetAsync(string url, string email, string passwd)
+        public async Task<Tuple<int, HttpResponseMessage>> GetAsync(
+            string url, bool need_credentials = true)
         {
             int result = 0;
             HttpResponseMessage getResponse = null;
             client.DefaultRequestHeaders.Clear();
-            client.DefaultRequestHeaders.Add("email", email);
-            client.DefaultRequestHeaders.Add("password", passwd);
+            if (need_credentials)
+            {
+                client.DefaultRequestHeaders.Add("email", Email);
+                client.DefaultRequestHeaders.Add("password", Password);
+            }
             try
             {
                 getResponse = await client.GetAsync(url);
@@ -44,23 +56,29 @@ namespace IoTBoxTiles
             //result:  0 = Not Connected,  1 = Connected,  2 = Server Failure.
             return Tuple.Create(result, getResponse);
         }
-
-        public async Task<Tuple<int, HttpResponseMessage>> GetAsync(string url)
+        
+        public async Task<Tuple<int, HttpResponseMessage>> PostAsync(string url, 
+            HttpContent body = null, bool need_credentials = true)
         {
             int result = 0;
-            HttpResponseMessage getResponse = null;
+            HttpResponseMessage postResponse = null;
             client.DefaultRequestHeaders.Clear();
+            if (need_credentials)
+            {
+                client.DefaultRequestHeaders.Add("email", Email);
+                client.DefaultRequestHeaders.Add("password", Password);
+            }
             try
             {
-                getResponse = await client.GetAsync(url);
-                result = getResponse.IsSuccessStatusCode ? 1 : 2;
+                postResponse = await client.PostAsync(url, body);
+                result = postResponse.IsSuccessStatusCode ? 1 : 2;
             }
             catch
             {
                 result = 0;
             }
-            return Tuple.Create(result, getResponse);
+            //result:  0 = Not Connected,  1 = Connected,  2 = Server Failure.
+            return Tuple.Create(result, postResponse);
         }
-        
     }
 }

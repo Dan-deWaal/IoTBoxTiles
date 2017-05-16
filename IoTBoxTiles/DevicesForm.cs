@@ -17,12 +17,12 @@ namespace IoTBoxTiles
     public partial class DevicesForm : Form
     {
         private List<Device> _devices = new List<Device>();
-        private ServerComm _serv_comm = new ServerComm();
+        private ServerComm _servComm = ServerComm.Instance;
         private string _username, _password;
-        private bool _large_ui;
+        private bool _largeUi;
 
         //this should be obtained from the server
-        String[] _dev_types;
+        String[] _devTypes;
 
         public DevicesForm(List<DeviceBase> device_list, string username, string password)
         {
@@ -125,7 +125,7 @@ namespace IoTBoxTiles
         {
             lbl_status.Text = "Downloading devices...  ";
             Tuple<int, HttpResponseMessage> devdetails = await 
-                _serv_comm.GetAsync(_serv_comm.details, _username, _password);
+                _servComm.GetAsync(_servComm.Details);
             switch (devdetails.Item1)
             {
                 case 0: //server not connected
@@ -145,7 +145,7 @@ namespace IoTBoxTiles
 
         private async void Form2_LoadAsync(object sender, EventArgs e)
         {
-            var result = await _serv_comm.GetAsync("https://iot.duality.co.nz/api/1/device/types");
+            var result = await _servComm.GetAsync(_servComm.Root + "/device/types", false);
             if (result.Item1 != 1)
             {
                 // should be handled better
@@ -153,7 +153,7 @@ namespace IoTBoxTiles
                 this.Close();
             }
             var json_str = await result.Item2.Content.ReadAsStringAsync();
-            _dev_types = JsonConvert.DeserializeObject<string[]>(json_str);
+            _devTypes = JsonConvert.DeserializeObject<string[]>(json_str);
             createDevices();
             buildTreeView();
             //updateBasicDetails();
@@ -168,7 +168,7 @@ namespace IoTBoxTiles
 
             if (tag.StartsWith("user_"))
             {
-                _large_ui = true;
+                _largeUi = true;
                 foreach (var dev in _devices)
                 {
                     dev.show_large = tag.Substring(5) == dev.friendly_name;
@@ -177,7 +177,7 @@ namespace IoTBoxTiles
             }
             else
             {
-                _large_ui = false;
+                _largeUi = false;
                 foreach (var dev in _devices)
                 {
                     dev.show_small = false;
@@ -209,7 +209,7 @@ namespace IoTBoxTiles
 
         private void flowLayoutPanel1_Resize(object sender, EventArgs e)
         {
-            if (_large_ui)
+            if (_largeUi)
             {
                 UserControl large_control = (UserControl)Controls.Find("UILarge", true).FirstOrDefault();
                 if (large_control == null)
@@ -223,48 +223,7 @@ namespace IoTBoxTiles
         {
             foreach (var dev in _devices)
             {
-                switch (dev.module_type)
-                {
-                    case 0:
-                        break;
-                    case 1:
-                        SmartPlug sm = (SmartPlug)dev;
-                        sm.updateLargeUI();
-                        sm.updateSmallUI();
-                        break;
-                    case 2:
-                        Bluetooth bt = (Bluetooth)dev;
-                        bt.updateLargeUI();
-                        bt.updateSmallUI();
-                        break;
-                    case 3:
-                        USB usb = (USB)dev;
-                        usb.updateLargeUI();
-                        usb.updateSmallUI();
-                        break;
-                    case 4:
-                        Infrared ir = (Infrared)dev;
-                        ir.updateLargeUI();
-                        ir.updateSmallUI();
-                        break;
-                    case 5:
-                        Industrial ind = (Industrial)dev;
-                        ind.updateLargeUI();
-                        ind.updateSmallUI();
-                        break;
-                    case 6:
-                        Multiboard mb = (Multiboard)dev;
-                        mb.updateLargeUI();
-                        mb.updateSmallUI();
-                        break;
-                    case 7:
-                        Audio au = (Audio)dev;
-                        au.UpdateLargeUI();
-                        au.UpdateSmallUI();
-                        break;
-                    default:
-                        break;
-                }
+                dev.UpdateUI();
             }
         }
 

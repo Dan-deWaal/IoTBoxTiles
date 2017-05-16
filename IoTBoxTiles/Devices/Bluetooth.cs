@@ -41,12 +41,12 @@ namespace IoTBoxTiles.Devices
             };
         }
 
-        public void updateLargeUI()
+        public override void UpdateLargeUI()
         {
             ((BluetoothLarge)UI_large).UpdateUI();
         }
 
-        public void updateSmallUI()
+        public override void UpdateSmallUI()
         {
             ((BluetoothSmall)UI_small.Controls[0]).UpdateUI();
         }
