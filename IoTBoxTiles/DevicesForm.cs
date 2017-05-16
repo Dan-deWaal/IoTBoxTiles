@@ -124,19 +124,19 @@ namespace IoTBoxTiles
         private async void updateBasicDetails()
         {
             lbl_status.Text = "Downloading devices...  ";
-            Tuple<int, HttpResponseMessage> devdetails = await 
+            var devdetails = await 
                 _servComm.GetAsync(_servComm.Details);
             switch (devdetails.Item1)
             {
-                case 0: //server not connected
+                case ServerResponse.NotConnected: //server not connected
                     Console.WriteLine("Server Problem");
                     lbl_status.Text = "Server Problem";
                     break;
-                case 1: //success
+                case ServerResponse.Connected: //success
                     var jsonString = await devdetails.Item2.Content.ReadAsStringAsync();
                     Console.WriteLine(jsonString);
                     break;
-                case 2: //fail
+                case ServerResponse.ServerFailure: //fail
                     Console.WriteLine("Failed");
                     lbl_status.Text = "Failed";
                     break;
@@ -146,7 +146,7 @@ namespace IoTBoxTiles
         private async void Form2_LoadAsync(object sender, EventArgs e)
         {
             var result = await _servComm.GetAsync(_servComm.Root + "/device/types", false);
-            if (result.Item1 != 1)
+            if (result.Item1 != ServerResponse.Connected)
             {
                 // should be handled better
                 MessageBox.Show("Server disconnected during intialisation.");
@@ -171,8 +171,10 @@ namespace IoTBoxTiles
                 _largeUi = true;
                 foreach (var dev in _devices)
                 {
-                    dev.show_large = tag.Substring(5) == dev.friendly_name;
-                    dev.show_small = false;
+                    if (tag.Substring(5) == dev.friendly_name)
+                        dev.DisplayState = DisplayStates.Large;
+                    else
+                        dev.DisplayState = DisplayStates.None;
                 }
             }
             else
@@ -180,12 +182,12 @@ namespace IoTBoxTiles
                 _largeUi = false;
                 foreach (var dev in _devices)
                 {
-                    dev.show_small = false;
-                    dev.show_large = false;
                     if (tag == "Devices" 
                         || (tag == "Online" && dev.online)
                         || (tag == "Offline" && !dev.online))
-                        dev.show_small = true;
+                        dev.DisplayState = DisplayStates.Small;
+                    else
+                        dev.DisplayState = DisplayStates.None;
                 }
             }
             updatePanels();
@@ -196,11 +198,11 @@ namespace IoTBoxTiles
             deviceFlowLayout.Controls.Clear();
             foreach (var dev in _devices)
             {
-                if (dev.show_large)
+                if (dev.DisplayState == DisplayStates.Large)
                 {
                     deviceFlowLayout.Controls.Add(dev.UI_large);
                 }
-                if (dev.show_small)
+                else if (dev.DisplayState == DisplayStates.Small)
                 {
                     deviceFlowLayout.Controls.Add(dev.UI_small);
                 }

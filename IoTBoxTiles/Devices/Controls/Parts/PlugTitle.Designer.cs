@@ -48,6 +48,7 @@
             // 
             this.powerBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.powerBox.Appearance = System.Windows.Forms.Appearance.Button;
+            this.powerBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.powerBox.Location = new System.Drawing.Point(388, 3);
             this.powerBox.Name = "powerBox";
             this.powerBox.Size = new System.Drawing.Size(128, 128);

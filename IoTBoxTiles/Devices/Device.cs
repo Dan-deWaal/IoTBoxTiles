@@ -4,13 +4,15 @@ using System.Windows.Forms;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
 
 namespace IoTBoxTiles.Devices
 {
+    public enum DisplayStates {None, Small, Large};
     public class Device : DeviceBase
     {
         private ServerComm _serverComm = ServerComm.Instance;
-
+        
         //Global Properties
         public DateTime first_connected { get; set; }
         public DateTime last_checked { get; set; }
@@ -20,8 +22,7 @@ namespace IoTBoxTiles.Devices
         //UI Elements
         public Control UI_small { get; set; }
         public Control UI_large { get; set; }
-        public bool show_small { get; set; }
-        public bool show_large { get; set; }
+        public DisplayStates DisplayState;
 
         // constructors
         public Device()
@@ -60,6 +61,7 @@ namespace IoTBoxTiles.Devices
 
         public virtual void CreateDevice()
         {
+            DisplayState = DisplayStates.None;
             // Small UI element
             UI_small = new Panel()
             {
@@ -77,8 +79,7 @@ namespace IoTBoxTiles.Devices
             deviceSmallTable.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
             deviceSmallTable.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
             UI_small.Controls.Add(deviceSmallTable);
-            show_small = false;
-
+            
             // Large UI element
             UI_large = new Panel()
             {
@@ -99,7 +100,6 @@ namespace IoTBoxTiles.Devices
             deviceLargeTable.Controls.Add(new Label() { Name = "LastCheck", Text = "last_checked: " + last_checked.ToString() }, 0, 3);
             deviceLargeTable.Controls.Add(new Label() { Name = "DeviceID", Text = "device_id: " + device_id.ToString() }, 0, 4);
             UI_large.Controls.Add(deviceLargeTable);
-            show_large = false;
         }
 
         public void UpdateUI()
@@ -157,7 +157,7 @@ namespace IoTBoxTiles.Devices
             conn_cb.Checked = plug_status;
         }
 
-        public void ChangePower(bool on)
+        public async Task<Tuple<ServerResponse, HttpResponseMessage>> ChangePowerAsync(bool on)
         {
             StringBuilder deviceUri = new StringBuilder(_serverComm.Root);
             deviceUri.Append("/device/");
@@ -168,10 +168,7 @@ namespace IoTBoxTiles.Devices
             else
                 deviceUri.Append("/off");
 
-            if (on)
-            {
-                // _serverComm.PostAsync(deviceUri.ToString(), email: );
-            }
+            return await _serverComm.PostAsync(deviceUri.ToString());
         }
     }
 }

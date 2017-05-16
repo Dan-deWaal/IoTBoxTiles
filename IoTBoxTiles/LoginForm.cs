@@ -33,7 +33,7 @@ namespace IoTBoxTiles
 
             //start timer
             _timer = new System.Windows.Forms.Timer();
-            _timer.Interval = 1000;
+            _timer.Interval = 5000;
             _timer.Tick += HeartbeatTimer;
             _timer.Start();
 
@@ -53,16 +53,17 @@ namespace IoTBoxTiles
 
         private async void login()
         {
+            btn_login.Enabled = false;
             lbl_ServerStatus.Text = "Logging in...";
             _serverComm.Email = txt_username.Text;
             _serverComm.Password = txt_passwd.Text;
-            Tuple<int, HttpResponseMessage> loginstat = await _serverComm.GetAsync(_serverComm.Login);
+            var loginstat = await _serverComm.GetAsync(_serverComm.Login);
             switch (loginstat.Item1)
             {
-                case 0: //server not connected
+                case ServerResponse.NotConnected: //server not connected
                     Console.WriteLine("Server Problem");
                     break;
-                case 1: //success
+                case ServerResponse.Connected: //success
                     Console.WriteLine("Success");
                     var jsonString = await loginstat.Item2.Content.ReadAsStringAsync(); // should never throw excptn because caught in servercomm.LoginAsync()
                     List<DeviceBase> devices = JsonConvert.DeserializeObject<List<DeviceBase>>(jsonString);
@@ -72,15 +73,16 @@ namespace IoTBoxTiles
                     frm.ShowDialog();
                     this.Close();
                     break;
-                case 2: //fail
+                case ServerResponse.ServerFailure: //fail
                     lbl_LoginStatus.Show();
                     Console.WriteLine("Not Success");
                     Err err = await loginstat.Item2.Content.ReadAsAsync<Err>(); // should never throw excptn because caught in servercomm.LoginAsync()
                     lbl_LoginStatus.Text = err.error;
                     break;
             }
+            btn_login.Enabled = true;
         }
-        
+
         private void link_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             System.Diagnostics.Process.Start(e.Link.LinkData.ToString());
@@ -88,16 +90,16 @@ namespace IoTBoxTiles
 
         private async void HeartbeatTimer(object sender, EventArgs e)
         {
-            Tuple<int, HttpResponseMessage> serverstat = await _serverComm.GetAsync(_serverComm.Heartbeat, false);
+            var serverstat = await _serverComm.GetAsync(_serverComm.Heartbeat, false);
             switch (serverstat.Item1)
             {
-                case 0:
+                case ServerResponse.NotConnected:
                     lbl_ServerStatus.Text = "Not Connected";
                     break;
-                case 1:
+                case ServerResponse.Connected:
                     lbl_ServerStatus.Text = "Connected";
                     break;
-                case 2:
+                case ServerResponse.ServerFailure:
                     lbl_ServerStatus.Text = "Server Failure";
                     break;
             }

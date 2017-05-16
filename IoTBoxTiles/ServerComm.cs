@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 
 namespace IoTBoxTiles
 {
+    public enum ServerResponse { NotConnected, Connected, ServerFailure };
     class ServerComm
     {
         private static readonly Lazy<ServerComm> lazy =
@@ -33,10 +34,10 @@ namespace IoTBoxTiles
             Details = Root + @"/user/devices/details";
         }
         
-        public async Task<Tuple<int, HttpResponseMessage>> GetAsync(
+        public async Task<Tuple<ServerResponse, HttpResponseMessage>> GetAsync(
             string url, bool need_credentials = true)
         {
-            int result = 0;
+            ServerResponse result = ServerResponse.NotConnected;
             HttpResponseMessage getResponse = null;
             client.DefaultRequestHeaders.Clear();
             if (need_credentials)
@@ -47,7 +48,7 @@ namespace IoTBoxTiles
             try
             {
                 getResponse = await client.GetAsync(url);
-                result = getResponse.IsSuccessStatusCode ? 1 : 2;
+                result = getResponse.IsSuccessStatusCode ? ServerResponse.Connected : ServerResponse.ServerFailure;
             }
             catch
             {
@@ -57,11 +58,11 @@ namespace IoTBoxTiles
             return Tuple.Create(result, getResponse);
         }
         
-        public async Task<Tuple<int, HttpResponseMessage>> PostAsync(string url, 
+        public async Task<Tuple<ServerResponse, HttpResponseMessage>> PostAsync(string url, 
             HttpContent body = null, bool need_credentials = true)
         {
-            int result = 0;
-            HttpResponseMessage postResponse = null;
+            ServerResponse result = ServerResponse.NotConnected;
+            HttpResponseMessage postResp = null;
             client.DefaultRequestHeaders.Clear();
             if (need_credentials)
             {
@@ -70,15 +71,15 @@ namespace IoTBoxTiles
             }
             try
             {
-                postResponse = await client.PostAsync(url, body);
-                result = postResponse.IsSuccessStatusCode ? 1 : 2;
+                postResp = await client.PostAsync(url, body);
+                result = postResp.IsSuccessStatusCode ? ServerResponse.Connected : ServerResponse.ServerFailure;
             }
             catch
             {
-                result = 0;
+                result = ServerResponse.NotConnected;
             }
             //result:  0 = Not Connected,  1 = Connected,  2 = Server Failure.
-            return Tuple.Create(result, postResponse);
+            return Tuple.Create(result, postResp);
         }
     }
 }
