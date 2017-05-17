@@ -64,10 +64,9 @@ namespace IoTBoxTiles.Devices.Controls
             UpdateUI();
         }
 
-        private void plugTitleCtrl_PowerCheckedChanged(object sender, EventArgs e)
+        private void plugTitleCtrl_PowerClicked(object sender, EventArgs e)
         {
-            // TODO: do stuff
-            ((CheckBox)sender).Text = plugTitleCtrl.PowerChecked ? "POW" : "pow";
+            _device.ChangePowerAsync(plugTitleCtrl);
         }
 
         private void repeaterToggle_CheckedChanged(object sender, EventArgs e)

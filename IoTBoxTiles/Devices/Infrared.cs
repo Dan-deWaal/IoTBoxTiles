@@ -40,22 +40,8 @@ namespace IoTBoxTiles.Devices
 
         public override void CreateDevice()
         {
-            UI_small = new Panel()
-            {
-                Name = "UISmallPanel",
-                Width = 270,
-                Height = 200,
-                BorderStyle = BorderStyle.FixedSingle
-            };
-            UI_small.Controls.Add(new InfraredSmall(this));
-
-            UI_large = new InfraredLarge(this)
-            {
-                Name = "UILarge",
-                Width = 400,
-                Height = 600,
-                BorderStyle = BorderStyle.FixedSingle,
-            };
+            AddSmallUI(new InfraredSmall(this));
+            AddLargeUI(new InfraredLarge(this));
         }
 
         public override void UpdateLargeUI()

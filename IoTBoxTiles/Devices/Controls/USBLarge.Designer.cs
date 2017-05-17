@@ -38,30 +38,31 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.plugTitleCtrl.FriendlyName = "name";
             this.plugTitleCtrl.Location = new System.Drawing.Point(0, 0);
-            this.plugTitleCtrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.plugTitleCtrl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.plugTitleCtrl.Name = "plugTitleCtrl";
             this.plugTitleCtrl.PowerChecked = false;
-            this.plugTitleCtrl.Size = new System.Drawing.Size(478, 48);
+            this.plugTitleCtrl.Size = new System.Drawing.Size(956, 42);
             this.plugTitleCtrl.TabIndex = 0;
             // 
             // connectPart1
             // 
             this.connectPart1.Client = null;
             this.connectPart1.ConnectChecked = false;
-            this.connectPart1.Location = new System.Drawing.Point(0, 52);
-            this.connectPart1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.connectPart1.Location = new System.Drawing.Point(0, 101);
+            this.connectPart1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.connectPart1.Name = "connectPart1";
-            this.connectPart1.Size = new System.Drawing.Size(318, 64);
+            this.connectPart1.Size = new System.Drawing.Size(636, 64);
             this.connectPart1.TabIndex = 1;
             // 
             // USBLarge
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.connectPart1);
             this.Controls.Add(this.plugTitleCtrl);
+            this.Margin = new System.Windows.Forms.Padding(0, 0, 0, 0);
             this.Name = "USBLarge";
-            this.Size = new System.Drawing.Size(480, 460);
+            this.Size = new System.Drawing.Size(960, 891);
             this.ResumeLayout(false);
 
         }

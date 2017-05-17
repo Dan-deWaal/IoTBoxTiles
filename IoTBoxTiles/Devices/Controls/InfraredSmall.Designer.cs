@@ -53,7 +53,6 @@
             this.plugTitleCtrl.PowerChecked = false;
             this.plugTitleCtrl.Size = new System.Drawing.Size(318, 48);
             this.plugTitleCtrl.TabIndex = 0;
-            this.plugTitleCtrl.PowerCheckedChanged += new System.EventHandler(this.plugTitleCtrl_PowerCheckedChanged);
             this.plugTitleCtrl.Load += new System.EventHandler(this.plugTitleCtrl_Load);
             // 
             // button1
