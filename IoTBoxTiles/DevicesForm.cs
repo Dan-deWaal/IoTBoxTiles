@@ -252,17 +252,38 @@ namespace IoTBoxTiles
                 else if (dev.DisplayState == DisplayStates.Small)
                     deviceFlowLayout.Controls.Add(dev.UI_small);
             }
+            flowLayoutPanel1_Resize(null, null);
         }
 
         private void flowLayoutPanel1_Resize(object sender, EventArgs e)
         {
+            deviceFlowLayout.AutoScroll = true;
             if (_largeUi)
             {
-                UserControl large_control = (UserControl)Controls.Find("UILarge", true).FirstOrDefault();
-                if (large_control == null)
+                if (deviceFlowLayout.Controls.Count < 1)
                     return;
-                large_control.Width = deviceFlowLayout.ClientSize.Width - 2;
-                large_control.Height = deviceFlowLayout.ClientSize.Height - 2;
+                deviceFlowLayout.AutoScroll = false;
+
+                // hey dont select that
+                UserControl largeControl = (UserControl)deviceFlowLayout.Controls[0];
+                largeControl.Width = deviceFlowLayout.ClientSize.Width - 4;
+                largeControl.Height = deviceFlowLayout.ClientSize.Height - 4;
+            } else
+            {
+                if (deviceFlowLayout.Controls.Count < 1)
+                    return;
+                int minWidth = deviceFlowLayout.Controls[0].MinimumSize.Width;
+                int layoutWidth = deviceFlowLayout.ClientSize.Width;
+                if (deviceFlowLayout.ClientSize.Width < minWidth + 8)
+                    return;
+                int columnCount = layoutWidth / (270 + 4);
+                if (columnCount < 1)
+                    return;
+                int newSize = (layoutWidth - (5 + 5*columnCount)) / columnCount;
+                foreach (Control smallControl in deviceFlowLayout.Controls)
+                {
+                    smallControl.Width = newSize;
+                }
             }
         }
 

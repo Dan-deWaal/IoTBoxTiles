@@ -52,10 +52,10 @@
             this.toolStripStatusLabel1,
             this.toolStripDropDownButton1,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 1152);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 1151);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(3, 0, 27, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(2379, 47);
+            this.statusStrip1.Size = new System.Drawing.Size(2379, 48);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -105,7 +105,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.deviceFlowLayout);
             this.splitContainer1.Panel2MinSize = 320;
-            this.splitContainer1.Size = new System.Drawing.Size(2379, 1152);
+            this.splitContainer1.Size = new System.Drawing.Size(2379, 1151);
             this.splitContainer1.SplitterDistance = 618;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -118,18 +118,20 @@
             this.tv_DeviceList.Location = new System.Drawing.Point(0, 0);
             this.tv_DeviceList.Margin = new System.Windows.Forms.Padding(5);
             this.tv_DeviceList.Name = "tv_DeviceList";
-            this.tv_DeviceList.Size = new System.Drawing.Size(618, 1152);
+            this.tv_DeviceList.Size = new System.Drawing.Size(618, 1151);
             this.tv_DeviceList.TabIndex = 0;
             this.tv_DeviceList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_DeviceList_AfterSelect);
             // 
             // deviceFlowLayout
             // 
             this.deviceFlowLayout.AutoScroll = true;
+            this.deviceFlowLayout.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.deviceFlowLayout.Dock = System.Windows.Forms.DockStyle.Fill;
             this.deviceFlowLayout.Location = new System.Drawing.Point(0, 0);
-            this.deviceFlowLayout.Margin = new System.Windows.Forms.Padding(5);
+            this.deviceFlowLayout.Margin = new System.Windows.Forms.Padding(0);
             this.deviceFlowLayout.Name = "deviceFlowLayout";
-            this.deviceFlowLayout.Size = new System.Drawing.Size(1757, 1152);
+            this.deviceFlowLayout.Padding = new System.Windows.Forms.Padding(3);
+            this.deviceFlowLayout.Size = new System.Drawing.Size(1757, 1151);
             this.deviceFlowLayout.TabIndex = 0;
             this.deviceFlowLayout.Resize += new System.EventHandler(this.flowLayoutPanel1_Resize);
             // 

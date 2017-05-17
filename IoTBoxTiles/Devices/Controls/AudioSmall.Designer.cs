@@ -91,9 +91,9 @@
             this.plugTitleCtrl.Location = new System.Drawing.Point(3, 15);
             this.plugTitleCtrl.Name = "plugTitleCtrl";
             this.plugTitleCtrl.PowerChecked = false;
-            this.plugTitleCtrl.Size = new System.Drawing.Size(634, 101);
+            this.plugTitleCtrl.Size = new System.Drawing.Size(634, 42);
             this.plugTitleCtrl.TabIndex = 5;
-            this.plugTitleCtrl.PowerCheckedChanged += new System.EventHandler(this.plugTitleCtrl_PowerCheckedChangedAsync);
+            this.plugTitleCtrl.PowerClicked += new System.EventHandler(this.plugTitleCtrl_PowerClicked);
             // 
             // connectPart1
             // 
@@ -103,7 +103,7 @@
             this.connectPart1.ConnectChecked = false;
             this.connectPart1.Location = new System.Drawing.Point(3, 122);
             this.connectPart1.Name = "connectPart1";
-            this.connectPart1.Size = new System.Drawing.Size(634, 162);
+            this.connectPart1.Size = new System.Drawing.Size(634, 64);
             this.connectPart1.TabIndex = 6;
             this.connectPart1.ConnectCheckedChanged += new System.EventHandler(this.connectPart1_ConnectCheckedChanged);
             this.connectPart1.DisconnectBtnClick += new System.EventHandler(this.connectPart1_DisconnectBtnClick);

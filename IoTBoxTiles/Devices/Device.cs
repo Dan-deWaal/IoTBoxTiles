@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
+using System.Drawing;
+using IoTBoxTiles.Devices.Controls.Parts;
 
 namespace IoTBoxTiles.Devices
 {
@@ -102,13 +104,15 @@ namespace IoTBoxTiles.Devices
             {
                 Width = 270,
                 Height = 200,
-                BorderStyle = BorderStyle.FixedSingle
+                BorderStyle = BorderStyle.None,
+                BackColor = SystemColors.Control
             };
 
             TableLayoutPanel deviceSmallTable = new TableLayoutPanel()
             {
                 Name = "table",
-                Dock = DockStyle.Fill
+                Dock = DockStyle.Fill,
+                Padding = new Padding(3)
             };
             deviceSmallTable.Controls.Add(new Label() { Name = "Name", Text = "Name" }, 0, 0); //friendly_name
             deviceSmallTable.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
@@ -145,6 +149,36 @@ namespace IoTBoxTiles.Devices
 
         public virtual void UpdateLargeUI() { }
         public virtual void UpdateSmallUI() { }
+
+        public void AddSmallUI(UserControl newSmall)
+        {
+            UI_small = new Panel()
+            {
+                Name = "UISmallPanel",
+                Width = 270,
+                Height = 200,
+                MinimumSize = new Size(270, 200),
+                BorderStyle = BorderStyle.None,
+                BackColor = System.Drawing.SystemColors.Control
+            };
+            newSmall.BorderStyle = BorderStyle.None;
+            newSmall.BackColor = SystemColors.Control;
+            newSmall.Dock = DockStyle.Fill;
+            newSmall.Padding = new Padding(3);
+            UI_small.Controls.Add(newSmall);
+        }
+
+        public void AddLargeUI(UserControl newLarge)
+        {
+            newLarge.Name = "UILarge";
+            newLarge.BorderStyle = BorderStyle.None;
+            newLarge.BackColor = SystemColors.Control;
+            newLarge.Margin = new Padding(1);
+            newLarge.Padding = new Padding(3);
+            newLarge.AutoScroll = true;
+
+            UI_large = newLarge;
+        }
 
         public void UpdateLargeCommonUI(TableLayoutPanel table)
         {
@@ -192,18 +226,31 @@ namespace IoTBoxTiles.Devices
             conn_cb.Checked = plug_status;
         }
 
-        public async Task<Tuple<ServerResponse, HttpResponseMessage>> ChangePowerAsync(bool on)
+        public async void ChangePowerAsync(PlugTitle pt)
         {
+            if (pt.Refreshing)
+                return;
+
+            pt.Refreshing = true;
+
             StringBuilder deviceUri = new StringBuilder(_serverComm.Root);
             deviceUri.Append("/device/");
             deviceUri.Append(device_id);
             deviceUri.Append("/power");
-            if (on)
+            if (pt.PowerChecked)
                 deviceUri.Append("/on");
             else
                 deviceUri.Append("/off");
 
-            return await _serverComm.PostAsync(deviceUri.ToString());
+            var response = await _serverComm.PostAsync(deviceUri.ToString());
+
+            pt.Refreshing = false;
+
+            if (response.Item1 != ServerResponse.Connected)
+            {
+                pt.PowerChecked = !pt.PowerChecked;
+                MessageBox.Show("Problem switching plug " + (!pt.PowerChecked ? "on." : "off."));
+            }
         }
     }
 }

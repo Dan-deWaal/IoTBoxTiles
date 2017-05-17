@@ -49,18 +49,7 @@ namespace IoTBoxTiles.Devices.Controls
         {
             UpdateUI();
         }
-
-        private async void plugTitleCtrl_PowerCheckedChangedAsync(object sender, EventArgs e)
-        {
-            var response =  await _device.ChangePowerAsync(plugTitleCtrl.PowerChecked);
-            if (response.Item1 != ServerResponse.Connected)
-            {
-                plugTitleCtrl.PowerChecked = !plugTitleCtrl.PowerChecked;
-                MessageBox.Show("Problem switching plug on.");
-            }
-            ((CheckBox)sender).Text = plugTitleCtrl.PowerChecked ? "POW" : "pow";
-        }
-
+        
         private void connectPart1_ConnectCheckedChanged(object sender, EventArgs e)
         {
             // TODO: replace with working code
@@ -71,6 +60,11 @@ namespace IoTBoxTiles.Devices.Controls
         {
             // TODO: replace with working code
             connectPart1.Client = null;
+        }
+
+        private void plugTitleCtrl_PowerClicked(object sender, EventArgs e)
+        {
+            _device.ChangePowerAsync(plugTitleCtrl);
         }
     }
 }

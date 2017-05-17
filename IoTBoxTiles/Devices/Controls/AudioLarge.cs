@@ -32,5 +32,10 @@ namespace IoTBoxTiles.Devices.Controls
         {
             UpdateUI();
         }
+
+        private void plugTitleCtrl_PowerClicked(object sender, EventArgs e)
+        {
+            _device.ChangePowerAsync(plugTitleCtrl);
+        }
     }
 }

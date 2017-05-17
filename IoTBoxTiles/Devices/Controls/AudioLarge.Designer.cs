@@ -30,6 +30,7 @@
         {
             this.plugTitleCtrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
             this.connectPartCtrl = new IoTBoxTiles.Devices.Controls.Parts.ConnectPart();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // plugTitleCtrl
@@ -40,7 +41,7 @@
             this.plugTitleCtrl.Location = new System.Drawing.Point(3, 3);
             this.plugTitleCtrl.Name = "plugTitleCtrl";
             this.plugTitleCtrl.PowerChecked = false;
-            this.plugTitleCtrl.Size = new System.Drawing.Size(955, 48);
+            this.plugTitleCtrl.Size = new System.Drawing.Size(955, 42);
             this.plugTitleCtrl.TabIndex = 0;
             // 
             // connectPartCtrl
@@ -52,15 +53,25 @@
             this.connectPartCtrl.Size = new System.Drawing.Size(513, 64);
             this.connectPartCtrl.TabIndex = 1;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(879, 1097);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 38);
+            this.button1.TabIndex = 2;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // AudioLarge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.connectPartCtrl);
             this.Controls.Add(this.plugTitleCtrl);
             this.Name = "AudioLarge";
-            this.Size = new System.Drawing.Size(961, 892);
+            this.Size = new System.Drawing.Size(961, 1165);
             this.Load += new System.EventHandler(this.AudioLarge_Load);
             this.ResumeLayout(false);
 
@@ -70,5 +81,6 @@
 
         private Parts.PlugTitle plugTitleCtrl;
         private Parts.ConnectPart connectPartCtrl;
+        private System.Windows.Forms.Button button1;
     }
 }
