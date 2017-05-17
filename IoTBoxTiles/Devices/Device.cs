@@ -157,6 +157,7 @@ namespace IoTBoxTiles.Devices
                 Name = "UISmallPanel",
                 Width = 270,
                 Height = 200,
+                MinimumSize = new Size(270, 200),
                 BorderStyle = BorderStyle.None,
                 BackColor = System.Drawing.SystemColors.Control
             };

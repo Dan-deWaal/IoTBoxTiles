@@ -260,12 +260,29 @@ namespace IoTBoxTiles
             deviceFlowLayout.AutoScroll = true;
             if (_largeUi)
             {
-                UserControl large_control = (UserControl)Controls.Find("UILarge", true).FirstOrDefault();
-                if (large_control == null)
+                if (deviceFlowLayout.Controls.Count < 1)
                     return;
                 deviceFlowLayout.AutoScroll = false;
-                large_control.Width = deviceFlowLayout.ClientSize.Width - 4;
-                large_control.Height = deviceFlowLayout.ClientSize.Height - 4;
+
+                UserControl largeControl = (UserControl)deviceFlowLayout.Controls[0];
+                largeControl.Width = deviceFlowLayout.ClientSize.Width - 4;
+                largeControl.Height = deviceFlowLayout.ClientSize.Height - 4;
+            } else
+            {
+                if (deviceFlowLayout.Controls.Count < 1)
+                    return;
+                int minWidth = deviceFlowLayout.Controls[0].MinimumSize.Width;
+                int layoutWidth = deviceFlowLayout.ClientSize.Width;
+                if (deviceFlowLayout.ClientSize.Width < minWidth + 8)
+                    return;
+                int columnCount = layoutWidth / (270 + 4);
+                if (columnCount < 1)
+                    return;
+                int newSize = (layoutWidth - (5 + 5*columnCount)) / columnCount;
+                foreach (Control smallControl in deviceFlowLayout.Controls)
+                {
+                    smallControl.Width = newSize;
+                }
             }
         }
 
