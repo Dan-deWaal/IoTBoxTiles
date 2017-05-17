@@ -264,6 +264,7 @@ namespace IoTBoxTiles
                     return;
                 deviceFlowLayout.AutoScroll = false;
 
+                // hey dont select that
                 UserControl largeControl = (UserControl)deviceFlowLayout.Controls[0];
                 largeControl.Width = deviceFlowLayout.ClientSize.Width - 4;
                 largeControl.Height = deviceFlowLayout.ClientSize.Height - 4;
