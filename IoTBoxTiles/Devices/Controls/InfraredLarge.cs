@@ -48,7 +48,7 @@ namespace IoTBoxTiles.Devices.Controls
             buttonsFlowLayout.Controls.Clear();
             foreach(Infrared.IRButton butt in _device._buttons)
             {
-                var x = new Button() { Name = "shitfuck"+butt.id.ToString(), Text = butt.name, Tag = butt.id };
+                var x = new Button() { Name = "irbutton"+butt.id.ToString(), Text = butt.name, Tag = butt.id };
                 x.Click += new EventHandler(IRButton_click);
                 buttonsFlowLayout.Controls.Add(x);
             }
@@ -71,7 +71,15 @@ namespace IoTBoxTiles.Devices.Controls
 
         private void repeaterToggle_CheckedChanged(object sender, EventArgs e)
         {
-
+            _device._repeater = repeaterToggle.Checked;
+            if (repeaterToggle.Checked)
+            {
+                repeaterToggle.Text = "Rptr On";
+            } else
+            {
+                repeaterToggle.Text = "Rptr Off";
+            }
+            
         }
     }
 }
