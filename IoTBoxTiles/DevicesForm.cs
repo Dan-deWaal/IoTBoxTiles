@@ -49,12 +49,12 @@ namespace IoTBoxTiles
                 if (dev.online)
                 {
                     tv_DeviceList.Nodes[0].Nodes[0].Nodes.Add(dev.friendly_name);
-                    tv_DeviceList.Nodes[0].Nodes[0].LastNode.Tag = "user_" + dev.friendly_name;
+                    tv_DeviceList.Nodes[0].Nodes[0].LastNode.Tag = dev.device_id;
                 }
                 else
                 {
                     tv_DeviceList.Nodes[0].Nodes[1].Nodes.Add(dev.friendly_name);
-                    tv_DeviceList.Nodes[0].Nodes[1].LastNode.Tag = "user_" + dev.friendly_name;
+                    tv_DeviceList.Nodes[0].Nodes[1].LastNode.Tag = dev.device_id;
                 }
             }
             tv_DeviceList.Nodes[0].ExpandAll();
@@ -213,22 +213,21 @@ namespace IoTBoxTiles
 
         private void tv_DeviceList_AfterSelect(object sender, TreeViewEventArgs e)
         {
-            String tag = e.Node.Tag.ToString();
-
-            if (tag.StartsWith("user_"))
+            if (e.Node.Tag is int)
             {
                 _largeUi = true;
                 foreach (var dev in _devices)
                 {
-                    if (tag.Substring(5) == dev.friendly_name)
+                    if ((int)e.Node.Tag == dev.device_id)
                         dev.DisplayState = DisplayStates.Large;
                     else
                         dev.DisplayState = DisplayStates.None;
                 }
             }
-            else
+            else if (e.Node.Tag is string)
             {
                 _largeUi = false;
+                string tag = (string)e.Node.Tag;
                 foreach (var dev in _devices)
                 {
                     if (tag == "Devices" 
@@ -272,9 +271,8 @@ namespace IoTBoxTiles
             {
                 if (deviceFlowLayout.Controls.Count < 1)
                     return;
-                int minWidth = deviceFlowLayout.Controls[0].MinimumSize.Width;
                 int layoutWidth = deviceFlowLayout.ClientSize.Width;
-                if (deviceFlowLayout.ClientSize.Width < minWidth + 8)
+                if (deviceFlowLayout.ClientSize.Width < 270 + 8)
                     return;
                 int columnCount = layoutWidth / (270 + 4);
                 if (columnCount < 1)

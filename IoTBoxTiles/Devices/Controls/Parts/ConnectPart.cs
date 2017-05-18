@@ -38,6 +38,8 @@ namespace IoTBoxTiles.Devices.Controls.Parts
             disconnectBtn.Height = 64 - 42 - 1;
             disconnectBtn.Width = 72;
             disconnectBtn.Visible = client;
+
+            connectChkBox.ForeColor = Color.White;
         }
 
         public bool ConnectChecked
@@ -73,6 +75,11 @@ namespace IoTBoxTiles.Devices.Controls.Parts
         private void ConnectPart_Resize(object sender, EventArgs e)
         {
             ResizeComponents(_client != null);
+        }
+
+        private void chkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            connectChkBox.ForeColor = Color.White;
         }
     }
 }
