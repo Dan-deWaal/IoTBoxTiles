@@ -34,7 +34,7 @@ namespace IoTBoxTiles
 
         private void buildTreeView()
         {
-            Console.WriteLine("Building TreeView...");
+            //Console.WriteLine("Building TreeView...");
             //tv_ == treeview_
             tv_DeviceList.BeginUpdate();
             tv_DeviceList.Nodes.Clear();
@@ -64,7 +64,7 @@ namespace IoTBoxTiles
 
         private void createDevices()
         {
-            Console.WriteLine("Creating Device Objects...");
+            //Console.WriteLine("Creating Device Objects...");
             List<Device> new_devices = new List<Device>();
             foreach (var dev in _devices)
             {

@@ -41,8 +41,10 @@
             this.plugTitleCtrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.plugTitleCtrl.Name = "plugTitleCtrl";
             this.plugTitleCtrl.PowerChecked = false;
-            this.plugTitleCtrl.Size = new System.Drawing.Size(314, 48);
+            this.plugTitleCtrl.Refreshing = false;
+            this.plugTitleCtrl.Size = new System.Drawing.Size(314, 42);
             this.plugTitleCtrl.TabIndex = 0;
+            this.plugTitleCtrl.PowerClicked += new System.EventHandler(this.plugTitleCtrl_PowerClicked);
             this.plugTitleCtrl.Load += new System.EventHandler(this.plugTitleCtrl_Load);
             // 
             // connectPart1
@@ -57,6 +59,7 @@
             this.connectPart1.Size = new System.Drawing.Size(314, 64);
             this.connectPart1.TabIndex = 1;
             this.connectPart1.ConnectCheckedChanged += new System.EventHandler(this.connectPart1_ConnectCheckedChanged);
+            this.connectPart1.DisconnectBtnClick += new System.EventHandler(this.connectPart1_DisconnectBtnClick);
             // 
             // BluetoothSmall
             // 

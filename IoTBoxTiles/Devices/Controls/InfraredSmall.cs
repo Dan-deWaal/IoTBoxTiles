@@ -41,6 +41,7 @@ namespace IoTBoxTiles.Devices.Controls
                         {
                             _smallButtons[i].Enabled = true;
                             _smallButtons[i].Text = butt.name;
+                            _smallButtons[i].Tag = butt.id;
                         } else
                         {
                             _smallButtons[i].Enabled = false;
@@ -59,6 +60,13 @@ namespace IoTBoxTiles.Devices.Controls
         private void plugTitleCtrl_PowerClicked(object sender, EventArgs e)
         {
             _device.ChangePowerAsync(plugTitleCtrl);
+        }
+
+        private void buttons_Click(object sender, EventArgs e)
+        {
+            var num = ((Button)sender).Tag;
+            Console.WriteLine(num);
+            //do something here.
         }
     }
 }

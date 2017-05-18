@@ -38,8 +38,10 @@
             this.plugTitleCtrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.plugTitleCtrl.Name = "plugTitleCtrl";
             this.plugTitleCtrl.PowerChecked = false;
-            this.plugTitleCtrl.Size = new System.Drawing.Size(478, 48);
+            this.plugTitleCtrl.Refreshing = false;
+            this.plugTitleCtrl.Size = new System.Drawing.Size(478, 42);
             this.plugTitleCtrl.TabIndex = 0;
+            this.plugTitleCtrl.PowerClicked += new System.EventHandler(this.plugTitleCtrl_PowerClicked);
             this.plugTitleCtrl.Load += new System.EventHandler(this.plugTitleCtrl_Load);
             // 
             // SmartPlugLarge

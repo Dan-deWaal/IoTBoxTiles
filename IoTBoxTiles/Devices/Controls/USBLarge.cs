@@ -32,5 +32,17 @@ namespace IoTBoxTiles.Devices.Controls
         {
             _device.ChangePowerAsync(plugTitleCtrl);
         }
+
+        private void connectPart1_ConnectCheckedChanged(object sender, EventArgs e)
+        {
+            // TODO: replace with working code
+            connectPart1.Client = "test";
+        }
+
+        private void connectPart1_DisconnectBtnClick(object sender, EventArgs e)
+        {
+            // TODO: replace with working code
+            connectPart1.Client = null;
+        }
     }
 }

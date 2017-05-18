@@ -67,6 +67,7 @@
             this.plug1Ctrl.Refreshing = false;
             this.plug1Ctrl.Size = new System.Drawing.Size(304, 42);
             this.plug1Ctrl.TabIndex = 1;
+            this.plug1Ctrl.PowerClicked += new System.EventHandler(this.plug1Ctrl_PowerClicked);
             // 
             // currentLabel1
             // 
@@ -149,6 +150,7 @@
             this.plug2Ctrl.Refreshing = false;
             this.plug2Ctrl.Size = new System.Drawing.Size(304, 42);
             this.plug2Ctrl.TabIndex = 2;
+            this.plug2Ctrl.PowerClicked += new System.EventHandler(this.plug2Ctrl_PowerClicked);
             // 
             // plug3Ctrl
             // 
@@ -162,6 +164,7 @@
             this.plug3Ctrl.Refreshing = false;
             this.plug3Ctrl.Size = new System.Drawing.Size(304, 42);
             this.plug3Ctrl.TabIndex = 3;
+            this.plug3Ctrl.PowerClicked += new System.EventHandler(this.plug3Ctrl_PowerClicked);
             // 
             // plug4Ctrl
             // 
@@ -175,6 +178,7 @@
             this.plug4Ctrl.Refreshing = false;
             this.plug4Ctrl.Size = new System.Drawing.Size(304, 42);
             this.plug4Ctrl.TabIndex = 4;
+            this.plug4Ctrl.PowerClicked += new System.EventHandler(this.plug4Ctrl_PowerClicked);
             // 
             // MultiboardLarge
             // 

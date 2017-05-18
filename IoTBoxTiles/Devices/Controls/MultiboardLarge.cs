@@ -34,7 +34,13 @@ namespace IoTBoxTiles.Devices.Controls
                 plugCtrls[i].FriendlyName = _device._boards[i].Key;
                 plugCtrls[i].PowerChecked = _device._boards[i].Value;
                 plugCtrls[i].Bold = false;
-                currentLabels[i].Text = _device.current_consumption.ToString() + " mA";
+                if (_device.current_consumption == null)
+                {
+                    currentLabels[i].Text = "0 mA";
+                } else
+                {
+                    currentLabels[i].Text = _device.current_consumption.ToString() + " mA";
+                }
             }
         }
 
@@ -46,6 +52,27 @@ namespace IoTBoxTiles.Devices.Controls
         private void plugTitleCtrl_PowerClicked(object sender, EventArgs e)
         {
             _device.ChangePowerAsync(plugTitleCtrl);
+        }
+
+        private void plug1Ctrl_PowerClicked(object sender, EventArgs e)
+        {
+            _device._boards[0] = new KeyValuePair<string, bool>(_device._boards[0].Key, plug1Ctrl.PowerChecked);
+            //var newEntry = new KeyValuePair<Tkey, Tvalue>(oldEntry.Key, newValue);
+        }
+
+        private void plug2Ctrl_PowerClicked(object sender, EventArgs e)
+        {
+            _device._boards[1] = new KeyValuePair<string, bool>(_device._boards[1].Key, plug2Ctrl.PowerChecked);
+        }
+
+        private void plug3Ctrl_PowerClicked(object sender, EventArgs e)
+        {
+            _device._boards[2] = new KeyValuePair<string, bool>(_device._boards[2].Key, plug3Ctrl.PowerChecked);
+        }
+
+        private void plug4Ctrl_PowerClicked(object sender, EventArgs e)
+        {
+            _device._boards[3] = new KeyValuePair<string, bool>(_device._boards[3].Key, plug4Ctrl.PowerChecked);
         }
     }
 }
