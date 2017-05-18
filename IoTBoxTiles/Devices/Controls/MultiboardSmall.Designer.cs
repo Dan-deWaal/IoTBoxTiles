@@ -99,6 +99,7 @@
             this.plugTitleCtrl.Refreshing = false;
             this.plugTitleCtrl.Size = new System.Drawing.Size(318, 42);
             this.plugTitleCtrl.TabIndex = 0;
+            this.plugTitleCtrl.PowerClicked += new System.EventHandler(this.plugTitleCtrl_PowerClicked);
             // 
             // MultiboardSmall
             // 

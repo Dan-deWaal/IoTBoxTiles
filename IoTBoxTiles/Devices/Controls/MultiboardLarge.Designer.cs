@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.plugTitleCtrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
-            this.plugTitle1 = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
-            this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
+            this.plug1Ctrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
+            this.currentLabel1 = new System.Windows.Forms.Label();
+            this.currentLabel2 = new System.Windows.Forms.Label();
+            this.currentLabel3 = new System.Windows.Forms.Label();
+            this.currentLabel4 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.plugTitle5 = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
-            this.plugTitle6 = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
-            this.plugTitle7 = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
+            this.plug2Ctrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
+            this.plug3Ctrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
+            this.plug4Ctrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -53,63 +53,64 @@
             this.plugTitleCtrl.Refreshing = false;
             this.plugTitleCtrl.Size = new System.Drawing.Size(476, 42);
             this.plugTitleCtrl.TabIndex = 0;
+            this.plugTitleCtrl.PowerClicked += new System.EventHandler(this.plugTitleCtrl_PowerClicked);
             // 
-            // plugTitle1
+            // plug1Ctrl
             // 
-            this.plugTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.plug1Ctrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.plugTitle1.FriendlyName = "name";
-            this.plugTitle1.Location = new System.Drawing.Point(56, 2);
-            this.plugTitle1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.plugTitle1.Name = "plugTitle1";
-            this.plugTitle1.PowerChecked = false;
-            this.plugTitle1.Refreshing = false;
-            this.plugTitle1.Size = new System.Drawing.Size(304, 42);
-            this.plugTitle1.TabIndex = 1;
+            this.plug1Ctrl.FriendlyName = "name";
+            this.plug1Ctrl.Location = new System.Drawing.Point(56, 2);
+            this.plug1Ctrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.plug1Ctrl.Name = "plug1Ctrl";
+            this.plug1Ctrl.PowerChecked = false;
+            this.plug1Ctrl.Refreshing = false;
+            this.plug1Ctrl.Size = new System.Drawing.Size(304, 42);
+            this.plug1Ctrl.TabIndex = 1;
             // 
-            // label1
+            // currentLabel1
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.currentLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.Location = new System.Drawing.Point(3, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(48, 42);
-            this.label1.TabIndex = 5;
-            this.label1.Text = "label1";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.currentLabel1.Location = new System.Drawing.Point(3, 0);
+            this.currentLabel1.Name = "currentLabel1";
+            this.currentLabel1.Size = new System.Drawing.Size(48, 42);
+            this.currentLabel1.TabIndex = 5;
+            this.currentLabel1.Text = "label1";
+            this.currentLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label2
+            // currentLabel2
             // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.currentLabel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label2.Location = new System.Drawing.Point(3, 54);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(48, 42);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "label2";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.currentLabel2.Location = new System.Drawing.Point(3, 54);
+            this.currentLabel2.Name = "currentLabel2";
+            this.currentLabel2.Size = new System.Drawing.Size(48, 42);
+            this.currentLabel2.TabIndex = 6;
+            this.currentLabel2.Text = "label2";
+            this.currentLabel2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label3
+            // currentLabel3
             // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.currentLabel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.Location = new System.Drawing.Point(3, 108);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(48, 42);
-            this.label3.TabIndex = 7;
-            this.label3.Text = "label3";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.currentLabel3.Location = new System.Drawing.Point(3, 108);
+            this.currentLabel3.Name = "currentLabel3";
+            this.currentLabel3.Size = new System.Drawing.Size(48, 42);
+            this.currentLabel3.TabIndex = 7;
+            this.currentLabel3.Text = "label3";
+            this.currentLabel3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // label4
+            // currentLabel4
             // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.currentLabel4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.Location = new System.Drawing.Point(3, 162);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(48, 42);
-            this.label4.TabIndex = 8;
-            this.label4.Text = "label4";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.currentLabel4.Location = new System.Drawing.Point(3, 162);
+            this.currentLabel4.Name = "currentLabel4";
+            this.currentLabel4.Size = new System.Drawing.Size(48, 42);
+            this.currentLabel4.TabIndex = 8;
+            this.currentLabel4.Text = "label4";
+            this.currentLabel4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tableLayoutPanel1
             // 
@@ -118,14 +119,14 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 85F));
-            this.tableLayoutPanel1.Controls.Add(this.plugTitle1, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this.plugTitle5, 1, 1);
-            this.tableLayoutPanel1.Controls.Add(this.plugTitle6, 1, 2);
-            this.tableLayoutPanel1.Controls.Add(this.plugTitle7, 1, 3);
-            this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label2, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.label3, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.label4, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.plug1Ctrl, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.plug2Ctrl, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.plug3Ctrl, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.plug4Ctrl, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.currentLabel1, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.currentLabel2, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.currentLabel3, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.currentLabel4, 0, 3);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(27, 64);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 4;
@@ -136,44 +137,44 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(362, 218);
             this.tableLayoutPanel1.TabIndex = 9;
             // 
-            // plugTitle5
+            // plug2Ctrl
             // 
-            this.plugTitle5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.plug2Ctrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.plugTitle5.FriendlyName = "name";
-            this.plugTitle5.Location = new System.Drawing.Point(56, 56);
-            this.plugTitle5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.plugTitle5.Name = "plugTitle5";
-            this.plugTitle5.PowerChecked = false;
-            this.plugTitle5.Refreshing = false;
-            this.plugTitle5.Size = new System.Drawing.Size(304, 42);
-            this.plugTitle5.TabIndex = 2;
+            this.plug2Ctrl.FriendlyName = "name";
+            this.plug2Ctrl.Location = new System.Drawing.Point(56, 56);
+            this.plug2Ctrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.plug2Ctrl.Name = "plug2Ctrl";
+            this.plug2Ctrl.PowerChecked = false;
+            this.plug2Ctrl.Refreshing = false;
+            this.plug2Ctrl.Size = new System.Drawing.Size(304, 42);
+            this.plug2Ctrl.TabIndex = 2;
             // 
-            // plugTitle6
+            // plug3Ctrl
             // 
-            this.plugTitle6.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.plug3Ctrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.plugTitle6.FriendlyName = "name";
-            this.plugTitle6.Location = new System.Drawing.Point(56, 110);
-            this.plugTitle6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.plugTitle6.Name = "plugTitle6";
-            this.plugTitle6.PowerChecked = false;
-            this.plugTitle6.Refreshing = false;
-            this.plugTitle6.Size = new System.Drawing.Size(304, 42);
-            this.plugTitle6.TabIndex = 3;
+            this.plug3Ctrl.FriendlyName = "name";
+            this.plug3Ctrl.Location = new System.Drawing.Point(56, 110);
+            this.plug3Ctrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.plug3Ctrl.Name = "plug3Ctrl";
+            this.plug3Ctrl.PowerChecked = false;
+            this.plug3Ctrl.Refreshing = false;
+            this.plug3Ctrl.Size = new System.Drawing.Size(304, 42);
+            this.plug3Ctrl.TabIndex = 3;
             // 
-            // plugTitle7
+            // plug4Ctrl
             // 
-            this.plugTitle7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.plug4Ctrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.plugTitle7.FriendlyName = "name";
-            this.plugTitle7.Location = new System.Drawing.Point(56, 164);
-            this.plugTitle7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.plugTitle7.Name = "plugTitle7";
-            this.plugTitle7.PowerChecked = false;
-            this.plugTitle7.Refreshing = false;
-            this.plugTitle7.Size = new System.Drawing.Size(304, 42);
-            this.plugTitle7.TabIndex = 4;
+            this.plug4Ctrl.FriendlyName = "name";
+            this.plug4Ctrl.Location = new System.Drawing.Point(56, 164);
+            this.plug4Ctrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.plug4Ctrl.Name = "plug4Ctrl";
+            this.plug4Ctrl.PowerChecked = false;
+            this.plug4Ctrl.Refreshing = false;
+            this.plug4Ctrl.Size = new System.Drawing.Size(304, 42);
+            this.plug4Ctrl.TabIndex = 4;
             // 
             // MultiboardLarge
             // 
@@ -191,14 +192,14 @@
         #endregion
 
         private Parts.PlugTitle plugTitleCtrl;
-        private Parts.PlugTitle plugTitle1;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label label4;
+        private Parts.PlugTitle plug1Ctrl;
+        private System.Windows.Forms.Label currentLabel1;
+        private System.Windows.Forms.Label currentLabel2;
+        private System.Windows.Forms.Label currentLabel3;
+        private System.Windows.Forms.Label currentLabel4;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private Parts.PlugTitle plugTitle5;
-        private Parts.PlugTitle plugTitle6;
-        private Parts.PlugTitle plugTitle7;
+        private Parts.PlugTitle plug2Ctrl;
+        private Parts.PlugTitle plug3Ctrl;
+        private Parts.PlugTitle plug4Ctrl;
     }
 }
