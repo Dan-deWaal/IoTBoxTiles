@@ -98,13 +98,8 @@ namespace IoTBoxTiles
                         industrial.url = dev.url;
                         break;
                     case 6: // *** Multiboard ***
-                        Multiboard multiboard = new Multiboard();
+                        Multiboard multiboard = new Multiboard(dev);
                         new_devices.Add(multiboard);
-                        multiboard.device_id = dev.device_id;
-                        multiboard.friendly_name = dev.friendly_name;
-                        multiboard.module_type = dev.module_type;
-                        multiboard.online = dev.online;
-                        multiboard.url = dev.url;
                         break;
                     case 7: // *** Audio ***
                         Audio audio = new Audio(dev);

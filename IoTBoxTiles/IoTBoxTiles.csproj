@@ -96,6 +96,18 @@
     <Compile Include="Devices\Controls\InfraredSmall.Designer.cs">
       <DependentUpon>InfraredSmall.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devices\Controls\MultiboardLarge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\MultiboardLarge.Designer.cs">
+      <DependentUpon>MultiboardLarge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Controls\MultiboardSmall.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\MultiboardSmall.Designer.cs">
+      <DependentUpon>MultiboardSmall.cs</DependentUpon>
+    </Compile>
     <Compile Include="Devices\Controls\Parts\ConnectPart.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -175,6 +187,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\InfraredSmall.resx">
       <DependentUpon>InfraredSmall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\MultiboardLarge.resx">
+      <DependentUpon>MultiboardLarge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\MultiboardSmall.resx">
+      <DependentUpon>MultiboardSmall.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\Parts\ConnectPart.resx">
       <DependentUpon>ConnectPart.cs</DependentUpon>

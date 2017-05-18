@@ -5,35 +5,44 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using IoTBoxTiles.Devices.Controls;
 
 namespace IoTBoxTiles.Devices
 {
-    class Multiboard : Device
+    public class Multiboard : Device
     {
         //unique properties
-        //public List<Tuple> buttons(string_name, bool_power, float_curr) { get; set; }
-        public bool repeater { get; set; }
-        public bool feedback { get; set; }
+        public List<KeyValuePair<string, bool>> _boards { get; set; }
 
-        public Multiboard()
+        public Multiboard(Device old_device) : base(old_device)
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
+            _boards = new List<KeyValuePair<string, bool>>() {
+                new KeyValuePair<string, bool>("board1",true),
+                new KeyValuePair<string, bool>("board2",false),
+                new KeyValuePair<string, bool>("board3",true),
+                new KeyValuePair<string, bool>("board4",false)
+            };
         }
 
         public Multiboard(JObject device) : base(device)
         {
+            
+        }
+
+        public override void CreateDevice()
+        {
+            AddSmallUI(new MultiboardSmall(this));
+            AddLargeUI(new MultiboardLarge(this));
         }
 
         public override void UpdateLargeUI()
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_large.Controls.Find("table", true).First();
-            UpdateLargeCommonUI(table);
+            ((MultiboardLarge)UI_large).UpdateUI();
         }
 
         public override void UpdateSmallUI()
         {
-            TableLayoutPanel table = (TableLayoutPanel)UI_small.Controls.Find("table", true).First();
-            UpdateSmallCommonUI(table);
+            ((MultiboardSmall)UI_small.Controls[0]).UpdateUI();
         }
     }
 }

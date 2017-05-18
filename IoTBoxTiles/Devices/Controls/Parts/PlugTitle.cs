@@ -20,6 +20,11 @@ namespace IoTBoxTiles.Devices.Controls.Parts
             InitializeComponent();
         }
 
+        public bool Bold
+        {
+            set { nameLbl.Font = value ? new Font(nameLbl.Font, FontStyle.Bold) : new Font(nameLbl.Font, FontStyle.Regular); }
+        }
+
         public bool Refreshing
         {
             get { return _refreshing; }

@@ -74,7 +74,15 @@ namespace IoTBoxTiles
                 case ServerResponse.ServerFailure: //fail
                     lbl_LoginStatus.Show();
                     Console.WriteLine("Not Success");
-                    Err err = await loginstat.Item2.Content.ReadAsAsync<Err>(); // should never throw excptn because caught in servercomm.LoginAsync()
+                    Err err = new Err();
+                    try
+                    {
+                        err = await loginstat.Item2.Content.ReadAsAsync<Err>();
+                    }
+                    catch (Exception e)
+                    {
+                        err.error = "No server";
+                    }
                     lbl_LoginStatus.Text = err.error;
                     break;
             }
