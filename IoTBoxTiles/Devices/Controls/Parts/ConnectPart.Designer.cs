@@ -36,30 +36,45 @@
             // disconnectBtn
             // 
             this.disconnectBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.disconnectBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(99)))), ((int)(((byte)(117)))));
+            this.disconnectBtn.FlatAppearance.BorderSize = 0;
+            this.disconnectBtn.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(124)))), ((int)(((byte)(141)))));
+            this.disconnectBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.disconnectBtn.Font = new System.Drawing.Font("Segoe UI", 8F);
+            this.disconnectBtn.ForeColor = System.Drawing.Color.White;
             this.disconnectBtn.Location = new System.Drawing.Point(462, 109);
             this.disconnectBtn.Name = "disconnectBtn";
             this.disconnectBtn.Size = new System.Drawing.Size(165, 47);
             this.disconnectBtn.TabIndex = 6;
             this.disconnectBtn.Text = "disconnect";
-            this.disconnectBtn.UseVisualStyleBackColor = true;
+            this.disconnectBtn.UseVisualStyleBackColor = false;
             // 
             // connectChkBox
             // 
             this.connectChkBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.connectChkBox.Appearance = System.Windows.Forms.Appearance.Button;
+            this.connectChkBox.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(82)))), ((int)(((byte)(99)))), ((int)(((byte)(117)))));
+            this.connectChkBox.FlatAppearance.BorderSize = 0;
+            this.connectChkBox.FlatAppearance.CheckedBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(108)))), ((int)(((byte)(124)))), ((int)(((byte)(141)))));
+            this.connectChkBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.connectChkBox.Font = new System.Drawing.Font("Segoe UI Semibold", 9.900001F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.connectChkBox.ForeColor = System.Drawing.Color.White;
             this.connectChkBox.Location = new System.Drawing.Point(0, 0);
             this.connectChkBox.Name = "connectChkBox";
             this.connectChkBox.Size = new System.Drawing.Size(627, 106);
             this.connectChkBox.TabIndex = 5;
             this.connectChkBox.Text = "Connect";
             this.connectChkBox.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.connectChkBox.UseVisualStyleBackColor = true;
+            this.connectChkBox.UseVisualStyleBackColor = false;
+            this.connectChkBox.CheckedChanged += new System.EventHandler(this.chkBox_CheckedChanged);
             // 
             // alreadyConnLbl
             // 
             this.alreadyConnLbl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.alreadyConnLbl.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.alreadyConnLbl.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.alreadyConnLbl.Location = new System.Drawing.Point(3, 109);
             this.alreadyConnLbl.Name = "alreadyConnLbl";
             this.alreadyConnLbl.Size = new System.Drawing.Size(453, 47);

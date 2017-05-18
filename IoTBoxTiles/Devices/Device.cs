@@ -162,7 +162,7 @@ namespace IoTBoxTiles.Devices
                 BackColor = System.Drawing.SystemColors.Control
             };
             newSmall.BorderStyle = BorderStyle.None;
-            newSmall.BackColor = SystemColors.Control;
+            newSmall.BackColor = Color.FromArgb(235, 235, 235);
             newSmall.Dock = DockStyle.Fill;
             newSmall.Padding = new Padding(3);
             UI_small.Controls.Add(newSmall);
@@ -172,7 +172,7 @@ namespace IoTBoxTiles.Devices
         {
             newLarge.Name = "UILarge";
             newLarge.BorderStyle = BorderStyle.None;
-            newLarge.BackColor = SystemColors.Control;
+            newLarge.BackColor = Color.FromArgb(235, 235, 235);
             newLarge.Margin = new Padding(1);
             newLarge.Padding = new Padding(3);
             newLarge.AutoScroll = true;
