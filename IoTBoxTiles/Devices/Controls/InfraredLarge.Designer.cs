@@ -129,12 +129,12 @@
             // 
             this.repeaterToggle.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.repeaterToggle.Appearance = System.Windows.Forms.Appearance.Button;
-            this.repeaterToggle.Location = new System.Drawing.Point(108, 24);
+            this.repeaterToggle.Location = new System.Drawing.Point(102, 24);
             this.repeaterToggle.Margin = new System.Windows.Forms.Padding(2);
             this.repeaterToggle.Name = "repeaterToggle";
-            this.repeaterToggle.Size = new System.Drawing.Size(64, 66);
+            this.repeaterToggle.Size = new System.Drawing.Size(76, 66);
             this.repeaterToggle.TabIndex = 3;
-            this.repeaterToggle.Text = "pow";
+            this.repeaterToggle.Text = "Rptr Off";
             this.repeaterToggle.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.repeaterToggle.UseVisualStyleBackColor = true;
             this.repeaterToggle.CheckedChanged += new System.EventHandler(this.repeaterToggle_CheckedChanged);
@@ -158,7 +158,8 @@
             this.plugTitleCtrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.plugTitleCtrl.Name = "plugTitleCtrl";
             this.plugTitleCtrl.PowerChecked = false;
-            this.plugTitleCtrl.Size = new System.Drawing.Size(478, 48);
+            this.plugTitleCtrl.Refreshing = false;
+            this.plugTitleCtrl.Size = new System.Drawing.Size(478, 42);
             this.plugTitleCtrl.TabIndex = 0;
             this.plugTitleCtrl.Load += new System.EventHandler(this.plugTitleCtrl_Load);
             // 

@@ -71,7 +71,15 @@ namespace IoTBoxTiles.Devices.Controls
 
         private void repeaterToggle_CheckedChanged(object sender, EventArgs e)
         {
-
+            _device._repeater = repeaterToggle.Checked;
+            if (repeaterToggle.Checked)
+            {
+                repeaterToggle.Text = "Rptr On";
+            } else
+            {
+                repeaterToggle.Text = "Rptr Off";
+            }
+            
         }
     }
 }
