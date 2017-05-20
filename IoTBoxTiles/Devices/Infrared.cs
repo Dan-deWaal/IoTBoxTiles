@@ -29,6 +29,7 @@ namespace IoTBoxTiles.Devices
         public override void UpdateDevice(JObject device)
         {
             base.UpdateDevice(device);
+            _repeater = (bool)device["repeater"];
             _feedback.Clear();
             foreach (JToken fbItem in device["feedback"])
             {
@@ -42,6 +43,7 @@ namespace IoTBoxTiles.Devices
             }
             if (device["buttons"] != null)
             {
+                _buttons.Clear();
                 foreach (JToken buttItem in device["buttons"])
                 {
                     _buttons.Add(new IRButton(buttItem));

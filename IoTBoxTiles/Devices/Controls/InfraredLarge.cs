@@ -88,9 +88,11 @@ namespace IoTBoxTiles.Devices.Controls
             if (repeaterToggle.Checked)
             {
                 repeaterToggle.Text = "Rptr On";
+                _device._repeater = true;
             } else
             {
                 repeaterToggle.Text = "Rptr Off";
+                _device._repeater = false;
             }
             
         }
