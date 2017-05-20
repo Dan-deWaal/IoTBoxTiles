@@ -34,6 +34,8 @@
             // 
             // plugTitleCtrl
             // 
+            this.plugTitleCtrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.plugTitleCtrl.FriendlyName = "name";
             this.plugTitleCtrl.Location = new System.Drawing.Point(0, 0);
             this.plugTitleCtrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
@@ -47,6 +49,7 @@
             // 
             // currentTitle1
             // 
+            this.currentTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.currentTitle1.Location = new System.Drawing.Point(344, 434);
             this.currentTitle1.Name = "currentTitle1";
             this.currentTitle1.Size = new System.Drawing.Size(133, 23);

@@ -184,6 +184,7 @@
             // currentTitle1
             // 
             this.currentTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.currentTitle1.CurrentFont = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.currentTitle1.Location = new System.Drawing.Point(344, 434);
             this.currentTitle1.Name = "currentTitle1";
             this.currentTitle1.Size = new System.Drawing.Size(133, 23);
@@ -198,6 +199,7 @@
             this.Controls.Add(this.plugTitleCtrl);
             this.Name = "MultiboardLarge";
             this.Size = new System.Drawing.Size(480, 460);
+            this.Load += new System.EventHandler(this.MultiboardLarge_Load_1);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 

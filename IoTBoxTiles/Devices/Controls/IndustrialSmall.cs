@@ -10,34 +10,32 @@ using System.Windows.Forms;
 
 namespace IoTBoxTiles.Devices.Controls
 {
-    public partial class BluetoothLarge : UserControl
+    public partial class IndustrialSmall : UserControl
     {
-        private Bluetooth _device;
+        private Industrial _device;
 
-        public BluetoothLarge(Bluetooth bt_device)
+        public IndustrialSmall(Industrial ind_device)
         {
             InitializeComponent();
-            _device = bt_device;
+            _device = ind_device;
         }
 
         public void UpdateUI()
         {
             plugTitleCtrl.FriendlyName = _device.friendly_name;
             plugTitleCtrl.PowerChecked = _device.plug_status;
-            connectPart1.ConnectChecked = _device.connected;
-            currentTitle1.CurrentVal = _device.current_consumption;
         }
-
-        private void plugTitleCtrl_Load(object sender, EventArgs e)
-        {
-            UpdateUI();
-        }
-
+        
         private void plugTitleCtrl_PowerClicked(object sender, EventArgs e)
         {
             _device.ChangePowerAsync(plugTitleCtrl);
         }
-        
+
+        private void IndustrialSmall_Load(object sender, EventArgs e)
+        {
+            UpdateUI();
+        }
+
         private void connectPart1_ConnectCheckedChanged(object sender, EventArgs e)
         {
             // TODO: replace with working code
@@ -49,5 +47,6 @@ namespace IoTBoxTiles.Devices.Controls
             // TODO: replace with working code
             connectPart1.Client = null;
         }
+
     }
 }

@@ -29,7 +29,7 @@ namespace IoTBoxTiles.Devices.Controls
         {
             plugTitleCtrl.FriendlyName = _device.friendly_name;
             plugTitleCtrl.PowerChecked = _device.plug_status;
-            currentTitle1.setValue(_device.current_consumption);
+            currentTitle1.CurrentVal = _device.current_consumption;
             for (int i = 0; i < 4; i++)
             {
                 plugCtrls[i].FriendlyName = _device._boards[i].Key;
@@ -74,6 +74,11 @@ namespace IoTBoxTiles.Devices.Controls
         private void plug4Ctrl_PowerClicked(object sender, EventArgs e)
         {
             _device._boards[3] = new KeyValuePair<string, bool>(_device._boards[3].Key, plug4Ctrl.PowerChecked);
+        }
+
+        private void MultiboardLarge_Load_1(object sender, EventArgs e)
+        {
+            UpdateUI();
         }
     }
 }

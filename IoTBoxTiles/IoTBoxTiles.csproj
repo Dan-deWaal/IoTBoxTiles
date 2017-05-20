@@ -84,6 +84,18 @@
     <Compile Include="Devices\Controls\BluetoothSmall.Designer.cs">
       <DependentUpon>BluetoothSmall.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devices\Controls\IndustrialLarge.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\IndustrialLarge.Designer.cs">
+      <DependentUpon>IndustrialLarge.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Devices\Controls\IndustrialSmall.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\IndustrialSmall.Designer.cs">
+      <DependentUpon>IndustrialSmall.cs</DependentUpon>
+    </Compile>
     <Compile Include="Devices\Controls\InfraredLarge.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -187,6 +199,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\BluetoothSmall.resx">
       <DependentUpon>BluetoothSmall.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\IndustrialLarge.resx">
+      <DependentUpon>IndustrialLarge.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\IndustrialSmall.resx">
+      <DependentUpon>IndustrialSmall.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\InfraredLarge.resx">
       <DependentUpon>InfraredLarge.cs</DependentUpon>

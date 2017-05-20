@@ -1,6 +1,6 @@
 ﻿namespace IoTBoxTiles.Devices.Controls
 {
-    partial class USBLarge
+    partial class IndustrialSmall
     {
         /// <summary> 
         /// Required designer variable.
@@ -30,7 +30,7 @@
         {
             this.plugTitleCtrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
             this.connectPart1 = new IoTBoxTiles.Devices.Controls.Parts.ConnectPart();
-            this.currentTitle1 = new IoTBoxTiles.Devices.Controls.Parts.CurrentTitle();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // plugTitleCtrl
@@ -38,47 +38,51 @@
             this.plugTitleCtrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.plugTitleCtrl.FriendlyName = "name";
-            this.plugTitleCtrl.Location = new System.Drawing.Point(0, 0);
+            this.plugTitleCtrl.Location = new System.Drawing.Point(0, 2);
             this.plugTitleCtrl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.plugTitleCtrl.Name = "plugTitleCtrl";
             this.plugTitleCtrl.PowerChecked = false;
             this.plugTitleCtrl.Refreshing = false;
-            this.plugTitleCtrl.Size = new System.Drawing.Size(478, 42);
+            this.plugTitleCtrl.Size = new System.Drawing.Size(320, 42);
             this.plugTitleCtrl.TabIndex = 0;
             this.plugTitleCtrl.PowerClicked += new System.EventHandler(this.plugTitleCtrl_PowerClicked);
             // 
             // connectPart1
             // 
+            this.connectPart1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.connectPart1.Client = null;
             this.connectPart1.ConnectChecked = false;
-            this.connectPart1.Location = new System.Drawing.Point(0, 52);
+            this.connectPart1.Location = new System.Drawing.Point(0, 48);
             this.connectPart1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.connectPart1.Name = "connectPart1";
-            this.connectPart1.Size = new System.Drawing.Size(318, 64);
+            this.connectPart1.Size = new System.Drawing.Size(320, 64);
             this.connectPart1.TabIndex = 1;
             this.connectPart1.ConnectCheckedChanged += new System.EventHandler(this.connectPart1_ConnectCheckedChanged);
             this.connectPart1.DisconnectBtnClick += new System.EventHandler(this.connectPart1_DisconnectBtnClick);
             // 
-            // currentTitle1
+            // label1
             // 
-            this.currentTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.currentTitle1.CurrentFont = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.currentTitle1.Location = new System.Drawing.Point(344, 434);
-            this.currentTitle1.Name = "currentTitle1";
-            this.currentTitle1.Size = new System.Drawing.Size(133, 23);
-            this.currentTitle1.TabIndex = 2;
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(0, 127);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(320, 29);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "COM3";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // USBLarge
+            // IndustrialSmall
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.currentTitle1);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.connectPart1);
             this.Controls.Add(this.plugTitleCtrl);
-            this.Margin = new System.Windows.Forms.Padding(0);
-            this.Name = "USBLarge";
-            this.Size = new System.Drawing.Size(480, 460);
-            this.Load += new System.EventHandler(this.USBLarge_Load);
+            this.Name = "IndustrialSmall";
+            this.Size = new System.Drawing.Size(320, 248);
+            this.Load += new System.EventHandler(this.IndustrialSmall_Load);
             this.ResumeLayout(false);
 
         }
@@ -87,6 +91,6 @@
 
         private Parts.PlugTitle plugTitleCtrl;
         private Parts.ConnectPart connectPart1;
-        private Parts.CurrentTitle currentTitle1;
+        private System.Windows.Forms.Label label1;
     }
 }

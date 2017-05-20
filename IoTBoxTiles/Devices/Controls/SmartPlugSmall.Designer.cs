@@ -35,6 +35,7 @@
             // currentTitle1
             // 
             this.currentTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.currentTitle1.CurrentFont = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.currentTitle1.Location = new System.Drawing.Point(181, 222);
             this.currentTitle1.Name = "currentTitle1";
             this.currentTitle1.Size = new System.Drawing.Size(133, 23);

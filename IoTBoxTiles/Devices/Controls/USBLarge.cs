@@ -26,7 +26,7 @@ namespace IoTBoxTiles.Devices.Controls
             plugTitleCtrl.FriendlyName = _device.friendly_name;
             plugTitleCtrl.PowerChecked = _device.plug_status;
             connectPart1.ConnectChecked = _device.connected;
-            currentTitle1.setValue(_device.current_consumption);
+            currentTitle1.CurrentVal = _device.current_consumption;
         }
 
         private void plugTitleCtrl_PowerClicked(object sender, EventArgs e)
@@ -44,6 +44,11 @@ namespace IoTBoxTiles.Devices.Controls
         {
             // TODO: replace with working code
             connectPart1.Client = null;
+        }
+
+        private void USBLarge_Load(object sender, EventArgs e)
+        {
+            UpdateUI();
         }
     }
 }

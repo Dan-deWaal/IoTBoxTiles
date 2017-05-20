@@ -89,13 +89,8 @@ namespace IoTBoxTiles
                         new_devices.Add(infrared);
                         break;
                     case 5: // *** Industrial ***
-                        Industrial industrial = new Industrial();
+                        Industrial industrial = new Industrial(dev);
                         new_devices.Add(industrial);
-                        industrial.device_id = dev.device_id;
-                        industrial.friendly_name = dev.friendly_name;
-                        industrial.module_type = dev.module_type;
-                        industrial.online = dev.online;
-                        industrial.url = dev.url;
                         break;
                     case 6: // *** Multiboard ***
                         Multiboard multiboard = new Multiboard(dev);

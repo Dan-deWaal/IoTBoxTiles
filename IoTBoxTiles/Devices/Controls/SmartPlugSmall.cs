@@ -25,7 +25,7 @@ namespace IoTBoxTiles.Devices.Controls
         {
             plugTitleCtrl.FriendlyName = _device.friendly_name;
             plugTitleCtrl.PowerChecked = _device.plug_status;
-            currentTitle1.setValue(_device.current_consumption);
+            currentTitle1.CurrentVal = _device.current_consumption;
         }
 
         private void plugTitleCtrl_Load(object sender, EventArgs e)

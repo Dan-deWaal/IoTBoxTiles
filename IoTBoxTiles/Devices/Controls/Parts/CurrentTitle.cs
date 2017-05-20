@@ -17,13 +17,30 @@ namespace IoTBoxTiles.Devices.Controls.Parts
             InitializeComponent();
         }
 
-        public void setValue(float? val)
+        public float? CurrentVal
         {
-            if (val == null)
+            set
             {
-                val = 0;
+                if (value == null)
+                {
+                    currentLabel.Text = "0";
+                }
+                else currentLabel.Text = value.ToString();
+
             }
-            currentLabel.Text = val.ToString();
+        }
+
+        public Font CurrentFont
+        {
+            get
+            {
+                return currentLabel.Font;
+            }
+            set
+            {
+                currentLabel.Font = value;
+                mALabel.Font = value;
+            }
         }
     }
 }
