@@ -34,15 +34,26 @@ namespace IoTBoxTiles.Devices.Controls
             //feedback
             for (int i=0; i<4; i++)
             {
-                _feedbackNames[i].Text = _device._feedback[i].Key;
-                if (_device._feedback[i].Value)
+                if (_device._feedback[i].HasValue)
                 {
-                    _feedbackImages[i].BackColor = Color.Blue;
+                    _feedbackNames[i].Visible = true;
+                    _feedbackImages[i].Visible = true;
+                    _feedbackNames[i].Text = _device._feedback[i].Value.Key;
+                    if (_device._feedback[i].Value.Value)
+                    {
+                        _feedbackImages[i].BackColor = Color.Blue;
+                    }
+                    else
+                    {
+                        _feedbackImages[i].BackColor = Color.Red;
+                    }
                 }
                 else
                 {
-                    _feedbackImages[i].BackColor = Color.Red;
+                    _feedbackNames[i].Visible = false;
+                    _feedbackImages[i].Visible = false;
                 }
+                
             }
             //repeater toggle
             repeaterToggle.Checked = _device._repeater;

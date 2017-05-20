@@ -13,18 +13,13 @@ namespace IoTBoxTiles.Devices
     {
         //unique properties
         public bool _repeater { get; set; }
-        public List<KeyValuePair<string, bool>> _feedback { get; set; }
+        public List<KeyValuePair<string, bool>?> _feedback { get; set; }
         public List<IRButton> _buttons { get; set; }
 
         public Infrared(Device old_device) : base(old_device)
         {
-            _feedback = new List<KeyValuePair<string, bool>>() {
-                new KeyValuePair<string, bool>("1",true),
-                new KeyValuePair<string, bool>("2",false),
-                new KeyValuePair<string, bool>("3",true),
-                new KeyValuePair<string, bool>("4",false)
-            };
             _buttons = new List<IRButton>();
+            _feedback = new List<KeyValuePair<string, bool>?>();
 
             // *** fake buttons ***
             _buttons.Add(new IRButton());
@@ -36,6 +31,22 @@ namespace IoTBoxTiles.Devices
 
         public Infrared(JObject device) : base(device)
         {
+        }
+
+        public override void UpdateDevice(JObject device)
+        {
+            base.UpdateDevice(device);
+            _feedback.Clear();
+            foreach (JToken fbItem in device["feedback"])
+            {
+                if ((bool)fbItem["enabled"])
+                {
+                    _feedback.Add(new KeyValuePair<string, bool>((string)fbItem["name"], (bool)fbItem["input"]));
+                } else
+                {
+                    _feedback.Add(null);
+                }
+            }
         }
 
         public override void CreateDevice()
@@ -56,13 +67,14 @@ namespace IoTBoxTiles.Devices
 
         public class IRButton
         {
-            public int? id { get; set; }
+            public int id { get; set; }
             public int? icon { get; set; }
             public string name { get; set; }
-            public bool? continuous { get; set; }
+            public bool continuous { get; set; }
             public int? num_pulses { get; set; }
-            public IRButton()
+            public IRButton(JToken buttonData)
             {
+
             }
 
         }
