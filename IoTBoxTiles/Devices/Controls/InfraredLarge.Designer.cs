@@ -40,6 +40,7 @@
             this.repeaterToggle = new System.Windows.Forms.CheckBox();
             this.buttonsFlowLayout = new System.Windows.Forms.FlowLayoutPanel();
             this.plugTitleCtrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
+            this.currentTitle1 = new IoTBoxTiles.Devices.Controls.Parts.CurrentTitle();
             ((System.ComponentModel.ISupportInitialize)(this.feedbackBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.feedbackBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.feedbackBox3)).BeginInit();
@@ -146,7 +147,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.buttonsFlowLayout.Location = new System.Drawing.Point(4, 181);
             this.buttonsFlowLayout.Name = "buttonsFlowLayout";
-            this.buttonsFlowLayout.Size = new System.Drawing.Size(473, 276);
+            this.buttonsFlowLayout.Size = new System.Drawing.Size(473, 247);
             this.buttonsFlowLayout.TabIndex = 10;
             // 
             // plugTitleCtrl
@@ -164,10 +165,19 @@
             this.plugTitleCtrl.PowerClicked += new System.EventHandler(this.plugTitleCtrl_PowerClicked);
             this.plugTitleCtrl.Load += new System.EventHandler(this.plugTitleCtrl_Load);
             // 
+            // currentTitle1
+            // 
+            this.currentTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.currentTitle1.Location = new System.Drawing.Point(344, 434);
+            this.currentTitle1.Name = "currentTitle1";
+            this.currentTitle1.Size = new System.Drawing.Size(133, 23);
+            this.currentTitle1.TabIndex = 11;
+            // 
             // InfraredLarge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.currentTitle1);
             this.Controls.Add(this.buttonsFlowLayout);
             this.Controls.Add(this.repeaterPanel);
             this.Controls.Add(this.feedbackName4);
@@ -204,5 +214,6 @@
         private System.Windows.Forms.Panel repeaterPanel;
         private System.Windows.Forms.CheckBox repeaterToggle;
         private System.Windows.Forms.FlowLayoutPanel buttonsFlowLayout;
+        private Parts.CurrentTitle currentTitle1;
     }
 }

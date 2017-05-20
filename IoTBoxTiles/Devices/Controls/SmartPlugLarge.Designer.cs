@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.plugTitleCtrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
+            this.currentTitle1 = new IoTBoxTiles.Devices.Controls.Parts.CurrentTitle();
             this.SuspendLayout();
             // 
             // plugTitleCtrl
@@ -44,10 +45,18 @@
             this.plugTitleCtrl.PowerClicked += new System.EventHandler(this.plugTitleCtrl_PowerClicked);
             this.plugTitleCtrl.Load += new System.EventHandler(this.plugTitleCtrl_Load);
             // 
+            // currentTitle1
+            // 
+            this.currentTitle1.Location = new System.Drawing.Point(344, 434);
+            this.currentTitle1.Name = "currentTitle1";
+            this.currentTitle1.Size = new System.Drawing.Size(133, 23);
+            this.currentTitle1.TabIndex = 1;
+            // 
             // SmartPlugLarge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.currentTitle1);
             this.Controls.Add(this.plugTitleCtrl);
             this.Name = "SmartPlugLarge";
             this.Size = new System.Drawing.Size(480, 460);
@@ -58,5 +67,6 @@
         #endregion
 
         private Parts.PlugTitle plugTitleCtrl;
+        private Parts.CurrentTitle currentTitle1;
     }
 }

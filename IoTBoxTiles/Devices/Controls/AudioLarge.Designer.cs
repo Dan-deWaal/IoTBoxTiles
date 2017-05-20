@@ -30,7 +30,7 @@
         {
             this.plugTitleCtrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
             this.connectPartCtrl = new IoTBoxTiles.Devices.Controls.Parts.ConnectPart();
-            this.button1 = new System.Windows.Forms.Button();
+            this.currentTitle1 = new IoTBoxTiles.Devices.Controls.Parts.CurrentTitle();
             this.SuspendLayout();
             // 
             // plugTitleCtrl
@@ -38,40 +38,45 @@
             this.plugTitleCtrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.plugTitleCtrl.FriendlyName = "name";
-            this.plugTitleCtrl.Location = new System.Drawing.Point(3, 3);
+            this.plugTitleCtrl.Location = new System.Drawing.Point(2, 2);
+            this.plugTitleCtrl.Margin = new System.Windows.Forms.Padding(1);
             this.plugTitleCtrl.Name = "plugTitleCtrl";
             this.plugTitleCtrl.PowerChecked = false;
-            this.plugTitleCtrl.Size = new System.Drawing.Size(955, 42);
+            this.plugTitleCtrl.Refreshing = false;
+            this.plugTitleCtrl.Size = new System.Drawing.Size(478, 42);
             this.plugTitleCtrl.TabIndex = 0;
             // 
             // connectPartCtrl
             // 
             this.connectPartCtrl.Client = null;
             this.connectPartCtrl.ConnectChecked = false;
-            this.connectPartCtrl.Location = new System.Drawing.Point(3, 111);
+            this.connectPartCtrl.Location = new System.Drawing.Point(2, 57);
+            this.connectPartCtrl.Margin = new System.Windows.Forms.Padding(1);
             this.connectPartCtrl.Name = "connectPartCtrl";
-            this.connectPartCtrl.Size = new System.Drawing.Size(513, 64);
+            this.connectPartCtrl.Size = new System.Drawing.Size(256, 64);
             this.connectPartCtrl.TabIndex = 1;
+            this.connectPartCtrl.ConnectCheckedChanged += new System.EventHandler(this.connectPartCtrl_ConnectCheckedChanged);
+            this.connectPartCtrl.DisconnectBtnClick += new System.EventHandler(this.connectPartCtrl_DisconnectBtnClick);
             // 
-            // button1
+            // currentTitle1
             // 
-            this.button1.Location = new System.Drawing.Point(879, 1097);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 38);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "button1";
-            this.button1.UseVisualStyleBackColor = true;
+            this.currentTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.currentTitle1.Location = new System.Drawing.Point(344, 434);
+            this.currentTitle1.Name = "currentTitle1";
+            this.currentTitle1.Size = new System.Drawing.Size(133, 23);
+            this.currentTitle1.TabIndex = 2;
             // 
             // AudioLarge
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.currentTitle1);
             this.Controls.Add(this.connectPartCtrl);
             this.Controls.Add(this.plugTitleCtrl);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "AudioLarge";
-            this.Size = new System.Drawing.Size(961, 1165);
+            this.Size = new System.Drawing.Size(480, 460);
             this.Load += new System.EventHandler(this.AudioLarge_Load);
             this.ResumeLayout(false);
 
@@ -81,6 +86,6 @@
 
         private Parts.PlugTitle plugTitleCtrl;
         private Parts.ConnectPart connectPartCtrl;
-        private System.Windows.Forms.Button button1;
+        private Parts.CurrentTitle currentTitle1;
     }
 }

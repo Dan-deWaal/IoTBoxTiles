@@ -114,6 +114,12 @@
     <Compile Include="Devices\Controls\Parts\ConnectPart.Designer.cs">
       <DependentUpon>ConnectPart.cs</DependentUpon>
     </Compile>
+    <Compile Include="Devices\Controls\Parts\CurrentTitle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Devices\Controls\Parts\CurrentTitle.Designer.cs">
+      <DependentUpon>CurrentTitle.cs</DependentUpon>
+    </Compile>
     <Compile Include="Devices\Controls\Parts\PlugTitle.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -196,6 +202,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\Parts\ConnectPart.resx">
       <DependentUpon>ConnectPart.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Devices\Controls\Parts\CurrentTitle.resx">
+      <DependentUpon>CurrentTitle.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Devices\Controls\Parts\PlugTitle.resx">
       <DependentUpon>PlugTitle.cs</DependentUpon>

@@ -25,7 +25,8 @@ namespace IoTBoxTiles.Devices.Controls
         {
             plugTitleCtrl.FriendlyName = _device.friendly_name;
             plugTitleCtrl.PowerChecked = _device.plug_status;
-            //connectPart1.ConnectChecked = _device.connected;
+            connectPartCtrl.ConnectChecked = _device.connected;
+            currentTitle1.setValue(_device.current_consumption);
         }
 
         private void AudioLarge_Load(object sender, EventArgs e)
@@ -36,6 +37,18 @@ namespace IoTBoxTiles.Devices.Controls
         private void plugTitleCtrl_PowerClicked(object sender, EventArgs e)
         {
             _device.ChangePowerAsync(plugTitleCtrl);
+        }
+
+        private void connectPartCtrl_ConnectCheckedChanged(object sender, EventArgs e)
+        {
+            // TODO: replace with working code
+            connectPartCtrl.Client = "test";
+        }
+
+        private void connectPartCtrl_DisconnectBtnClick(object sender, EventArgs e)
+        {
+            // TODO: replace with working code
+            connectPartCtrl.Client = null;
         }
     }
 }

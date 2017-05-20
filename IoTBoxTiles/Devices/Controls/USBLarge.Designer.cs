@@ -30,6 +30,7 @@
         {
             this.plugTitleCtrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
             this.connectPart1 = new IoTBoxTiles.Devices.Controls.Parts.ConnectPart();
+            this.currentTitle1 = new IoTBoxTiles.Devices.Controls.Parts.CurrentTitle();
             this.SuspendLayout();
             // 
             // plugTitleCtrl
@@ -58,10 +59,19 @@
             this.connectPart1.ConnectCheckedChanged += new System.EventHandler(this.connectPart1_ConnectCheckedChanged);
             this.connectPart1.DisconnectBtnClick += new System.EventHandler(this.connectPart1_DisconnectBtnClick);
             // 
+            // currentTitle1
+            // 
+            this.currentTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.currentTitle1.Location = new System.Drawing.Point(344, 434);
+            this.currentTitle1.Name = "currentTitle1";
+            this.currentTitle1.Size = new System.Drawing.Size(133, 23);
+            this.currentTitle1.TabIndex = 2;
+            // 
             // USBLarge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.currentTitle1);
             this.Controls.Add(this.connectPart1);
             this.Controls.Add(this.plugTitleCtrl);
             this.Margin = new System.Windows.Forms.Padding(0);
@@ -75,5 +85,6 @@
 
         private Parts.PlugTitle plugTitleCtrl;
         private Parts.ConnectPart connectPart1;
+        private Parts.CurrentTitle currentTitle1;
     }
 }

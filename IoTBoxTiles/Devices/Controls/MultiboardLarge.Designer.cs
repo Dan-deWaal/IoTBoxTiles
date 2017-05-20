@@ -38,6 +38,7 @@
             this.plug2Ctrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
             this.plug3Ctrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
             this.plug4Ctrl = new IoTBoxTiles.Devices.Controls.Parts.PlugTitle();
+            this.currentTitle1 = new IoTBoxTiles.Devices.Controls.Parts.CurrentTitle();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -180,14 +181,23 @@
             this.plug4Ctrl.TabIndex = 4;
             this.plug4Ctrl.PowerClicked += new System.EventHandler(this.plug4Ctrl_PowerClicked);
             // 
+            // currentTitle1
+            // 
+            this.currentTitle1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.currentTitle1.Location = new System.Drawing.Point(344, 434);
+            this.currentTitle1.Name = "currentTitle1";
+            this.currentTitle1.Size = new System.Drawing.Size(133, 23);
+            this.currentTitle1.TabIndex = 10;
+            // 
             // MultiboardLarge
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.currentTitle1);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.plugTitleCtrl);
             this.Name = "MultiboardLarge";
-            this.Size = new System.Drawing.Size(480, 601);
+            this.Size = new System.Drawing.Size(480, 460);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -205,5 +215,6 @@
         private Parts.PlugTitle plug2Ctrl;
         private Parts.PlugTitle plug3Ctrl;
         private Parts.PlugTitle plug4Ctrl;
+        private Parts.CurrentTitle currentTitle1;
     }
 }
