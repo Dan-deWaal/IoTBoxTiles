@@ -35,18 +35,16 @@ namespace IoTBoxTiles.Devices.Controls
                 buttonLayout.Enabled = true;
                 for (int i = 0; i<9; i++)
                 {
-                    foreach (Infrared.IRButton butt in _device._buttons)
+                    var butt_i = _device._buttons.FindIndex(button => button.id == i);
+                    if (butt_i == -1)
                     {
-                        if (butt.id == i)
-                        {
-                            _smallButtons[i].Enabled = true;
-                            _smallButtons[i].Text = butt.name;
-                            _smallButtons[i].Tag = butt.id;
-                        } else
-                        {
-                            _smallButtons[i].Enabled = false;
-                            _smallButtons[i].Text = "";
-                        }
+                        _smallButtons[i].Enabled = false;
+                        _smallButtons[i].Text = "";
+                    } else
+                    {
+                        _smallButtons[i].Enabled = true;
+                        _smallButtons[i].Text = _device._buttons[butt_i].name;
+                        _smallButtons[i].Tag = _device._buttons[butt_i].id;
                     }
                 }
             }

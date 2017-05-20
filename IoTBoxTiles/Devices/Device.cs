@@ -98,47 +98,6 @@ namespace IoTBoxTiles.Devices
 
         public virtual void CreateDevice()
         {
-            DisplayState = DisplayStates.None;
-            // Small UI element
-            UI_small = new Panel()
-            {
-                Width = 270,
-                Height = 200,
-                BorderStyle = BorderStyle.None,
-                BackColor = SystemColors.Control
-            };
-
-            TableLayoutPanel deviceSmallTable = new TableLayoutPanel()
-            {
-                Name = "table",
-                Dock = DockStyle.Fill,
-                Padding = new Padding(3)
-            };
-            deviceSmallTable.Controls.Add(new Label() { Name = "Name", Text = "Name" }, 0, 0); //friendly_name
-            deviceSmallTable.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
-            deviceSmallTable.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
-            UI_small.Controls.Add(deviceSmallTable);
-            
-            // Large UI element
-            UI_large = new Panel()
-            {
-                Name = "UILargePanel",
-                //UI_large.Dock = DockStyle.Fill;
-                BorderStyle = BorderStyle.Fixed3D
-            };
-
-            TableLayoutPanel deviceLargeTable = new TableLayoutPanel()
-            {
-                Name = "table",
-                Dock = DockStyle.Fill
-            };
-            deviceLargeTable.Controls.Add(new Label() { Name = "Name", Text = "Name" }, 0, 0); //friendly_name
-            deviceLargeTable.Controls.Add(new CheckBox() { Name = "Power", Text = "Power" }, 0, 1);
-            deviceLargeTable.Controls.Add(new Label() { Name = "Current", Text = "0 mA" }, 1, 1);
-            deviceLargeTable.Controls.Add(new Label() { Name = "FirstConn", Text = "first_connected: " + first_connected.ToString() }, 0, 2);
-            deviceLargeTable.Controls.Add(new Label() { Name = "LastCheck", Text = "last_checked: " + last_checked.ToString() }, 0, 3);
-            deviceLargeTable.Controls.Add(new Label() { Name = "DeviceID", Text = "device_id: " + device_id.ToString() }, 0, 4);
-            UI_large.Controls.Add(deviceLargeTable);
         }
 
         public void UpdateUI()
@@ -179,53 +138,7 @@ namespace IoTBoxTiles.Devices
 
             UI_large = newLarge;
         }
-
-        public void UpdateLargeCommonUI(TableLayoutPanel table)
-        {
-            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
-            name_lbl.Text = friendly_name;
-            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
-            power_cb.Checked = plug_status;
-            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
-            current_lbl.Text = "current: " + current_consumption.ToString() + " mA";
-            Label first_lbl = (Label)table.Controls.Find("FirstConn", true).First();
-            first_lbl.Text = "first_connected: " + first_connected.ToString();
-            Label last_lbl = (Label)table.Controls.Find("LastCheck", true).First();
-            last_lbl.Text = "last_checked: " + last_checked.ToString();
-            Label id_lbl = (Label)table.Controls.Find("DeviceID", true).First();
-            id_lbl.Text = "device_id: " + device_id.ToString();
-        }
-
-        public void UpdateSmallCommonUI(TableLayoutPanel table)
-        {
-            Label name_lbl = (Label)table.Controls.Find("Name", true).First();
-            name_lbl.Text = friendly_name;
-            CheckBox power_cb = (CheckBox)table.Controls.Find("Power", true).First();
-            power_cb.Checked = plug_status;
-            Label current_lbl = (Label)table.Controls.Find("Current", true).First();
-            current_lbl.Text = current_consumption.ToString();
-        }
-
-        public void UpdateLargeConnectUI(TableLayoutPanel table, int? client_id, string ip_address, int? port)
-        {
-            CheckBox conn_cb = (CheckBox)table.Controls.Find("Connect", true).First();
-            conn_cb.Checked = plug_status;
-            Label ci_lbl = (Label)table.Controls.Find("Client", true).First();
-            ci_lbl.Text = "client_id: " + (client_id?.ToString() ?? "not available");
-
-            Label ip_lbl = (Label)table.Controls.Find("IP", true).First();
-            ip_lbl.Text = "IP: " + (ip_address?.ToString() ?? "not available");
-
-            Label port_lbl = (Label)table.Controls.Find("Port", true).First();
-            port_lbl.Text = "port: " + (port?.ToString() ?? "not available");
-        }
-
-        public void UpdateSmallConnectUI(TableLayoutPanel table)
-        {
-            CheckBox conn_cb = (CheckBox)table.Controls.Find("Connect", true).First();
-            conn_cb.Checked = plug_status;
-        }
-
+        
         public async void ChangePowerAsync(PlugTitle pt)
         {
             if (pt.Refreshing)

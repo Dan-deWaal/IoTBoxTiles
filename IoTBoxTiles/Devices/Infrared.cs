@@ -83,7 +83,6 @@ namespace IoTBoxTiles.Devices
                 continuous = (bool)buttonData["continuous"];
                 num_pulses = (int?)buttonData["pulses"];
             }
-
         }
     }
 }
