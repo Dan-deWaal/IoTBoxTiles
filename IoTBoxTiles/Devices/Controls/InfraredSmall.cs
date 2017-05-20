@@ -45,7 +45,7 @@ namespace IoTBoxTiles.Devices.Controls
                         } else
                         {
                             _smallButtons[i].Enabled = false;
-                            _smallButtons[i].Text = ".";
+                            _smallButtons[i].Text = "";
                         }
                     }
                 }

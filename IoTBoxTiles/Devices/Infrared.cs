@@ -20,13 +20,6 @@ namespace IoTBoxTiles.Devices
         {
             _buttons = new List<IRButton>();
             _feedback = new List<KeyValuePair<string, bool>?>();
-
-            // *** fake buttons ***
-            _buttons.Add(new IRButton());
-            _buttons.First().id = 1;
-            _buttons.First().name = "Bob";
-            
-            // **   remove!!   **
         }
 
         public Infrared(JObject device) : base(device)
@@ -45,6 +38,13 @@ namespace IoTBoxTiles.Devices
                 } else
                 {
                     _feedback.Add(null);
+                }
+            }
+            if (device["buttons"] != null)
+            {
+                foreach (JToken buttItem in device["buttons"])
+                {
+                    _buttons.Add(new IRButton(buttItem));
                 }
             }
         }
@@ -72,9 +72,14 @@ namespace IoTBoxTiles.Devices
             public string name { get; set; }
             public bool continuous { get; set; }
             public int? num_pulses { get; set; }
+
             public IRButton(JToken buttonData)
             {
-
+                id = (int)buttonData["id"];
+                icon = (int?)buttonData["icon"];
+                name = (string)buttonData["name"];
+                continuous = (bool)buttonData["continuous"];
+                num_pulses = (int?)buttonData["pulses"];
             }
 
         }
