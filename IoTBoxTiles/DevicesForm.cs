@@ -116,16 +116,13 @@ namespace IoTBoxTiles
 
             switch (devDetails.Item1)
             {
-                case ServerResponse.NotConnected: //server not connected
-                    Console.WriteLine("Server Problem");
+                case ServerResponse.NotConnected:
                     lbl_status.Text = "Server Problem";
                     break;
-                case ServerResponse.Connected: //success
+                case ServerResponse.Connected:
                     jsonStr = await devDetails.Item2.Content.ReadAsStringAsync();
-                    Console.WriteLine(jsonStr);
                     break;
-                case ServerResponse.ServerFailure: //fail
-                    Console.WriteLine("Failed");
+                case ServerResponse.ServerFailure:
                     lbl_status.Text = "Failed";
                     break;
             }
