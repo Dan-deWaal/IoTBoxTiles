@@ -62,7 +62,19 @@ namespace IoTBoxTiles.Devices.Controls
             foreach(Infrared.IRButton butt in _device._buttons)
             {
                 var x = new Button() { Name = "irbutton"+butt.id.ToString(), Text = butt.name, Tag = butt.id };
-                x.Click += new EventHandler(IRButton_click);
+                if (butt.continuous)
+                {
+                    x.Click -= _device.irbuttonClick;
+                    x.MouseDown += _device.irbuttonDown;
+                    x.MouseUp += _device.irbuttonUp;
+                }
+                else
+                {
+                    x.Click += _device.irbuttonClick;
+                    x.MouseDown -= _device.irbuttonDown;
+                    x.MouseUp -= _device.irbuttonUp;
+                }
+                //x.Click += new EventHandler(IRButton_click);
                 buttonsFlowLayout.Controls.Add(x);
             }
         }
@@ -88,13 +100,11 @@ namespace IoTBoxTiles.Devices.Controls
             if (repeaterToggle.Checked)
             {
                 repeaterToggle.Text = "Rptr On";
-                _device._repeater = true;
             } else
             {
                 repeaterToggle.Text = "Rptr Off";
-                _device._repeater = false;
             }
-            
+            _device.ChangeRepeaterAsync();
         }
     }
 }

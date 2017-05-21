@@ -11,6 +11,7 @@ namespace IoTBoxTiles.Devices
 {
     public class Infrared : Device
     {
+        private ServerComm _serverComm = ServerComm.Instance;
         //unique properties
         public bool _repeater { get; set; }
         public List<KeyValuePair<string, bool>?> _feedback { get; set; }
@@ -65,6 +66,57 @@ namespace IoTBoxTiles.Devices
         public override void UpdateSmallUI()
         {
             ((InfraredSmall)UI_small.Controls[0]).UpdateUI();
+        }
+
+        public void irbuttonDown(object sender, EventArgs e)
+        {
+            irbuttonComms((int)((Button)sender).Tag, "/start");
+        }
+
+        public void irbuttonUp(object sender, EventArgs e)
+        {
+            irbuttonComms((int)((Button)sender).Tag, "/stop");
+        }
+
+        public void irbuttonClick(object sender, EventArgs e)
+        {
+            irbuttonComms((int)((Button)sender).Tag, "/single");
+        }
+
+        public async void irbuttonComms(int button_id, string sss)
+        {
+            StringBuilder deviceUri = new StringBuilder(_serverComm.Root);
+            deviceUri.Append("/device/");
+            deviceUri.Append(device_id);
+            deviceUri.Append("/ir/");
+            deviceUri.Append(button_id);
+            deviceUri.Append(sss); //start, stop, single
+            
+            var response = await _serverComm.PutAsync(deviceUri.ToString());
+            if (response.Item1 != ServerResponse.Connected)
+            {
+                MessageBox.Show("Problem with IR button sending.");
+                Console.WriteLine(await response.Item2.Content.ReadAsStringAsync());
+            }
+        }
+
+        public async void ChangeRepeaterAsync()
+        {
+            StringBuilder deviceUri = new StringBuilder(_serverComm.Root);
+            deviceUri.Append("/device/");
+            deviceUri.Append(device_id);
+            deviceUri.Append("/repeater");
+            if (_repeater)
+                deviceUri.Append("/on");
+            else
+                deviceUri.Append("/off");
+
+            var response = await _serverComm.PostAsync(deviceUri.ToString());
+            if (response.Item1 != ServerResponse.Connected)
+            {
+                _repeater = !_repeater;
+                MessageBox.Show("Problem switching repeater " + (!_repeater ? "on." : "off."));
+            }
         }
 
         public class IRButton

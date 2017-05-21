@@ -76,5 +76,29 @@ namespace IoTBoxTiles
             //result:  0 = Not Connected,  1 = Connected,  2 = Server Failure.
             return Tuple.Create(result, postResp);
         }
+
+        public async Task<Tuple<ServerResponse, HttpResponseMessage>> PutAsync(string url,
+            HttpContent body = null, bool need_credentials = true)
+        {
+            ServerResponse result = ServerResponse.NotConnected;
+            HttpResponseMessage putResp = null;
+            client.DefaultRequestHeaders.Clear();
+            if (need_credentials)
+            {
+                client.DefaultRequestHeaders.Add("email", Email);
+                client.DefaultRequestHeaders.Add("password", Password);
+            }
+            try
+            {
+                putResp = await client.PutAsync(url, body);
+                result = putResp.IsSuccessStatusCode ? ServerResponse.Connected : ServerResponse.ServerFailure;
+            }
+            catch
+            {
+                result = ServerResponse.NotConnected;
+            }
+            //result:  0 = Not Connected,  1 = Connected,  2 = Server Failure.
+            return Tuple.Create(result, putResp);
+        }
     }
 }

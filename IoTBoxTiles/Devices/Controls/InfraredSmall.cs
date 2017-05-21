@@ -45,6 +45,18 @@ namespace IoTBoxTiles.Devices.Controls
                         _smallButtons[i].Enabled = true;
                         _smallButtons[i].Text = _device._buttons[butt_i].name;
                         _smallButtons[i].Tag = _device._buttons[butt_i].id;
+                        if (_device._buttons[butt_i].continuous)
+                        {
+                            _smallButtons[i].Click -= _device.irbuttonClick;
+                            _smallButtons[i].MouseDown += _device.irbuttonDown;
+                            _smallButtons[i].MouseUp += _device.irbuttonUp;
+                        }
+                        else
+                        {
+                            _smallButtons[i].Click += _device.irbuttonClick;
+                            _smallButtons[i].MouseDown -= _device.irbuttonDown;
+                            _smallButtons[i].MouseUp -= _device.irbuttonUp;
+                        }
                     }
                 }
             }
