@@ -39,7 +39,10 @@ namespace IoTBoxTiles
                     {
                         byte[] buffer = new byte[2];
                         _TcpClient.GetStream().Read(buffer, 0, 2);
-                        Console.WriteLine(buffer);
+                        foreach (var data in buffer)
+                        {
+                            Console.WriteLine(data.ToString());
+                        }
                         nodata = false;
                     } else
                     {
