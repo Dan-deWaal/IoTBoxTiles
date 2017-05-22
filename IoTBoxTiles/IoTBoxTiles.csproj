@@ -58,6 +58,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DeviceBase.cs" />
+    <Compile Include="DeviceComm.cs" />
     <Compile Include="Devices\Audio.cs" />
     <Compile Include="Devices\Bluetooth.cs" />
     <Compile Include="Devices\Controls\AudioLarge.cs">
@@ -188,6 +189,7 @@
     </Compile>
     <Compile Include="ServerComm.cs" />
     <Compile Include="Devices\SmartPlug.cs" />
+    <Compile Include="USBdriver.cs" />
     <EmbeddedResource Include="Devices\Controls\AudioLarge.resx">
       <DependentUpon>AudioLarge.cs</DependentUpon>
     </EmbeddedResource>

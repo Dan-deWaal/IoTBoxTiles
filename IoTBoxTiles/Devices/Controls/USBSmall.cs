@@ -41,12 +41,14 @@ namespace IoTBoxTiles.Devices.Controls
         {
             // TODO: replace with working code
             connectPart1.Client = "test";
+            _device.connectUSB();
         }
 
         private void connectPart1_DisconnectBtnClick(object sender, EventArgs e)
         {
             // TODO: replace with working code
             connectPart1.Client = null;
+            _device.disconnectUSB();
         }
     }
 }

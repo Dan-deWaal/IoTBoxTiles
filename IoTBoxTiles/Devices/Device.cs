@@ -32,7 +32,7 @@ namespace IoTBoxTiles.Devices
         public DateTime first_connected { get; set; }
         public DateTime last_checked { get; set; }
         public bool plug_status { get; set; }
-        public float? current_consumption { get; set; } // nullable float
+        public int? current_consumption { get; set; } // nullable float
 
         //UI Elements
         public Control UI_small { get; set; }
@@ -93,7 +93,7 @@ namespace IoTBoxTiles.Devices
             first_connected = (DateTime)device["first_connected"];
             last_checked = (DateTime)device["last_checked"];
             plug_status = (bool)device["plug_status"];
-            current_consumption = (float?)device["current_consumption"];
+            current_consumption = (int?)device["current_consumption"];
         }
 
         public virtual void CreateDevice()

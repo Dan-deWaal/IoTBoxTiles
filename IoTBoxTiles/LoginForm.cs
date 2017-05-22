@@ -79,7 +79,7 @@ namespace IoTBoxTiles
                     {
                         err = await loginstat.Item2.Content.ReadAsAsync<Err>();
                     }
-                    catch (Exception e)
+                    catch
                     {
                         err.error = "No server";
                     }
