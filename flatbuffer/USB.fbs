@@ -1,0 +1,14 @@
+// "Fake USB" Schema
+
+namespace IoTBoxTiles;
+
+struct Mouse
+{
+	x:int;
+	y:int;
+}
+
+table Keyboard
+{
+	keys:string;
+}
