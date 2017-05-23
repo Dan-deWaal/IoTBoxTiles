@@ -25,6 +25,7 @@ namespace IoTBoxTiles.Devices.Controls
             plugTitleCtrl.FriendlyName = _device.friendly_name;
             plugTitleCtrl.PowerChecked = _device.plug_status;
             connectPart1.ConnectChecked = _device.connected;
+            connectPart1.Client = _device.client_name;
         }
 
         private void AudioSmall_Load(object sender, EventArgs e)
@@ -39,16 +40,16 @@ namespace IoTBoxTiles.Devices.Controls
 
         private void connectPart1_ConnectCheckedChanged(object sender, EventArgs e)
         {
-            // TODO: replace with working code
-            connectPart1.Client = "test";
+            //connectPart1.Client = "test";
             _device.connectUSB();
+            UpdateUI();
         }
 
         private void connectPart1_DisconnectBtnClick(object sender, EventArgs e)
         {
-            // TODO: replace with working code
-            connectPart1.Client = null;
+            //connectPart1.Client = null;
             _device.disconnectUSB();
+            UpdateUI();
         }
     }
 }

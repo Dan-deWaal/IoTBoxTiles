@@ -62,8 +62,8 @@ namespace IoTBoxTiles.Devices.Controls.Parts
         
         public event EventHandler ConnectCheckedChanged
         {
-            add { connectChkBox.CheckedChanged += value; }
-            remove { connectChkBox.CheckedChanged += value; }
+            add { connectChkBox.Click += value; }
+            remove { connectChkBox.Click += value; }
         }
 
         public event EventHandler DisconnectBtnClick

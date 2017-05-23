@@ -12,6 +12,7 @@ using System.Net.Http.Headers;
 using Newtonsoft.Json;
 using IoTBoxTiles.Devices;
 using Newtonsoft.Json.Linq;
+using System.Threading;
 
 namespace IoTBoxTiles
 {
@@ -20,6 +21,7 @@ namespace IoTBoxTiles
         private List<Device> _devices = new List<Device>();
         private ServerComm _servComm = ServerComm.Instance;
         private bool _largeUi;
+        public static List<Thread> _openThreads = new List<Thread>();
         
         String[] _devTypes;
 
@@ -281,7 +283,17 @@ namespace IoTBoxTiles
         {
             DialogResult result = MessageBox.Show("Really quit?", "Confirm Quit", MessageBoxButtons.YesNo);
             if (result != DialogResult.Yes)
+            {
                 e.Cancel = true;
+            }
+            else
+            {
+                foreach (Thread openThread in _openThreads)
+                {
+                    openThread.Abort();
+                }
+                //send msg to server - "disconnected from all devices"
+            }
         }
     }
 }

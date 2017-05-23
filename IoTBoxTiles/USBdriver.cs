@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net.Security;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -15,44 +17,45 @@ namespace IoTBoxTiles
         private Point _cursor = new Point(0, 0);
         private string _keys;
         private TcpClient _TcpClient;
-        private SslStream _SslStream;
-        private bool nodata;
+        private NetworkStream _netStream;
+        private SslStream _ssl;
+        private bool running;
 
         public USBdriver(string server, int port)
         {
             Console.WriteLine("USB Driver Started.");
-            Console.WriteLine("Socket created: {0} : {1}", server, port);
             _TcpClient = new TcpClient(server, port);
-            //_SslStream = new SslStream(_TcpClient.GetStream());
-            //_SslStream.AuthenticateAsClient("iot.duality.co.nz");
+            _netStream = _TcpClient.GetStream();
+            _ssl = new SslStream(_TcpClient.GetStream(), false, new RemoteCertificateValidationCallback(ValidateCert));
+            _ssl.AuthenticateAsClient("iot.duality.co.nz");
+            running = true;
         }
-        
+
+        public static bool ValidateCert(object sender, X509Certificate certificate,
+              X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        {
+            return true; // Allow untrusted certificates.
+        }
+
         public void listen()
         {
             try
             {
-                while (true)
+                while (running)
                 {
-                    //Console.WriteLine("Listening for data");
-                    //update cursor from data
-                    if (_TcpClient.GetStream().DataAvailable)
+                    //Listening for data
+                    if (_ssl.CanRead)
                     {
+                        //get data
                         byte[] buffer = new byte[2];
-                        _TcpClient.GetStream().Read(buffer, 0, 2);
+                        _ssl.Read(buffer, 0, 2);
+                        Console.WriteLine("buffer size: " + buffer.Length);
                         foreach (var data in buffer)
                         {
                             Console.WriteLine(data.ToString());
                         }
-                        nodata = false;
-                    } else
-                    {
-                        if (!nodata)
-                        {
-                            Console.WriteLine("no data");
-                        }
-                        nodata = true;
                     }
-                    
+                    //update cursor from data
                     //update key from data
                     //Cursor.Position = _cursor;
                     //SendKeys.Send(_keys); // or //SendKeys.SendWait(_keys);
@@ -63,11 +66,14 @@ namespace IoTBoxTiles
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                running = false;
             }
             finally
             {
-                Console.WriteLine("Close Socket");
+                _ssl.Close();
+                _netStream.Close();
+                _TcpClient.Close();
+                Console.WriteLine("Closed Socket");
             }
         }
         
