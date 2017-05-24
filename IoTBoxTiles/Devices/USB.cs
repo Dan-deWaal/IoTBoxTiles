@@ -51,6 +51,7 @@ namespace IoTBoxTiles.Devices
             //polling server goes here
             client_name = "test USB"; //this is retrieved from server
 
+
             UpdateLargeUI();
             UpdateSmallUI();
 
@@ -58,7 +59,7 @@ namespace IoTBoxTiles.Devices
             Console.WriteLine("Connect USB");
             try
             {
-                USBdriver usbdriver = new USBdriver("127.0.0.1", 12345);
+                USBdriver usbdriver = new USBdriver("192.168.0.137", 12345); //("192.168.0.137", 12345); //("127.0.0.1", 12345);
                 _usbref = new ThreadStart(usbdriver.listen);
                 _usbthread = new Thread(_usbref);
                 DevicesForm._openThreads.Add(_usbthread);
