@@ -8,6 +8,7 @@ using System.Net.Http;
 using Newtonsoft.Json.Linq;
 using System.Drawing;
 using IoTBoxTiles.Devices.Controls.Parts;
+using Newtonsoft.Json;
 
 namespace IoTBoxTiles.Devices
 {
@@ -15,6 +16,8 @@ namespace IoTBoxTiles.Devices
     public class Device : DeviceBase
     {
         private ServerComm _serverComm = ServerComm.Instance;
+        private System.Windows.Forms.Timer _timer;
+
 
         public bool SameDevice(object o)
         {
@@ -42,10 +45,12 @@ namespace IoTBoxTiles.Devices
         // constructors
         public Device()
         {
-            CreateDevice();
+            _timer = new System.Windows.Forms.Timer();
+            _timer.Interval = 2000;
+            _timer.Tick += ServerPolling;
         }
 
-        public Device(DeviceBase old_device)
+        public Device(DeviceBase old_device) : base()
         {
             device_id = old_device.device_id;
             friendly_name = old_device.friendly_name;
@@ -80,6 +85,59 @@ namespace IoTBoxTiles.Devices
             current_consumption = old_device.current_consumption;
 
             CreateDevice();
+        }
+
+        public async Task<int> ServerRequest()
+        {
+            int success = -1;
+
+            //Send a request to the server for Device Info
+            string request = JsonConvert.SerializeObject(new RequestInfo
+            {
+                localIP = _serverComm.GetLocalIPAddress(),
+                hostname = _serverComm.GetNETBIOSName()
+            });
+            StringBuilder deviceUri = new StringBuilder(_serverComm.Root);
+            deviceUri.Append("/device/");
+            deviceUri.Append(device_id);
+            deviceUri.Append("/connect");
+            var result = await _serverComm.PostAsync(deviceUri.ToString(),
+                new StringContent(request), contentType: "application/json");
+            if (result.Item1 != ServerResponse.Connected)
+            {
+                // should be handled better
+                MessageBox.Show("Server disconnected during intialisation.");
+            }
+            else
+            {
+                success = 1;
+                _timer.Start();
+                do
+                {
+
+                } while (true);
+            }
+
+            return success;
+        }
+
+        public void ServerPolling(object sender, EventArgs e)
+        {
+
+        }
+
+        public class RequestInfo
+        {
+            public string localIP;
+            public string hostname;
+        }
+
+        public class ConnectionDetail
+        {
+            public string error_message;
+            public string ip_address;
+            public int port;
+            //NAT traversal will add more properties
         }
 
         public virtual void UpdateDevice(JObject device)

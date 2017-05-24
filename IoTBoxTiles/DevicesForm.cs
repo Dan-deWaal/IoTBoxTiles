@@ -22,6 +22,7 @@ namespace IoTBoxTiles
         private ServerComm _servComm = ServerComm.Instance;
         private bool _largeUi;
         public static List<Thread> _openThreads = new List<Thread>();
+
         
         String[] _devTypes;
 
@@ -295,5 +296,6 @@ namespace IoTBoxTiles
                 //send msg to server - "disconnected from all devices"
             }
         }
+        
     }
 }

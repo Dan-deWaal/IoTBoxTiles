@@ -16,8 +16,11 @@ namespace IoTBoxTiles
 {
     public class USBdriver
     {
-        [DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
-        public static extern void mouse_event(long dwFlags, long dx, long dy, long cButtons, long dwExtraInfo);
+        /*[DllImport("user32.dll", CharSet = CharSet.Auto, CallingConvention = CallingConvention.StdCall)]
+        public static extern void mouse_event(long dwFlags, long dx, long dy, long cButtons, long dwExtraInfo);*/
+
+        [DllImport("user32.dll")]
+        static extern void mouse_event(uint dwFlags, int dx, int dy, uint dwData, int dwExtraInfo);
 
         private const int MOUSEEVENTF_LEFTDOWN = 0x02;
         private const int MOUSEEVENTF_LEFTUP = 0x04;
@@ -91,7 +94,7 @@ namespace IoTBoxTiles
                         dataread = _ssl.Read(buffer, 0, buffer.Length);
                         message.AddRange(buffer.Take(dataread));
                         string test = System.Text.Encoding.Default.GetString(message.ToArray());
-                        //Console.WriteLine("test = {0}", test);
+                        Console.WriteLine("test = {0}", test);
                         if (test.IndexOf("<EOF>") != -1)
                         {
                             break;
@@ -100,7 +103,7 @@ namespace IoTBoxTiles
                     
                     //Deserialize data
                     USBData usbdata = LZ4MessagePackSerializer.Deserialize<USBData>(message.ToArray());
-                    //Console.WriteLine("X: {0},  Y: {1}\nKeys: {2}", usbdata.x, usbdata.y, usbdata.keys);
+                    Console.WriteLine("X: {0},  Y: {1}, MB: {2}\nKeys: {3}", usbdata.x, usbdata.y, usbdata.mb, usbdata.keys);
 
                     //update cursor from data
                     Cursor.Position = new Point(usbdata.x, usbdata.y);

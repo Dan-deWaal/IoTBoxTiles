@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using IoTBoxTiles.Devices.Controls;
 using Newtonsoft.Json.Linq;
 using System.Threading;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace IoTBoxTiles.Devices
 {
@@ -14,6 +16,7 @@ namespace IoTBoxTiles.Devices
     {
         ThreadStart _usbref = null;
         public Thread _usbthread = null;
+        public ServerComm _servComm = ServerComm.Instance;
 
         //unique properties
         public bool connected { get; set; }
@@ -21,7 +24,7 @@ namespace IoTBoxTiles.Devices
         public string ip_address { get; set; } //convert to IP datatype be better?
         public int? port { get; set; }
         public string client_name { get; set; }
-
+        
         public USB(Device old_device) : base(old_device)
         {
         }
@@ -46,10 +49,32 @@ namespace IoTBoxTiles.Devices
             ((USBSmall)UI_small.Controls[0]).UpdateUI();
         }
 
-        public void connectUSB()
+        public async void connectUSB()
         {
-            //polling server goes here
+            //changing client_name to a value changes the UI to "connected"
             client_name = "test USB"; //this is retrieved from server
+
+            //Send a request to the server for Device Info
+            string request = JsonConvert.SerializeObject(new RequestInfo
+            {
+                localIP = _servComm.GetLocalIPAddress(),
+                hostname = _servComm.GetNETBIOSName()
+            });
+            StringBuilder deviceUri = new StringBuilder(_servComm.Root);
+            deviceUri.Append("/device/");
+            deviceUri.Append(device_id);
+            deviceUri.Append("/connect");
+            var result = await _servComm.PostAsync(deviceUri.ToString(),
+                new StringContent(request), contentType:"application/json");
+            if (result.Item1 != ServerResponse.Connected)
+            {
+                // should be handled better
+                MessageBox.Show("Server disconnected during intialisation.");
+            }
+            //Console.WriteLine("Request: {0}", result);
+
+            //assume success
+            //Poll server for Device Info
 
 
             UpdateLargeUI();
@@ -86,5 +111,8 @@ namespace IoTBoxTiles.Devices
             DevicesForm._openThreads.Remove(_usbthread);
             //send msg to server = "disconnected from device"
         }
+
+        
+
     }
 }

@@ -8,11 +8,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading;
 using Newtonsoft.Json;
+using System.Net.Sockets;
 
 namespace IoTBoxTiles
 {
     public enum ServerResponse { NotConnected, Connected, ServerFailure };
-    class ServerComm
+    public class ServerComm
     {
         private static readonly Lazy<ServerComm> lazy =
             new Lazy<ServerComm>(() => new ServerComm());
@@ -54,7 +55,7 @@ namespace IoTBoxTiles
         }
         
         public async Task<Tuple<ServerResponse, HttpResponseMessage>> PostAsync(string url, 
-            HttpContent body = null, bool need_credentials = true)
+            HttpContent body = null, bool need_credentials = true, string contentType = null)
         {
             ServerResponse result = ServerResponse.NotConnected;
             HttpResponseMessage postResp = null;
@@ -64,6 +65,8 @@ namespace IoTBoxTiles
                 client.DefaultRequestHeaders.Add("email", Email);
                 client.DefaultRequestHeaders.Add("password", Password);
             }
+            if (contentType != null)
+                body.Headers.ContentType = new MediaTypeHeaderValue(contentType);
             try
             {
                 postResp = await client.PostAsync(url, body);
@@ -100,5 +103,24 @@ namespace IoTBoxTiles
             //result:  0 = Not Connected,  1 = Connected,  2 = Server Failure.
             return Tuple.Create(result, putResp);
         }
+
+        public string GetLocalIPAddress()
+        {
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+            {
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                {
+                    return ip.ToString();
+                }
+            }
+            throw new Exception("Local IP Address Not Found!");
+        }
+
+        public string GetNETBIOSName()
+        {
+            return System.Environment.GetEnvironmentVariable("COMPUTERNAME");
+        }
+
     }
 }
