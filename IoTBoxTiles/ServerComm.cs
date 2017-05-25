@@ -22,7 +22,7 @@ namespace IoTBoxTiles
 
         public string Root = @"https://iot.duality.co.nz/api/1";
 
-        public string Email { private get;  set; }
+        public string Email { get;  set; }
         public string Password { private get; set; }
 
         private ServerComm()

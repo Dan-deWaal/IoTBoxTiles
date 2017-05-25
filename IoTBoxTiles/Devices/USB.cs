@@ -57,10 +57,11 @@ namespace IoTBoxTiles.Devices
             var result = await base.ServerRequest();
             if (result.Item1 == ServerResponse.Connected)
             {
-                Console.WriteLine("Success");
+                Console.WriteLine("Response Success");
                 client_name = _servComm.GetNETBIOSName();
                 //deserialize ip & port content
                 string jsonstr = await result.Item2.Content.ReadAsStringAsync();
+                Console.WriteLine(jsonstr);
                 ConnectionDetail connectiondetails = JsonConvert.DeserializeObject<ConnectionDetail>(jsonstr);
                 Console.WriteLine("IP: {0},  Port: {1},  Status: {2}", connectiondetails.details.ip_address, connectiondetails.details.port, connectiondetails.status);
                 //do the direct connect

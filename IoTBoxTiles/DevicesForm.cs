@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using IoTBoxTiles.Devices;
 using Newtonsoft.Json.Linq;
 using System.Threading;
+using Microsoft.Win32;
 
 namespace IoTBoxTiles
 {
@@ -22,8 +23,11 @@ namespace IoTBoxTiles
         private ServerComm _servComm = ServerComm.Instance;
         private bool _largeUi;
         public static List<Thread> _openThreads = new List<Thread>();
+        private static string userRoot = "HKEY_CURRENT_USER";
+        private static string subkey = @"Software\IoTBox";
+        public static string _keyName = userRoot + "\\" + subkey;
+        public static int? _client_id = null;
 
-        
         String[] _devTypes;
 
         public DevicesForm(List<DeviceBase> device_list)
@@ -33,6 +37,8 @@ namespace IoTBoxTiles
             {
                 _devices.Add(new Device(dev));
             }
+            _client_id = (int?)Registry.GetValue(_keyName, _servComm.Email, null);
+            Console.WriteLine("Client ID: {0}", _client_id);
         }
 
         private void buildTreeView()

@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 using System.Drawing;
 using IoTBoxTiles.Devices.Controls.Parts;
 using Newtonsoft.Json;
+using Microsoft.Win32;
 
 namespace IoTBoxTiles.Devices
 {
@@ -92,11 +93,13 @@ namespace IoTBoxTiles.Devices
             var pollresult = new Tuple<ServerResponse, HttpResponseMessage>(ServerResponse.ServerFailure, null);
 
             //Send a request to the server for Device Info
-            string request = JsonConvert.SerializeObject(new RequestInfo
-            {
-                localIP = _serverComm.GetLocalIPAddress(),
-                hostname = _serverComm.GetNETBIOSName()
-            });
+            RequestInfo requestinfo = new RequestInfo();
+            requestinfo.hostname = _serverComm.GetNETBIOSName();
+            requestinfo.localIP = _serverComm.GetLocalIPAddress();
+            if (DevicesForm._client_id != null)
+                requestinfo.client_id = DevicesForm._client_id;
+            string request = JsonConvert.SerializeObject(requestinfo);
+            Console.WriteLine(request);
             StringBuilder deviceUri = new StringBuilder(_serverComm.Root);
             deviceUri.Append("/device/");
             deviceUri.Append(device_id);
@@ -111,6 +114,12 @@ namespace IoTBoxTiles.Devices
             else
             {
                 //successful request
+                string jsonstr = await result.Item2.Content.ReadAsStringAsync();
+                Console.WriteLine(jsonstr);
+                ConnectRequest connectrequest = JsonConvert.DeserializeObject<ConnectRequest>(jsonstr);
+                DevicesForm._client_id = connectrequest.client_id;
+                Registry.SetValue(DevicesForm._keyName, _serverComm.Email, DevicesForm._client_id);
+                Console.WriteLine("Registry written: {0} : {1} : {2}", DevicesForm._keyName, _serverComm.Email, DevicesForm._client_id);
                 _timer.Start();
                 pollCounter = 0;
                 int prevPollCounter = -1;
@@ -134,10 +143,17 @@ namespace IoTBoxTiles.Devices
             pollCounter++;
         }
 
+        public class ConnectRequest
+        {
+            public string status;
+            public int? client_id;
+        }
+
         public class RequestInfo
         {
             public string localIP;
             public string hostname;
+            public int? client_id;
         }
 
         public class ConnectionDetail
