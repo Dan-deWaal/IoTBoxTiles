@@ -17,7 +17,7 @@ namespace IoTBoxTiles.Devices
     {
         private ServerComm _serverComm = ServerComm.Instance;
         private System.Windows.Forms.Timer _timer;
-
+        private int pollCounter;
 
         public bool SameDevice(object o)
         {
@@ -50,7 +50,7 @@ namespace IoTBoxTiles.Devices
             _timer.Tick += ServerPolling;
         }
 
-        public Device(DeviceBase old_device) : base()
+        public Device(DeviceBase old_device) : this()
         {
             device_id = old_device.device_id;
             friendly_name = old_device.friendly_name;
@@ -63,13 +63,13 @@ namespace IoTBoxTiles.Devices
 
         // convert from JSON.net 'JObject'
         // gross but necessary unless we restructure the JSON response
-        public Device(JObject device)
+        public Device(JObject device) : this()
         {
             UpdateDevice(device);
             CreateDevice();
         }
 
-        public Device(Device old_device)
+        public Device(Device old_device) : this()
         {
             // from device base
             device_id = old_device.device_id;
@@ -87,9 +87,9 @@ namespace IoTBoxTiles.Devices
             CreateDevice();
         }
 
-        public async Task<int> ServerRequest()
+        public async Task<Tuple<ServerResponse, HttpResponseMessage>> ServerRequest()
         {
-            int success = -1;
+            var pollresult = new Tuple<ServerResponse, HttpResponseMessage>(ServerResponse.ServerFailure, null);
 
             //Send a request to the server for Device Info
             string request = JsonConvert.SerializeObject(new RequestInfo
@@ -110,20 +110,28 @@ namespace IoTBoxTiles.Devices
             }
             else
             {
-                success = 1;
+                //successful request
                 _timer.Start();
+                pollCounter = 0;
+                int prevPollCounter = -1;
+                deviceUri.Append("/status");
                 do
                 {
-
-                } while (true);
+                    if (pollCounter != prevPollCounter)
+                    {
+                        prevPollCounter = pollCounter;
+                        pollresult = await _serverComm.GetAsync(deviceUri.ToString(), true);
+                        Console.WriteLine("Server Poll #{0} result: {1}", pollCounter, pollresult.Item1);
+                    }
+                } while (pollCounter < 10 && pollresult.Item1 != ServerResponse.Connected);
             }
 
-            return success;
+            return pollresult;
         }
 
         public void ServerPolling(object sender, EventArgs e)
         {
-
+            pollCounter++;
         }
 
         public class RequestInfo
@@ -134,9 +142,14 @@ namespace IoTBoxTiles.Devices
 
         public class ConnectionDetail
         {
-            public string error_message;
-            public string ip_address;
-            public int port;
+            public string status;
+            public Details details;
+            public class Details
+            {
+                public string ip_address;
+                public int port;
+                public string error_message;
+            }
             //NAT traversal will add more properties
         }
 

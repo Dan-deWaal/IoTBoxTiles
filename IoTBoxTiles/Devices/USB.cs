@@ -52,44 +52,43 @@ namespace IoTBoxTiles.Devices
         public async void connectUSB()
         {
             //changing client_name to a value changes the UI to "connected"
-            client_name = "test USB"; //this is retrieved from server
 
             //Send a request to the server for Device Info
-            string request = JsonConvert.SerializeObject(new RequestInfo
+            var result = await base.ServerRequest();
+            if (result.Item1 == ServerResponse.Connected)
             {
-                localIP = _servComm.GetLocalIPAddress(),
-                hostname = _servComm.GetNETBIOSName()
-            });
-            StringBuilder deviceUri = new StringBuilder(_servComm.Root);
-            deviceUri.Append("/device/");
-            deviceUri.Append(device_id);
-            deviceUri.Append("/connect");
-            var result = await _servComm.PostAsync(deviceUri.ToString(),
-                new StringContent(request), contentType:"application/json");
-            if (result.Item1 != ServerResponse.Connected)
-            {
-                // should be handled better
-                MessageBox.Show("Server disconnected during intialisation.");
+                Console.WriteLine("Success");
+                client_name = _servComm.GetNETBIOSName();
+                //deserialize ip & port content
+                string jsonstr = await result.Item2.Content.ReadAsStringAsync();
+                ConnectionDetail connectiondetails = JsonConvert.DeserializeObject<ConnectionDetail>(jsonstr);
+                Console.WriteLine("IP: {0},  Port: {1},  Status: {2}", connectiondetails.details.ip_address, connectiondetails.details.port, connectiondetails.status);
+                //do the direct connect
+                if (connectiondetails.status.Contains("success")){
+                    DeviceConnect(connectiondetails.details.ip_address, connectiondetails.details.port);
+                }
             }
-            //Console.WriteLine("Request: {0}", result);
-
-            //assume success
-            //Poll server for Device Info
-
+            else
+            {
+                Console.WriteLine("Fail!");
+                client_name = null;
+            }
 
             UpdateLargeUI();
             UpdateSmallUI();
+            
+        }
 
-            //this runs upon poll success
+        public void DeviceConnect(string remote_ip, int remote_port)
+        {
             Console.WriteLine("Connect USB");
             try
             {
-                USBdriver usbdriver = new USBdriver("192.168.0.137", 12345); //("192.168.0.137", 12345); //("127.0.0.1", 12345);
+                USBdriver usbdriver = new USBdriver(remote_ip, remote_port); //("192.168.0.137", 12345); //("127.0.0.1", 12345);
                 _usbref = new ThreadStart(usbdriver.listen);
                 _usbthread = new Thread(_usbref);
                 DevicesForm._openThreads.Add(_usbthread);
                 _usbthread.Start();
-                Console.WriteLine("Socket created: {0} : {1}", ip_address, port);
                 //send msg to server = "connected to device"
             }
             catch (Exception e)
