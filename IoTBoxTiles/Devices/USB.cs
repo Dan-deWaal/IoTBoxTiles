@@ -41,6 +41,13 @@ namespace IoTBoxTiles.Devices
 
         public override void UpdateLargeUI()
         {
+            if (_usbthread != null)
+            {
+                if (!_usbthread.IsAlive)
+                {
+                    client_name = null;
+                }
+            }
             ((USBLarge)UI_large).UpdateUI();
         }
 
@@ -54,41 +61,24 @@ namespace IoTBoxTiles.Devices
             //changing client_name to a value changes the UI to "connected"
 
             //Send a request to the server for Device Info
-            var result = await base.ServerRequest();
-            if (result.Item1 == ServerResponse.Connected)
-            {
-                Console.WriteLine("Response Success");
-                client_name = _servComm.GetNETBIOSName();
-                //deserialize ip & port content
-                string jsonstr = await result.Item2.Content.ReadAsStringAsync();
-                Console.WriteLine(jsonstr);
-                ConnectionDetail connectiondetails = JsonConvert.DeserializeObject<ConnectionDetail>(jsonstr);
-                Console.WriteLine("IP: {0},  Port: {1},  Status: {2}", connectiondetails.details.ip_address, connectiondetails.details.port, connectiondetails.status);
-                //do the direct connect
-                if (connectiondetails.status.Contains("success")){
-                    DeviceConnect(connectiondetails.details.ip_address, connectiondetails.details.port);
-                }
-            }
-            else
-            {
-                Console.WriteLine("Fail!");
-                client_name = null;
-            }
-
+            base.ServerRequest();
+            
             UpdateLargeUI();
             UpdateSmallUI();
             
         }
 
-        public void DeviceConnect(string remote_ip, int remote_port)
+        public override void ConnectDevice(ConnectionDetail connectiondetails)//DeviceConnect(string remote_ip, int remote_port)
         {
             Console.WriteLine("Connect USB");
+            client_name = _servComm.GetNETBIOSName();
             try
             {
-                USBdriver usbdriver = new USBdriver(remote_ip, remote_port); //("192.168.0.137", 12345); //("127.0.0.1", 12345);
+                USBdriver usbdriver = new USBdriver(connectiondetails.details.ip_address, connectiondetails.details.port); 
                 _usbref = new ThreadStart(usbdriver.listen);
                 _usbthread = new Thread(_usbref);
                 DevicesForm._openThreads.Add(_usbthread);
+                client_name = _servComm.GetNETBIOSName();
                 _usbthread.Start();
                 //send msg to server = "connected to device"
             }

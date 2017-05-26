@@ -47,7 +47,7 @@ namespace IoTBoxTiles.Devices
         public Device()
         {
             _timer = new System.Windows.Forms.Timer();
-            _timer.Interval = 2000;
+            _timer.Interval = 1500;
             _timer.Tick += ServerPolling;
         }
 
@@ -88,10 +88,8 @@ namespace IoTBoxTiles.Devices
             CreateDevice();
         }
 
-        public async Task<Tuple<ServerResponse, HttpResponseMessage>> ServerRequest()
+        public async void ServerRequest()
         {
-            var pollresult = new Tuple<ServerResponse, HttpResponseMessage>(ServerResponse.ServerFailure, null);
-
             //Send a request to the server for Device Info
             RequestInfo requestinfo = new RequestInfo();
             requestinfo.hostname = _serverComm.GetNETBIOSName();
@@ -99,13 +97,14 @@ namespace IoTBoxTiles.Devices
             if (DevicesForm._client_id != null)
                 requestinfo.client_id = DevicesForm._client_id;
             string request = JsonConvert.SerializeObject(requestinfo);
-            Console.WriteLine(request);
+            Console.WriteLine("Request to server: {0}", request);
             StringBuilder deviceUri = new StringBuilder(_serverComm.Root);
             deviceUri.Append("/device/");
             deviceUri.Append(device_id);
             deviceUri.Append("/connect");
             var result = await _serverComm.PostAsync(deviceUri.ToString(),
                 new StringContent(request), contentType: "application/json");
+
             if (result.Item1 != ServerResponse.Connected)
             {
                 // should be handled better
@@ -115,32 +114,44 @@ namespace IoTBoxTiles.Devices
             {
                 //successful request
                 string jsonstr = await result.Item2.Content.ReadAsStringAsync();
-                Console.WriteLine(jsonstr);
+                Console.WriteLine("Request Response: {0}", jsonstr);
                 ConnectRequest connectrequest = JsonConvert.DeserializeObject<ConnectRequest>(jsonstr);
                 DevicesForm._client_id = connectrequest.client_id;
                 Registry.SetValue(DevicesForm._keyName, _serverComm.Email, DevicesForm._client_id);
                 Console.WriteLine("Registry written: {0} : {1} : {2}", DevicesForm._keyName, _serverComm.Email, DevicesForm._client_id);
-                _timer.Start();
-                pollCounter = 0;
-                int prevPollCounter = -1;
-                deviceUri.Append("/status");
-                do
-                {
-                    if (pollCounter != prevPollCounter)
-                    {
-                        prevPollCounter = pollCounter;
-                        pollresult = await _serverComm.GetAsync(deviceUri.ToString(), true);
-                        Console.WriteLine("Server Poll #{0} result: {1}", pollCounter, pollresult.Item1);
-                    }
-                } while (pollCounter < 10 && pollresult.Item1 != ServerResponse.Connected);
-            }
 
-            return pollresult;
+                pollCounter = 0;
+                _timer.Start(); //start the polling timer
+                
+            }
         }
 
-        public void ServerPolling(object sender, EventArgs e)
+        public async void ServerPolling(object sender, EventArgs e)
         {
             pollCounter++;
+            Console.WriteLine("PollCounter: {0}", pollCounter);
+            StringBuilder deviceUri = new StringBuilder(_serverComm.Root);
+            deviceUri.Append("/device/");
+            deviceUri.Append(device_id);
+            deviceUri.Append("/connect");
+            deviceUri.Append("/status");
+            var pollresult = await _serverComm.GetAsync(deviceUri.ToString(), true);
+            if (pollresult.Item1 == ServerResponse.Connected)
+            {
+                string jsonstr = await pollresult.Item2.Content.ReadAsStringAsync();
+                ConnectionDetail connectiondetails = JsonConvert.DeserializeObject<ConnectionDetail>(jsonstr);
+                Console.WriteLine("Poll Request status: {0}", connectiondetails.status);
+                if (connectiondetails.status.Contains("success"))
+                {
+                    _timer.Stop();
+                    ConnectDevice(connectiondetails);
+                }
+            }
+            if (pollCounter >= 10)
+            {
+                Console.WriteLine("Polling timed out");
+                _timer.Stop();
+            }
         }
 
         public class ConnectRequest
@@ -168,6 +179,8 @@ namespace IoTBoxTiles.Devices
             }
             //NAT traversal will add more properties
         }
+
+        public virtual void ConnectDevice(ConnectionDetail connectiondetails) { }
 
         public virtual void UpdateDevice(JObject device)
         {
