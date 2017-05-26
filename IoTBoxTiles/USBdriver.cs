@@ -156,10 +156,10 @@ namespace IoTBoxTiles
                             break;
                         }
                     } while (dataread != 0);
-                    
+
                     //Deserialize data
-                    USBData usbdata = LZ4MessagePackSerializer.Deserialize<USBData>(message.ToArray());
-                    Console.WriteLine("X: {0},  Y: {1}, MB: {2}\nKey: {3}\n", usbdata.x, usbdata.y, usbdata.mb, usbdata.key);
+                    USBData usbdata = MessagePackSerializer.Deserialize<USBData>(message.ToArray());
+                    //Console.WriteLine("X: {0},  Y: {1}, MB: {2}\nKey: {3}\n", usbdata.x, usbdata.y, usbdata.mb, usbdata.key);
 
                     //update cursor from data
                     Cursor.Position = new Point(usbdata.x, usbdata.y);

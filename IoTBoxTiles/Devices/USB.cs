@@ -56,7 +56,7 @@ namespace IoTBoxTiles.Devices
             ((USBSmall)UI_small.Controls[0]).UpdateUI();
         }
 
-        public async void connectUSB()
+        public void connectUSB()
         {
             //changing client_name to a value changes the UI to "connected"
 

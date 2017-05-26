@@ -146,6 +146,15 @@ namespace IoTBoxTiles.Devices
                     _timer.Stop();
                     ConnectDevice(connectiondetails);
                 }
+                if (connectiondetails.status.Contains("failure"))
+                {
+                    _timer.Stop();
+                    Console.WriteLine("Server Error: {0}", connectiondetails.details.error_message);
+                }
+                if (connectiondetails.status.Contains("connecting"))
+                {
+                    Console.WriteLine("Connecting...");
+                }
             }
             if (pollCounter >= 10)
             {
