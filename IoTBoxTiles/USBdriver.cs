@@ -86,6 +86,9 @@ namespace IoTBoxTiles
             public byte key { get; set; }
 
             [Key(5)]
+            public bool down { get; set; }
+
+            [Key(6)]
             public string eof { get; set; }
         }
 
@@ -135,6 +138,18 @@ namespace IoTBoxTiles
             keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
         }
 
+        void KeyDown(byte keyCode)
+        {
+            keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY, 0);
+            //keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+        }
+
+        void KeyUp(byte keyCode)
+        {
+            //keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY, 0);
+            keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
+        }
+
         public void listen()
         {
             try
@@ -149,9 +164,9 @@ namespace IoTBoxTiles
                     {
                         dataread = _ssl.Read(buffer, 0, buffer.Length);
                         message.AddRange(buffer.Take(dataread));
-                        string test = System.Text.Encoding.Default.GetString(message.ToArray());
+                        string test = System.Text.Encoding.UTF8.GetString(message.ToArray());
                         //Console.WriteLine("test = {0}", test);
-                        if (test.IndexOf("<EOF>") != -1)
+                        if (test.Contains("<EOF>"))
                         {
                             break;
                         }
@@ -162,27 +177,32 @@ namespace IoTBoxTiles
                     //Console.WriteLine("X: {0},  Y: {1}, MB: {2}\nKey: {3}\n", usbdata.x, usbdata.y, usbdata.mb, usbdata.key);
 
                     //update cursor from data
-                    Cursor.Position = new Point(usbdata.x, usbdata.y);
+                    int x = (usbdata.x * Screen.PrimaryScreen.Bounds.Width) / 10000;
+                    int y = (usbdata.y * Screen.PrimaryScreen.Bounds.Height) / 10000;
+                    Cursor.Position = new Point(x, y);
                     switch (usbdata.mb)
                     {
                         case 1:
-                            LMBDown();
+                            //LMBDown();
                             break;
                         case 2:
-                            LMBUp();
+                            //LMBUp();
                             break;
                         case 3:
-                            RMBDown();
+                            //RMBDown();
                             break;
                         case 4:
-                            RMBUp();
+                            //RMBUp();
                             break;
                     }
 
                     //update key from data
                     //SendKeys.Send(usbdata.keys); // or //SendKeys.SendWait(_keys);
                     if (usbdata.key != 0)
-                        PressKey(usbdata.key);
+                        if (usbdata.down)
+                            KeyDown(usbdata.key);
+                        else
+                            KeyUp(usbdata.key);
                     
                     //Maybe send back feedback, such as CAPSLOCK, NUMLOCK, etc
                 }
