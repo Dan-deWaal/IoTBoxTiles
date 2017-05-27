@@ -19,6 +19,9 @@ namespace IoTBoxTiles.Devices
         private ServerComm _serverComm = ServerComm.Instance;
         private System.Windows.Forms.Timer _timer;
         private int pollCounter;
+        private Device _dev = null;
+
+        public virtual string client_name { get; set; }
 
         public bool SameDevice(object o)
         {
@@ -88,8 +91,10 @@ namespace IoTBoxTiles.Devices
             CreateDevice();
         }
 
-        public async void ServerRequest()
+        public async void ServerRequest(Device dev)
         {
+            _dev = dev;
+            _dev.client_name = "Requesting...";
             //Send a request to the server for Device Info
             RequestInfo requestinfo = new RequestInfo();
             requestinfo.hostname = _serverComm.GetNETBIOSName();
@@ -109,6 +114,7 @@ namespace IoTBoxTiles.Devices
             {
                 // should be handled better
                 MessageBox.Show("Server disconnected during intialisation.");
+                _dev.client_name = null;
             }
             else
             {
@@ -120,9 +126,11 @@ namespace IoTBoxTiles.Devices
                 Registry.SetValue(DevicesForm._keyName, _serverComm.Email, DevicesForm._client_id);
                 Console.WriteLine("Registry written: {0} : {1} : {2}", DevicesForm._keyName, _serverComm.Email, DevicesForm._client_id);
 
+                _dev.client_name = "Polling...";
+                UpdateUI();
                 pollCounter = 0;
                 _timer.Start(); //start the polling timer
-                
+
             }
         }
 
@@ -149,6 +157,8 @@ namespace IoTBoxTiles.Devices
                 if (connectiondetails.status.Contains("failure"))
                 {
                     _timer.Stop();
+                    _dev.client_name = null;
+                    UpdateUI();
                     Console.WriteLine("Server Error: {0}", connectiondetails.details.error_message);
                 }
                 if (connectiondetails.status.Contains("connecting"))
@@ -159,6 +169,8 @@ namespace IoTBoxTiles.Devices
             if (pollCounter >= 10)
             {
                 Console.WriteLine("Polling timed out");
+                _dev.client_name = null;
+                UpdateUI();
                 _timer.Stop();
             }
         }

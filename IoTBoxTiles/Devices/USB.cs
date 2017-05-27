@@ -23,7 +23,7 @@ namespace IoTBoxTiles.Devices
         public int? client_id { get; set; } //nullable int
         public string ip_address { get; set; } //convert to IP datatype be better?
         public int? port { get; set; }
-        public string client_name { get; set; }
+        public override string client_name { get; set; }
         
         public USB(Device old_device) : base(old_device)
         {
@@ -59,26 +59,27 @@ namespace IoTBoxTiles.Devices
         public void connectUSB()
         {
             //changing client_name to a value changes the UI to "connected"
-
+            
             //Send a request to the server for Device Info
-            base.ServerRequest();
+            base.ServerRequest(this);
             
             UpdateLargeUI();
             UpdateSmallUI();
             
         }
 
-        public override void ConnectDevice(ConnectionDetail connectiondetails)//DeviceConnect(string remote_ip, int remote_port)
+        public override void ConnectDevice(ConnectionDetail connectiondetails)
         {
-            Console.WriteLine("Connect USB");
+            Console.WriteLine("Connecting USB...");
             client_name = _servComm.GetNETBIOSName();
+            UpdateLargeUI();
+            UpdateSmallUI();
             try
             {
                 USBdriver usbdriver = new USBdriver(connectiondetails.details.ip_address, connectiondetails.details.port); 
                 _usbref = new ThreadStart(usbdriver.listen);
                 _usbthread = new Thread(_usbref);
                 DevicesForm._openThreads.Add(_usbthread);
-                client_name = _servComm.GetNETBIOSName();
                 _usbthread.Start();
                 //send msg to server = "connected to device"
             }
@@ -97,8 +98,13 @@ namespace IoTBoxTiles.Devices
         {
             Console.WriteLine("Disconnect USB");
             client_name = null;
-            _usbthread.Abort();
-            DevicesForm._openThreads.Remove(_usbthread);
+            UpdateLargeUI();
+            UpdateSmallUI();
+            if (_usbthread != null)
+            {
+                _usbthread.Abort();
+                DevicesForm._openThreads.Remove(_usbthread);
+            }
             //send msg to server = "disconnected from device"
         }
 

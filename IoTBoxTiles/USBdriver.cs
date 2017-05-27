@@ -157,14 +157,14 @@ namespace IoTBoxTiles
                 while (running)
                 {
                     //Listening for data
-                    int dataread = -1;
+                    int dataread = 0;
                     byte[] buffer = new byte[1024];
                     List<byte> message = new List<byte>();
                     do
                     {
-                        dataread = _ssl.Read(buffer, 0, buffer.Length);
-                        message.AddRange(buffer.Take(dataread));
-                        string test = System.Text.Encoding.UTF8.GetString(message.ToArray());
+                        dataread += _ssl.Read(buffer, dataread, buffer.Length-dataread);
+                        //message.AddRange(buffer.Take(dataread));
+                        string test = System.Text.Encoding.UTF8.GetString(buffer.Take(dataread).ToArray());
                         //Console.WriteLine("test = {0}", test);
                         if (test.Contains("<EOF>"))
                         {
@@ -173,7 +173,7 @@ namespace IoTBoxTiles
                     } while (dataread != 0);
 
                     //Deserialize data
-                    USBData usbdata = MessagePackSerializer.Deserialize<USBData>(message.ToArray());
+                    USBData usbdata = MessagePackSerializer.Deserialize<USBData>(buffer.Take(dataread).ToArray());
                     //Console.WriteLine("X: {0},  Y: {1}, MB: {2}\nKey: {3}\n", usbdata.x, usbdata.y, usbdata.mb, usbdata.key);
 
                     //update cursor from data
@@ -183,16 +183,16 @@ namespace IoTBoxTiles
                     switch (usbdata.mb)
                     {
                         case 1:
-                            //LMBDown();
+                            LMBDown();
                             break;
                         case 2:
-                            //LMBUp();
+                            LMBUp();
                             break;
                         case 3:
-                            //RMBDown();
+                            RMBDown();
                             break;
                         case 4:
-                            //RMBUp();
+                            RMBUp();
                             break;
                     }
 
