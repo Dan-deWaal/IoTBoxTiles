@@ -100,6 +100,7 @@ namespace IoTBoxTiles.Devices
             client_name = null;
             UpdateLargeUI();
             UpdateSmallUI();
+            StopPolling();
             if (_usbthread != null)
             {
                 _usbthread.Abort();

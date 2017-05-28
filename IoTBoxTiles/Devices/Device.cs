@@ -95,6 +95,7 @@ namespace IoTBoxTiles.Devices
         {
             _dev = dev;
             _dev.client_name = "Requesting...";
+            UpdateUI();
             //Send a request to the server for Device Info
             RequestInfo requestinfo = new RequestInfo();
             requestinfo.hostname = _serverComm.GetNETBIOSName();
@@ -173,6 +174,11 @@ namespace IoTBoxTiles.Devices
                 UpdateUI();
                 _timer.Stop();
             }
+        }
+
+        public void StopPolling()
+        {
+            _timer.Stop();
         }
 
         public class ConnectRequest

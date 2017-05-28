@@ -33,13 +33,13 @@ namespace IoTBoxTiles.Devices.Controls
             // if device is online, update info
             if (_device.online)
             {
-                speakerChkBox.Enabled = _device.connected;
-                speakerChkBox.Checked = _device.connected && _device.speaker_status;
+                speakerChkBox.Enabled = _device.connected && _device._willRecv;
+                speakerChkBox.Checked = _device._willRecv && _device.speaker_status;
                 speakerScrollBar.Enabled = false;
                 speakerScrollBar.Value = _device.connected ? _device.speaker_VU : 0;
 
-                micChkBox.Enabled = _device.connected;
-                micChkBox.Checked = _device.connected && _device.mic_status;
+                micChkBox.Enabled = _device.connected && _device._willSend;
+                micChkBox.Checked = _device._willSend && _device.mic_status;
                 micScrollBar.Enabled = false;
                 micScrollBar.Value = _device.connected ? _device.mic_VU : 0;
             }
@@ -65,6 +65,16 @@ namespace IoTBoxTiles.Devices.Controls
         private void plugTitleCtrl_PowerClicked(object sender, EventArgs e)
         {
             _device.ChangePowerAsync(plugTitleCtrl);
+        }
+
+        private void speakerChkBox_Click(object sender, EventArgs e)
+        {
+            _device.SpeakerDevice(((CheckBox)sender).Checked);
+        }
+
+        private void micChkBox_CheckedChanged(object sender, EventArgs e)
+        {
+            _device.SpeakerPC(((CheckBox)sender).Checked);
         }
     }
 }

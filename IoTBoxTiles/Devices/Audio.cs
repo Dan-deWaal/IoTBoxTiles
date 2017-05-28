@@ -6,12 +6,52 @@ using System.Text;
 using System.Threading.Tasks;
 using IoTBoxTiles.Devices.Controls;
 using Newtonsoft.Json.Linq;
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
+using System.IO;
+using System.Threading;
+using System.Net.Sockets;
+using System.Security.Authentication;
+using MessagePack;
+using NAudio.Lame;
+using NAudio.Wave;
 
 namespace IoTBoxTiles.Devices
 {
+    /*
+    public enum ProgState
+    {
+        NotConnected,
+        Listening,
+        Connecting,
+        Connected
+    }
+    
+    public struct ConnectionInfo
+    {
+        public IPAddress IpAddress;
+        public int Port;
+
+        public ConnectionInfo(string ipAddr, int port)
+        {
+            IpAddress = IPAddress.Parse(ipAddr);
+            Port = port;
+        }
+    }
+    */
     public class Audio : Device
     {
-        public ServerComm _servComm = ServerComm.Instance;
+        private ServerComm _servComm = ServerComm.Instance;
+        //private ProgState _progState = ProgState.NotConnected;
+        private bool _sending = false;
+        private bool _receiving = false;
+        private SslStream _sslClient;
+        private X509Certificate2 _cert = new X509Certificate2("server.pfx", "IoTBox");
+        private MemoryStream _inStream = new MemoryStream();
+        private MemoryStream _outStream = new MemoryStream();
+        private LameMP3FileWriter _writer = null;
+        private Thread _audioThread = null;
 
         //unique properties
         public bool connected { get; set; }
@@ -22,6 +62,9 @@ namespace IoTBoxTiles.Devices
         public bool mic_status { get; set; }
         public int speaker_VU { get; set; }
         public int mic_VU { get; set; }
+
+        public bool _willSend { get; set; }
+        public bool _willRecv { get; set; }
 
         public Audio(Device old_device) : base(old_device)
         {
@@ -53,7 +96,15 @@ namespace IoTBoxTiles.Devices
         public void connectAudio()
         {
             Console.WriteLine("Connect Audio");
-            base.ServerRequest(this);
+            ConnectDevice(new ConnectionDetail() // ******************************* FIX *************************************
+            {
+                details = new ConnectionDetail.Details()
+                {
+                    ip_address = "127.0.0.1",
+                    port = 12345
+                }
+            });
+            //base.ServerRequest(this); // *************************************** HERE **************************************
 
             UpdateLargeUI();
             UpdateSmallUI();
@@ -70,14 +121,201 @@ namespace IoTBoxTiles.Devices
             //send msg to server = "disconnected from device"
         }
 
-        public override void ConnectDevice(ConnectionDetail connectiondetails)
+        public override async void ConnectDevice(ConnectionDetail connectiondetails)
         {
-            Console.WriteLine("Connecting Audio...");
-            client_name = _servComm.GetNETBIOSName();
+            Console.WriteLine("Connecting Audio... {0} : {1}",connectiondetails.details.ip_address, connectiondetails.details.port);
             UpdateLargeUI();
             UpdateSmallUI();
-            Console.WriteLine(connectiondetails.details.ip_address);
-            
+
+            TcpClient tcpClient = new TcpClient();
+            await tcpClient.ConnectAsync(IPAddress.Parse(connectiondetails.details.ip_address), connectiondetails.details.port);
+            _sslClient = new SslStream(tcpClient.GetStream(), false,
+                 new RemoteCertificateValidationCallback((obj, a, b, c) => true));
+            await _sslClient.AuthenticateAsClientAsync("iot.duality.co.nz");
+            //check for success?
+            Console.WriteLine("Connected Audio direct: {0}", tcpClient.Client.RemoteEndPoint);
+            //_progState = ProgState.Connected;
+            connected = true;
+
+            client_name = _servComm.GetNETBIOSName();
+            UpdateUI();
+            try
+            {
+                while (_sslClient != null)
+                {
+                    await ReceiveDataAsync();
+                }
+            }
+            catch (IOException)
+            {
+                //
+            }
+            finally
+            {
+                //This is disconnection
+                client_name = null;
+                connected = false;
+                UpdateUI();
+                //_audioThread.Abort();
+            }
+        }
+
+        public async void SpeakerDevice(bool chk)
+        {
+            _sending = chk;
+            if (_sending)
+            {
+                StartSendingAudio();
+            }
+            await SendData(_sending, _receiving, null);
+        }
+
+        public void SpeakerPC(bool chk)
+        {
+            _receiving = chk;
+            if (_receiving && _audioThread == null)
+            {
+                _audioThread = new Thread(new ThreadStart(PlayAudio));
+                _audioThread.Start();
+            }
+            else if (_audioThread != null)
+            {
+                _audioThread.Abort();
+                _audioThread = null;
+            }
+        }
+
+        private void PlayAudio()
+        {
+            while (_receiving)
+            {
+                while (_inStream.Length < 4000)
+                    Thread.Sleep(100);
+
+                _inStream.Position = 0;
+                using (WaveStream blockAlignedStream = new BlockAlignReductionStream(
+                    WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(_inStream))))
+                {
+                    using (WaveOut waveOut = new WaveOut(WaveCallbackInfo.FunctionCallback()))
+                    {
+                        waveOut.Init(blockAlignedStream);
+                        waveOut.Play();
+                        while (waveOut.PlaybackState == PlaybackState.Playing)
+                        {
+                            Thread.Sleep(100);
+                        }
+                    }
+                    _inStream.SetLength(0);
+                    _inStream.Position = 0;
+                }
+            }
+        }
+
+        private async void StartSendingAudio()
+        {
+            if (_writer != null)
+                return;
+            var waveIn = new WasapiLoopbackCapture();
+            using (_writer = new LameMP3FileWriter(_outStream, waveIn.WaveFormat, LAMEPreset.ABR_256))
+            {
+                waveIn.DataAvailable += OnDataAvailable;
+                waveIn.StartRecording();
+
+                //while (_progState == ProgState.Connected && _sending)
+                while (_sending)
+                {
+                    while (_outStream.Length < 4196)
+                        await Task.Delay(100);
+
+                    _outStream.Position = 0;
+                    byte[] mp3Data = new byte[32768];
+                    int bytesRead = await _outStream.ReadAsync(mp3Data, 0, mp3Data.Length);
+                    _outStream.SetLength(0);
+                    _outStream.Position = 0;
+
+                    if (bytesRead != 0)
+                        await SendData(_receiving, _sending,
+                            mp3Data.Take(bytesRead).ToArray());
+                }
+            }
+            waveIn.StopRecording();
+            waveIn.DataAvailable -= OnDataAvailable;
+        }
+
+        private void OnDataAvailable(object sender, WaveInEventArgs e)
+        {
+            _writer.Write(e.Buffer, 0, e.BytesRecorded);
+        }
+
+        private async Task SendData(bool willReceive, bool willSend, byte[] mp3Data)
+        {
+            if (_sslClient == null)
+                return;
+
+            byte[] buffer = MessagePackSerializer.Serialize(new AudioPack()
+            {
+                WillReceive = willReceive,
+                WillSend = willSend,
+                Mp3Data = mp3Data
+            });
+            await _sslClient.WriteAsync(buffer, 0, buffer.Length);
+            if (mp3Data != null)
+                Console.WriteLine("wrote {0} bytes", buffer.Length);
+            //await Task.Delay(5); // slow everything down
+        }
+
+        private async Task ReceiveDataAsync()
+        {
+            byte[] buffer = new byte[65536];
+            int bytesRead = 1;
+            int totalLen = 0;
+            while (bytesRead > 0)
+            {
+                bytesRead = await _sslClient.ReadAsync(buffer,
+                    totalLen, buffer.Length - totalLen);
+                totalLen += bytesRead;
+
+                if (Encoding.UTF8.GetString(buffer.Take(totalLen).ToArray()).Contains("<EOF>"))
+                    break;
+            }
+
+            if (bytesRead < 0)
+            {
+                //outputTxtBox.AppendText("Socket closed?\r\n");
+                Console.WriteLine("Socket closed?");
+                _sslClient.Dispose();
+                _sslClient = null;
+                //_progState = ProgState.NotConnected;
+                return;
+            }
+
+            //outputTxtBox.AppendText("Received data\r\n");
+            Console.WriteLine("Received data");
+
+            var resp = MessagePackSerializer.Deserialize<AudioPack>(buffer.Take(totalLen).ToArray());
+            //willReceiveChkBox.Checked = resp.WillReceive;
+            //willSendChkBox.Checked = resp.WillSend;
+            _willRecv = resp.WillReceive;
+            _willSend = resp.WillSend;
+            UpdateUI();
+
+            if (resp.Mp3Data != null)
+            {
+                var pos = _inStream.Position;
+                _inStream.Position = _inStream.Length;
+                await _inStream.WriteAsync(resp.Mp3Data, 0, resp.Mp3Data.Length);
+                _inStream.Position = pos;
+            }
+        }
+
+        private static IPAddress GetLocalIPAddress()
+        {
+            using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
+            {
+                socket.Connect("8.8.8.8", 65530);
+                IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+                return endPoint.Address;
+            }
         }
 
         public override void UpdateLargeUI()
@@ -89,5 +327,21 @@ namespace IoTBoxTiles.Devices
         {
             ((AudioSmall)UI_small.Controls[0]).UpdateUI();
         }
+    }
+    
+    [MessagePackObject]
+    public class AudioPack
+    {
+        [Key(0)]
+        public bool WillReceive { get; set; }
+
+        [Key(1)]
+        public bool WillSend { get; set; }
+
+        [Key(2)]
+        public byte[] Mp3Data { get; set; }
+
+        [Key(3)]
+        public string EOF = "<EOF>";
     }
 }
