@@ -49,17 +49,17 @@ namespace IoTBoxTiles.Devices.Controls
         {
             UpdateUI();
         }
-        
+
         private void connectPart1_ConnectCheckedChanged(object sender, EventArgs e)
         {
-            // TODO: replace with working code
-            connectPart1.Client = "test";
+            _device.connectAudio();
+            UpdateUI();
         }
 
         private void connectPart1_DisconnectBtnClick(object sender, EventArgs e)
         {
-            // TODO: replace with working code
-            connectPart1.Client = null;
+            _device.disconnectAudio();
+            UpdateUI();
         }
 
         private void plugTitleCtrl_PowerClicked(object sender, EventArgs e)

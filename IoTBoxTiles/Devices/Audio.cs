@@ -11,6 +11,8 @@ namespace IoTBoxTiles.Devices
 {
     public class Audio : Device
     {
+        public ServerComm _servComm = ServerComm.Instance;
+
         //unique properties
         public bool connected { get; set; }
         public int? client_id { get; set; } //nullable int
@@ -46,6 +48,36 @@ namespace IoTBoxTiles.Devices
         {
             AddSmallUI(new AudioSmall(this));
             AddLargeUI(new AudioLarge(this));
+        }
+
+        public void connectAudio()
+        {
+            Console.WriteLine("Connect Audio");
+            base.ServerRequest(this);
+
+            UpdateLargeUI();
+            UpdateSmallUI();
+        }
+
+        public void disconnectAudio()
+        {
+            Console.WriteLine("Disconnect Audio");
+            client_name = null;
+            UpdateLargeUI();
+            UpdateSmallUI();
+            //other disconnect code
+
+            //send msg to server = "disconnected from device"
+        }
+
+        public override void ConnectDevice(ConnectionDetail connectiondetails)
+        {
+            Console.WriteLine("Connecting Audio...");
+            client_name = _servComm.GetNETBIOSName();
+            UpdateLargeUI();
+            UpdateSmallUI();
+            Console.WriteLine(connectiondetails.details.ip_address);
+            
         }
 
         public override void UpdateLargeUI()

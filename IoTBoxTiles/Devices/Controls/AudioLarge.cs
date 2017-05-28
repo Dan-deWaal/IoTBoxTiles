@@ -41,14 +41,14 @@ namespace IoTBoxTiles.Devices.Controls
 
         private void connectPartCtrl_ConnectCheckedChanged(object sender, EventArgs e)
         {
-            // TODO: replace with working code
-            connectPartCtrl.Client = "test";
+            _device.connectAudio();
+            UpdateUI();
         }
 
         private void connectPartCtrl_DisconnectBtnClick(object sender, EventArgs e)
         {
-            // TODO: replace with working code
-            connectPartCtrl.Client = null;
+            _device.disconnectAudio();
+            UpdateUI();
         }
     }
 }
