@@ -117,7 +117,7 @@ namespace IoTBoxTiles
             _devices.AddRange(new_devices);
         }
 
-        private async void UpdateDeviceDetails()
+        private async void UpdateDeviceDetails(object sender = null, EventArgs e = null)
         {
             lbl_status.Text = "Downloading devices...  ";
             string jsonStr = null;
@@ -205,6 +205,10 @@ namespace IoTBoxTiles
             Refresh();
 
             lbl_status.Text = "Ready.";
+            var _refreshTimer = new System.Windows.Forms.Timer();
+            _refreshTimer.Interval = 1500;
+            _refreshTimer.Tick += UpdateDeviceDetails;
+            _refreshTimer.Start();
         }
 
         private void tv_DeviceList_AfterSelect(object sender, TreeViewEventArgs e)
