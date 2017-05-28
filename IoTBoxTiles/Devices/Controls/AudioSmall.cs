@@ -31,17 +31,23 @@ namespace IoTBoxTiles.Devices.Controls
                 control.Enabled = _device.online;
             
             // if device is online, update info
-            if (_device.online)
+            if (_device.online && _device.connected)
             {
-                speakerChkBox.Enabled = _device.connected && _device._willRecv;
-                speakerChkBox.Checked = _device._willRecv && _device.speaker_status;
+                sendChkBox.Enabled = _device._willRecv;
+                sendChkBox.Checked = _device._willRecv && sendChkBox.Checked;
                 speakerScrollBar.Enabled = false;
                 speakerScrollBar.Value = _device.connected ? _device.speaker_VU : 0;
 
-                micChkBox.Enabled = _device.connected && _device._willSend;
-                micChkBox.Checked = _device._willSend && _device.mic_status;
+                receiveChkBox.Enabled = _device._willSend;
+                receiveChkBox.Checked = _device._willSend && receiveChkBox.Checked;
                 micScrollBar.Enabled = false;
                 micScrollBar.Value = _device.connected ? _device.mic_VU : 0;
+            }
+            else
+            {
+                sendChkBox.Enabled = sendChkBox.Checked = false;
+                receiveChkBox.Enabled = receiveChkBox.Checked = false;
+                speakerScrollBar.Enabled = micScrollBar.Enabled = false;
             }
         }
 
@@ -67,14 +73,9 @@ namespace IoTBoxTiles.Devices.Controls
             _device.ChangePowerAsync(plugTitleCtrl);
         }
 
-        private void speakerChkBox_Click(object sender, EventArgs e)
+        private void audioCheckedChanged(object sender, EventArgs e)
         {
-            _device.SpeakerDevice(((CheckBox)sender).Checked);
-        }
-
-        private void micChkBox_CheckedChanged(object sender, EventArgs e)
-        {
-            _device.SpeakerPC(((CheckBox)sender).Checked);
+            _device.UpdateAudioConnectionsAsync(sendChkBox, receiveChkBox);
         }
     }
 }

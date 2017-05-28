@@ -18,28 +18,7 @@ using NAudio.Lame;
 using NAudio.Wave;
 
 namespace IoTBoxTiles.Devices
-{
-    /*
-    public enum ProgState
-    {
-        NotConnected,
-        Listening,
-        Connecting,
-        Connected
-    }
-    
-    public struct ConnectionInfo
-    {
-        public IPAddress IpAddress;
-        public int Port;
-
-        public ConnectionInfo(string ipAddr, int port)
-        {
-            IpAddress = IPAddress.Parse(ipAddr);
-            Port = port;
-        }
-    }
-    */
+{ 
     public class Audio : Device
     {
         private ServerComm _servComm = ServerComm.Instance;
@@ -47,7 +26,6 @@ namespace IoTBoxTiles.Devices
         private bool _sending = false;
         private bool _receiving = false;
         private SslStream _sslClient;
-        private X509Certificate2 _cert = new X509Certificate2("server.pfx", "IoTBox");
         private MemoryStream _inStream = new MemoryStream();
         private MemoryStream _outStream = new MemoryStream();
         private LameMP3FileWriter _writer = null;
@@ -93,19 +71,34 @@ namespace IoTBoxTiles.Devices
             AddLargeUI(new AudioLarge(this));
         }
 
+        internal async void UpdateAudioConnectionsAsync(CheckBox sendChkBox, CheckBox receiveChkBox)
+        {
+            sendChkBox.Enabled = _willRecv;
+            _sending = sendChkBox.Checked = _willRecv && sendChkBox.Checked;
+            if (_sending)
+            {
+                StartSendingAudio();
+            }
+
+            receiveChkBox.Enabled = _willSend;
+            _receiving = receiveChkBox.Checked = _willSend && receiveChkBox.Checked;
+            if (_receiving && _audioThread == null)
+            {
+                _audioThread = new Thread(new ThreadStart(PlayAudio));
+                _audioThread.Start();
+            }
+            else if (_audioThread != null)
+            {
+                _audioThread.Abort();
+                _audioThread = null;
+            }
+            await SendData(_receiving, _sending, null);
+        }
+
         public void connectAudio()
         {
             Console.WriteLine("Connect Audio");
-            ConnectDevice(new ConnectionDetail() // ******************************* FIX *************************************
-            {
-                details = new ConnectionDetail.Details()
-                {
-                    ip_address = "127.0.0.1",
-                    port = 12345
-                }
-            });
-            //base.ServerRequest(this); // *************************************** HERE **************************************
-
+            base.ServerRequest(this); 
             UpdateLargeUI();
             UpdateSmallUI();
         }
@@ -146,42 +139,13 @@ namespace IoTBoxTiles.Devices
                     await ReceiveDataAsync();
                 }
             }
-            catch (IOException)
-            {
-                //
-            }
+            catch { }
             finally
             {
                 //This is disconnection
                 client_name = null;
                 connected = false;
                 UpdateUI();
-                //_audioThread.Abort();
-            }
-        }
-
-        public async void SpeakerDevice(bool chk)
-        {
-            _sending = chk;
-            if (_sending)
-            {
-                StartSendingAudio();
-            }
-            await SendData(_sending, _receiving, null);
-        }
-
-        public void SpeakerPC(bool chk)
-        {
-            _receiving = chk;
-            if (_receiving && _audioThread == null)
-            {
-                _audioThread = new Thread(new ThreadStart(PlayAudio));
-                _audioThread.Start();
-            }
-            else if (_audioThread != null)
-            {
-                _audioThread.Abort();
-                _audioThread = null;
             }
         }
 
@@ -221,8 +185,7 @@ namespace IoTBoxTiles.Devices
                 waveIn.DataAvailable += OnDataAvailable;
                 waveIn.StartRecording();
 
-                //while (_progState == ProgState.Connected && _sending)
-                while (_sending)
+                while (_sending && _sslClient != null)
                 {
                     while (_outStream.Length < 4196)
                         await Task.Delay(100);
@@ -261,7 +224,6 @@ namespace IoTBoxTiles.Devices
             await _sslClient.WriteAsync(buffer, 0, buffer.Length);
             if (mp3Data != null)
                 Console.WriteLine("wrote {0} bytes", buffer.Length);
-            //await Task.Delay(5); // slow everything down
         }
 
         private async Task ReceiveDataAsync()
@@ -281,20 +243,13 @@ namespace IoTBoxTiles.Devices
 
             if (bytesRead < 0)
             {
-                //outputTxtBox.AppendText("Socket closed?\r\n");
                 Console.WriteLine("Socket closed?");
                 _sslClient.Dispose();
                 _sslClient = null;
-                //_progState = ProgState.NotConnected;
                 return;
             }
 
-            //outputTxtBox.AppendText("Received data\r\n");
-            Console.WriteLine("Received data");
-
             var resp = MessagePackSerializer.Deserialize<AudioPack>(buffer.Take(totalLen).ToArray());
-            //willReceiveChkBox.Checked = resp.WillReceive;
-            //willSendChkBox.Checked = resp.WillSend;
             _willRecv = resp.WillReceive;
             _willSend = resp.WillSend;
             UpdateUI();
