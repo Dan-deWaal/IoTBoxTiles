@@ -151,7 +151,7 @@ namespace IoTBoxTiles
                 }
                 else
                 {
-                    // i hate this
+                    // i hate this * me too :P
                     switch ((int)newDevs[i]["module_type"])
                     {
                         case 1:
@@ -184,6 +184,11 @@ namespace IoTBoxTiles
             _devices.AddRange(addedDevs);
             foreach (var dev in _devices)
                 dev.UpdateUI();
+            Console.WriteLine(addedDevs.Count);
+            //if (addedDevs.Count > 0)
+            //{
+            //    buildTreeView();
+            //}
             lbl_status.Text = "Ready.";
         }
 
