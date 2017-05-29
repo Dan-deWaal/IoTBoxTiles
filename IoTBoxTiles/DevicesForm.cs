@@ -139,19 +139,24 @@ namespace IoTBoxTiles
                 return;
             
             List<JObject> newDevs = JsonConvert.DeserializeObject<List<JObject>>(jsonStr);
-
+            /*
+             * Console.WriteLine("before: {0}", _devices.Count);
             _devices.RemoveAll( dev => !newDevs.Exists(dev.SameDevice) );
+            Console.WriteLine("after: {0}", _devices.Count);
+            */
             var addedDevs = new List<Device>();
-            foreach (var dev in _devices)
+            foreach (var dev in _devices) 
             {
-                int i = newDevs.FindIndex(dev.SameDevice);
+                //if (dev.SameDevice())
+                int i = newDevs.FindIndex(dev.SameDevice); //this never ever returns -1. SameDevice returns a bool !?
+                Console.WriteLine("index of same dev: {0}", i);
                 if (i != -1)
                 {
                     dev.UpdateDevice(newDevs[i]);
                 }
                 else
                 {
-                    // i hate this * me too :P
+                    // i hate this ... me too
                     switch ((int)newDevs[i]["module_type"])
                     {
                         case 1:
@@ -184,7 +189,7 @@ namespace IoTBoxTiles
             _devices.AddRange(addedDevs);
             foreach (var dev in _devices)
                 dev.UpdateUI();
-            Console.WriteLine(addedDevs.Count);
+            Console.WriteLine("num added: {0}", addedDevs.Count);
             //if (addedDevs.Count > 0)
             //{
             //    buildTreeView();
