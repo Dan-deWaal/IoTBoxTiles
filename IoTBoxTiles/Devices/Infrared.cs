@@ -31,7 +31,13 @@ namespace IoTBoxTiles.Devices
         {
             base.UpdateDevice(device);
             _repeater = (bool)device["repeater"];
-            _feedback.Clear();
+            if (_feedback == null)
+            {
+                _feedback = new List<KeyValuePair<string, bool>?>();
+            } else
+            {
+                _feedback.Clear();
+            }
             foreach (JToken fbItem in device["feedback"])
             {
                 if ((bool)fbItem["enabled"])
