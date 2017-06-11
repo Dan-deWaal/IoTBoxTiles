@@ -119,7 +119,7 @@ namespace IoTBoxTiles
         // ************************************************************* remove ***
         private void pic_logo_Click(object sender, EventArgs e)                 //*
         {                                                                       //*      
-            txt_username.Text = "hunter2@example.com";                          //*
+            txt_username.Text = "hunter4@example.com";                          //*
             txt_passwd.Text = "12345678";                                       //*
         }                                                                       //*
         // ************************************************************************

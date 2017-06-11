@@ -148,8 +148,8 @@ namespace IoTBoxTiles
             foreach (var dev in _devices) 
             {
                 //if (dev.SameDevice())
-                int i = newDevs.FindIndex(dev.SameDevice); //this never ever returns -1. SameDevice returns a bool !?
-                Console.WriteLine("index of same dev: {0}", i);
+                int i = newDevs.FindIndex(dev.SameDevice); //this never ever returns -1.
+                //Console.WriteLine("index of same dev: {0}", i);
                 if (i != -1)
                 {
                     dev.UpdateDevice(newDevs[i]);
@@ -189,7 +189,7 @@ namespace IoTBoxTiles
             _devices.AddRange(addedDevs);
             foreach (var dev in _devices)
                 dev.UpdateUI();
-            Console.WriteLine("num added: {0}", addedDevs.Count);
+            //Console.WriteLine("num added: {0}", addedDevs.Count);
             //if (addedDevs.Count > 0)
             //{
             //    buildTreeView();
@@ -216,7 +216,7 @@ namespace IoTBoxTiles
 
             lbl_status.Text = "Ready.";
             var _refreshTimer = new System.Windows.Forms.Timer();
-            _refreshTimer.Interval = 1500;
+            _refreshTimer.Interval = 3000;
             _refreshTimer.Tick += UpdateDeviceDetails;
             _refreshTimer.Start();
         }
@@ -298,6 +298,7 @@ namespace IoTBoxTiles
         private void toolStripDropDownButton1_Click(object sender, EventArgs e)
         {
             UpdateDeviceDetails();
+            buildTreeView();
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)

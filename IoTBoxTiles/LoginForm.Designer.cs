@@ -60,7 +60,7 @@
             this.loginTablePanel.Controls.Add(this.statusStrip1, 0, 2);
             this.loginTablePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.loginTablePanel.Location = new System.Drawing.Point(0, 0);
-            this.loginTablePanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.loginTablePanel.Margin = new System.Windows.Forms.Padding(4);
             this.loginTablePanel.Name = "loginTablePanel";
             this.loginTablePanel.RowCount = 3;
             this.loginTablePanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33F));
@@ -83,7 +83,7 @@
             this.panel1.Controls.Add(this.btn_login);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(369, 180);
-            this.panel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panel1.Margin = new System.Windows.Forms.Padding(4);
             this.panel1.MinimumSize = new System.Drawing.Size(312, 174);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(312, 174);
@@ -146,7 +146,7 @@
             // txt_passwd
             // 
             this.txt_passwd.Location = new System.Drawing.Point(84, 65);
-            this.txt_passwd.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txt_passwd.Margin = new System.Windows.Forms.Padding(4);
             this.txt_passwd.Name = "txt_passwd";
             this.txt_passwd.Size = new System.Drawing.Size(223, 22);
             this.txt_passwd.TabIndex = 2;
@@ -156,7 +156,7 @@
             // txt_username
             // 
             this.txt_username.Location = new System.Drawing.Point(84, 33);
-            this.txt_username.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txt_username.Margin = new System.Windows.Forms.Padding(4);
             this.txt_username.Name = "txt_username";
             this.txt_username.Size = new System.Drawing.Size(223, 22);
             this.txt_username.TabIndex = 1;
@@ -165,7 +165,7 @@
             // btn_login
             // 
             this.btn_login.Location = new System.Drawing.Point(122, 97);
-            this.btn_login.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btn_login.Margin = new System.Windows.Forms.Padding(4);
             this.btn_login.Name = "btn_login";
             this.btn_login.Size = new System.Drawing.Size(133, 28);
             this.btn_login.TabIndex = 3;
@@ -221,7 +221,7 @@
             this.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.ClientSize = new System.Drawing.Size(1051, 535);
             this.Controls.Add(this.loginTablePanel);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.MinimumSize = new System.Drawing.Size(787, 461);
             this.Name = "LoginForm";
             this.Text = "IoTTiles";

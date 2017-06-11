@@ -29,8 +29,16 @@ namespace IoTBoxTiles.Devices
             if (dev == null)
                 throw new ArgumentException("device is not castable to JObject");
 
-            if ((int)dev["device_id"] == device_id
-                && (int)dev["module_type"] == module_type)
+            /*
+            Console.WriteLine("new dev_id:{0},  this dev_id:{1}\nnew mod_type:{2},  this mod_type:{3}",
+                (int)dev["device_id"],
+                this.device_id,
+                (int)dev["module_type"],
+                this.module_type
+                );
+                */
+            if ((int)dev["device_id"] == this.device_id
+                && (int)dev["module_type"] == this.module_type)
                 return true;
             return false;
         }
