@@ -138,62 +138,84 @@ namespace IoTBoxTiles
             if (jsonStr == null)
                 return;
             
-            List<JObject> newDevs = JsonConvert.DeserializeObject<List<JObject>>(jsonStr);
-            /*
-             * Console.WriteLine("before: {0}", _devices.Count);
-            _devices.RemoveAll( dev => !newDevs.Exists(dev.SameDevice) );
-            Console.WriteLine("after: {0}", _devices.Count);
-            */
-            var addedDevs = new List<Device>();
-            foreach (var dev in _devices) 
+            List<JObject> newJDevs = JsonConvert.DeserializeObject<List<JObject>>(jsonStr);
+            Console.WriteLine("newJDevs size: {0}", newJDevs.Count);
+            Console.WriteLine("Devices size: {0}", _devices.Count);
+            
+            //remove deleted devices
+            foreach (var dev in _devices.Reverse<Device>())
             {
-                //if (dev.SameDevice())
-                int i = newDevs.FindIndex(dev.SameDevice); //this never ever returns -1.
-                //Console.WriteLine("index of same dev: {0}", i);
-                if (i != -1)
+
+                bool dev_deleted = true;
+                foreach (var newJdev in newJDevs)
                 {
-                    dev.UpdateDevice(newDevs[i]);
+                    if (dev.SameDevice(newJdev))
+                    {
+                        dev_deleted = false;
+                    }
                 }
-                else
+                if (dev_deleted)
                 {
-                    // i hate this ... me too
-                    switch ((int)newDevs[i]["module_type"])
+                    Console.WriteLine("dev deleted: {0}", dev.device_id);
+                    _devices.Remove(dev);
+                    buildTreeView();
+                }
+            }
+
+            //update devices
+            foreach (var newJdev in newJDevs.Reverse<JObject>())
+            {
+                //Console.WriteLine("newJDevs: {0}", (int)newJdev["module_type"]);
+                foreach (var dev in _devices)
+                {
+                    //Console.WriteLine("Device: {0},  Same: {1}", dev.friendly_name, dev.SameDevice(newJdev));
+                    if (dev.SameDevice(newJdev))
+                    {
+                        dev.UpdateDevice(newJdev);
+                        newJDevs.Remove(newJdev);
+                        break;
+                    }
+                }
+            }
+
+            //add new devices
+            if (newJDevs.Count > 0)
+            {
+                Console.WriteLine("New devices to add: {0}", newJDevs.Count);
+                foreach (var newJdev in newJDevs.Reverse<JObject>())
+                {
+                    switch ((int)newJdev["module_type"])
                     {
                         case 1:
-                            addedDevs.Add(new SmartPlug(newDevs[i]));
+                            _devices.Add(new SmartPlug(newJdev));
                             break;
                         case 2:
-                            addedDevs.Add(new Bluetooth(newDevs[i]));
+                            _devices.Add(new Bluetooth(newJdev));
                             break;
                         case 3:
-                            addedDevs.Add(new USB(newDevs[i]));
+                            _devices.Add(new USB(newJdev));
                             break;
                         case 4:
-                            addedDevs.Add(new Infrared(newDevs[i]));
+                            _devices.Add(new Infrared(newJdev));
                             break;
                         case 5:
-                            addedDevs.Add(new Industrial(newDevs[i]));
+                            _devices.Add(new Industrial(newJdev));
                             break;
                         case 6:
-                            addedDevs.Add(new Multiboard(newDevs[i]));
+                            _devices.Add(new Multiboard(newJdev));
                             break;
                         case 7:
-                            addedDevs.Add(new Audio(newDevs[i]));
+                            _devices.Add(new Audio(newJdev));
                             break;
                         case 0: //unknown
                         default:
                             break;
                     }
+                    newJDevs.Remove(newJdev);
+                    buildTreeView();
                 }
             }
-            _devices.AddRange(addedDevs);
-            foreach (var dev in _devices)
-                dev.UpdateUI();
-            //Console.WriteLine("num added: {0}", addedDevs.Count);
-            //if (addedDevs.Count > 0)
-            //{
-            //    buildTreeView();
-            //}
+
             lbl_status.Text = "Ready.";
         }
 
@@ -216,7 +238,7 @@ namespace IoTBoxTiles
 
             lbl_status.Text = "Ready.";
             var _refreshTimer = new System.Windows.Forms.Timer();
-            _refreshTimer.Interval = 3000;
+            _refreshTimer.Interval = 1500;
             _refreshTimer.Tick += UpdateDeviceDetails;
             _refreshTimer.Start();
         }
@@ -298,7 +320,6 @@ namespace IoTBoxTiles
         private void toolStripDropDownButton1_Click(object sender, EventArgs e)
         {
             UpdateDeviceDetails();
-            buildTreeView();
         }
 
         private void Form2_FormClosing(object sender, FormClosingEventArgs e)
