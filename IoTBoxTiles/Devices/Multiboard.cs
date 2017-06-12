@@ -26,7 +26,12 @@ namespace IoTBoxTiles.Devices
 
         public Multiboard(JObject device) : base(device)
         {
-            
+            _boards = new List<KeyValuePair<string, bool>>() {
+                new KeyValuePair<string, bool>("board1",true),
+                new KeyValuePair<string, bool>("board2",false),
+                new KeyValuePair<string, bool>("board3",true),
+                new KeyValuePair<string, bool>("board4",false)
+            };
         }
 
         public override void CreateDevice()

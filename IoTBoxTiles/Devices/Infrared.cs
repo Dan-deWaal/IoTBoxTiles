@@ -25,6 +25,8 @@ namespace IoTBoxTiles.Devices
 
         public Infrared(JObject device) : base(device)
         {
+            _buttons = new List<IRButton>();
+            _feedback = new List<KeyValuePair<string, bool>?>();
         }
 
         public override void UpdateDevice(JObject device)

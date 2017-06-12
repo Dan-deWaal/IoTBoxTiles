@@ -39,6 +39,13 @@ namespace IoTBoxTiles.Devices
             AddLargeUI(new USBLarge(this));
         }
 
+        public override void UpdateDevice(JObject device)
+        {
+            base.UpdateDevice(device);
+            UpdateSmallUI();
+            UpdateLargeUI();
+        }
+
         public override void UpdateLargeUI()
         {
             if (_usbthread != null)

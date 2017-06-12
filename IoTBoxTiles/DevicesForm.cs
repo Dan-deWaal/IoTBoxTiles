@@ -68,7 +68,7 @@ namespace IoTBoxTiles
             }
             tv_DeviceList.Nodes[0].ExpandAll();
             tv_DeviceList.EndUpdate();
-            tv_DeviceList.SelectedNode = tv_DeviceList.Nodes[0];
+            tv_DeviceList.SelectedNode = tv_DeviceList.Nodes[0].Nodes[0];
         }
 
         private void createDevices()
@@ -122,6 +122,7 @@ namespace IoTBoxTiles
             lbl_status.Text = "Downloading devices...  ";
             string jsonStr = null;
             var devDetails = await _servComm.GetAsync(_servComm.Root + "/user/devices/details");
+            bool doBuildTreeview = false;
 
             switch (devDetails.Item1)
             {
@@ -158,7 +159,7 @@ namespace IoTBoxTiles
                 {
                     Console.WriteLine("dev deleted: {0}", dev.device_id);
                     _devices.Remove(dev);
-                    buildTreeView();
+                    doBuildTreeview = true;
                 }
             }
 
@@ -171,6 +172,10 @@ namespace IoTBoxTiles
                     //Console.WriteLine("Device: {0},  Same: {1}", dev.friendly_name, dev.SameDevice(newJdev));
                     if (dev.SameDevice(newJdev))
                     {
+                        if (dev.online != (bool)newJdev["online"])
+                        {
+                            doBuildTreeview = true;
+                        }
                         dev.UpdateDevice(newJdev);
                         newJDevs.Remove(newJdev);
                         break;
@@ -212,9 +217,12 @@ namespace IoTBoxTiles
                             break;
                     }
                     newJDevs.Remove(newJdev);
-                    buildTreeView();
+                    doBuildTreeview = true;
                 }
             }
+
+            if (doBuildTreeview)
+                buildTreeView();
 
             lbl_status.Text = "Ready.";
         }
@@ -319,6 +327,7 @@ namespace IoTBoxTiles
 
         private void toolStripDropDownButton1_Click(object sender, EventArgs e)
         {
+            buildTreeView();
             UpdateDeviceDetails();
         }
 
