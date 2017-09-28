@@ -138,7 +138,7 @@ namespace IoTBoxTiles
             }
             if (jsonStr == null)
                 return;
-            
+
             List<JObject> newJDevs = JsonConvert.DeserializeObject<List<JObject>>(jsonStr);
             Console.WriteLine("newJDevs size: {0}", newJDevs.Count);
             Console.WriteLine("Devices size: {0}", _devices.Count);
@@ -174,6 +174,7 @@ namespace IoTBoxTiles
                     {
                         if (dev.online != (bool)newJdev["online"])
                         {
+                            Console.WriteLine((int?)newJdev["current_consumption"]);
                             doBuildTreeview = true;
                         }
                         dev.UpdateDevice(newJdev);
@@ -223,6 +224,9 @@ namespace IoTBoxTiles
 
             if (doBuildTreeview)
                 buildTreeView();
+
+            foreach (var dev in _devices)
+                dev.UpdateUI();
 
             lbl_status.Text = "Ready.";
         }

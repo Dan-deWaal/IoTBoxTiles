@@ -150,8 +150,7 @@ namespace IoTBoxTiles.Devices
             StringBuilder deviceUri = new StringBuilder(_serverComm.Root);
             deviceUri.Append("/device/");
             deviceUri.Append(device_id);
-            deviceUri.Append("/connect");
-            deviceUri.Append("/status");
+            deviceUri.Append("/connect/status");
             var pollresult = await _serverComm.GetAsync(deviceUri.ToString(), true);
             if (pollresult.Item1 == ServerResponse.Connected)
             {
