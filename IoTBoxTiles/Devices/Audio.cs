@@ -116,7 +116,7 @@ namespace IoTBoxTiles.Devices
 
         public override async void ConnectDevice(ConnectionDetail connectiondetails)
         {
-            Console.WriteLine("Connecting Audio... {0} : {1}",connectiondetails.details.ip_address, connectiondetails.details.port);
+            Console.WriteLine("Connecting Audio... {0} : {1}", connectiondetails.details.ip_address, connectiondetails.details.port);
             UpdateLargeUI();
             UpdateSmallUI();
 
@@ -125,6 +125,7 @@ namespace IoTBoxTiles.Devices
             _sslClient = new SslStream(tcpClient.GetStream(), false,
                  new RemoteCertificateValidationCallback((obj, a, b, c) => true));
             await _sslClient.AuthenticateAsClientAsync("iot.duality.co.nz");
+
             //check for success?
             Console.WriteLine("Connected Audio direct: {0}", tcpClient.Client.RemoteEndPoint);
             //_progState = ProgState.Connected;
