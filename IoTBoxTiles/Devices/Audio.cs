@@ -119,12 +119,15 @@ namespace IoTBoxTiles.Devices
             Console.WriteLine("Connecting Audio... {0} : {1}", connectiondetails.details.ip_address, connectiondetails.details.port);
             UpdateLargeUI();
             UpdateSmallUI();
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            ServicePointManager.ServerCertificateValidationCallback += 
+            (s, cert, chain, sslPolicyErrors) => true;
 
             TcpClient tcpClient = new TcpClient();
             await tcpClient.ConnectAsync(IPAddress.Parse(connectiondetails.details.ip_address), connectiondetails.details.port);
             _sslClient = new SslStream(tcpClient.GetStream(), false,
                  new RemoteCertificateValidationCallback((obj, a, b, c) => true));
-            await _sslClient.AuthenticateAsClientAsync("iot.duality.co.nz");
+            await _sslClient.AuthenticateAsClientAsync(connectiondetails.details.ip_address);
 
             //check for success?
             Console.WriteLine("Connected Audio direct: {0}", tcpClient.Client.RemoteEndPoint);
