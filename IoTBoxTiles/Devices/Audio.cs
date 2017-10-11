@@ -16,6 +16,10 @@ using System.Security.Authentication;
 using MessagePack;
 using NAudio.Lame;
 using NAudio.Wave;
+using CSCore;
+using CSCore.SoundIn;
+using System.Diagnostics;
+using CSCore.Streams;
 
 namespace IoTBoxTiles.Devices
 { 
@@ -25,11 +29,9 @@ namespace IoTBoxTiles.Devices
         //private ProgState _progState = ProgState.NotConnected;
         private bool _sending = false;
         private bool _receiving = false;
-        private SslStream _sslClient;
-        private MemoryStream _inStream = new MemoryStream();
-        private MemoryStream _outStream = new MemoryStream();
-        private LameMP3FileWriter _writer = null;
+        private NetworkStream _nsClient;
         private Thread _audioThread = null;
+        private Process _oggEncProcess;
 
         //unique properties
         public bool connected { get; set; }
@@ -121,15 +123,13 @@ namespace IoTBoxTiles.Devices
             UpdateSmallUI();
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
             ServicePointManager.ServerCertificateValidationCallback += 
-            (s, cert, chain, sslPolicyErrors) => true;
+                (s, cert, chain, sslPolicyErrors) => true;
 
             TcpClient tcpClient = new TcpClient();
             await tcpClient.ConnectAsync(IPAddress.Parse(connectiondetails.details.ip_address), connectiondetails.details.port);
-            _sslClient = new SslStream(tcpClient.GetStream(), false,
-                 new RemoteCertificateValidationCallback((obj, a, b, c) => true));
-            await _sslClient.AuthenticateAsClientAsync(connectiondetails.details.ip_address);
 
-            //check for success?
+            _nsClient = tcpClient.GetStream();
+            await _nsClient.WriteAsync(Encoding.ASCII.GetBytes("hello"), 0, 5);
             Console.WriteLine("Connected Audio direct: {0}", tcpClient.Client.RemoteEndPoint);
             //_progState = ProgState.Connected;
             connected = true;
@@ -138,7 +138,7 @@ namespace IoTBoxTiles.Devices
             UpdateUI();
             try
             {
-                while (_sslClient != null)
+                while (_nsClient != null)
                 {
                     await ReceiveDataAsync();
                 }
@@ -156,77 +156,57 @@ namespace IoTBoxTiles.Devices
         private void PlayAudio()
         {
             while (_receiving)
+            { }
+        }
+
+        private void StartSendingAudio()
+        {
+            _oggEncProcess = new Process();
+            _oggEncProcess.StartInfo.UseShellExecute = false;
+            _oggEncProcess.StartInfo.RedirectStandardInput = true;
+            _oggEncProcess.StartInfo.RedirectStandardOutput = true;
+            _oggEncProcess.StartInfo.FileName = "oggenc2.exe";
+            _oggEncProcess.StartInfo.Arguments = "--raw --raw-format=3 --raw-rate=48000 --resample 44100 -";
+            _oggEncProcess.StartInfo.CreateNoWindow = true;
+            _oggEncProcess.Start();
+
+            var waveIn = new CSCore.SoundIn.WasapiLoopbackCapture();
+            waveIn.Initialize();
+            var soundInSource = new SoundInSource(waveIn);
+            var singleBlockNotificationStream = new SingleBlockNotificationStream(soundInSource.ToSampleSource());
+            var finalSource = singleBlockNotificationStream.ToWaveSource();
+
+            byte[] inBuffer = new byte[finalSource.WaveFormat.BytesPerSecond / 2];
+            soundInSource.DataAvailable += (s, _) =>
             {
-                while (_inStream.Length < 4000)
-                    Thread.Sleep(100);
-
-                _inStream.Position = 0;
-                using (WaveStream blockAlignedStream = new BlockAlignReductionStream(
-                    WaveFormatConversionStream.CreatePcmStream(new Mp3FileReader(_inStream))))
+                int read = 0;
+                do
                 {
-                    using (WaveOut waveOut = new WaveOut(WaveCallbackInfo.FunctionCallback()))
-                    {
-                        waveOut.Init(blockAlignedStream);
-                        waveOut.Play();
-                        while (waveOut.PlaybackState == PlaybackState.Playing)
-                        {
-                            Thread.Sleep(100);
-                        }
-                    }
-                    _inStream.SetLength(0);
-                    _inStream.Position = 0;
-                }
-            }
-        }
+                    _oggEncProcess.StandardInput.BaseStream.Write(inBuffer, 0, read);
+                    read = finalSource.Read(inBuffer, 0, inBuffer.Length);
+                } while (read > 0);
+            };
 
-        private async void StartSendingAudio()
-        {
-            if (_writer != null)
-                return;
-            var waveIn = new WasapiLoopbackCapture();
-            using (_writer = new LameMP3FileWriter(_outStream, waveIn.WaveFormat, LAMEPreset.ABR_256))
+            var stdOut = new AsyncStreamChunker(_oggEncProcess.StandardOutput);
+            stdOut.DataReceived += async (s, data) =>
             {
-                waveIn.DataAvailable += OnDataAvailable;
-                waveIn.StartRecording();
-
-                while (_sending && _sslClient != null)
-                {
-                    while (_outStream.Length < 4196)
-                        await Task.Delay(100);
-
-                    _outStream.Position = 0;
-                    byte[] mp3Data = new byte[32768];
-                    int bytesRead = await _outStream.ReadAsync(mp3Data, 0, mp3Data.Length);
-                    _outStream.SetLength(0);
-                    _outStream.Position = 0;
-
-                    if (bytesRead != 0)
-                        await SendData(_receiving, _sending,
-                            mp3Data.Take(bytesRead).ToArray());
-                }
-            }
-            waveIn.StopRecording();
-            waveIn.DataAvailable -= OnDataAvailable;
+                await SendData(_receiving, _sending, data);
+            };
         }
 
-        private void OnDataAvailable(object sender, WaveInEventArgs e)
+        private async Task SendData(bool willReceive, bool willSend, byte[] oggData)
         {
-            _writer.Write(e.Buffer, 0, e.BytesRecorded);
-        }
-
-        private async Task SendData(bool willReceive, bool willSend, byte[] mp3Data)
-        {
-            if (_sslClient == null)
+            if (_nsClient == null)
                 return;
 
             byte[] buffer = MessagePackSerializer.Serialize(new AudioPack()
             {
                 WillReceive = willReceive,
                 WillSend = willSend,
-                Mp3Data = mp3Data
+                OggData = oggData
             });
-            await _sslClient.WriteAsync(buffer, 0, buffer.Length);
-            if (mp3Data != null)
+            await _nsClient.WriteAsync(buffer, 0, buffer.Length);
+            if (oggData != null)
                 Console.WriteLine("wrote {0} bytes", buffer.Length);
         }
 
@@ -237,7 +217,7 @@ namespace IoTBoxTiles.Devices
             int totalLen = 0;
             while (bytesRead > 0)
             {
-                bytesRead = await _sslClient.ReadAsync(buffer,
+                bytesRead = await _nsClient.ReadAsync(buffer,
                     totalLen, buffer.Length - totalLen);
                 totalLen += bytesRead;
 
@@ -248,8 +228,8 @@ namespace IoTBoxTiles.Devices
             if (bytesRead < 0)
             {
                 Console.WriteLine("Socket closed?");
-                _sslClient.Dispose();
-                _sslClient = null;
+                _nsClient.Dispose();
+                _nsClient = null;
                 return;
             }
 
@@ -258,12 +238,12 @@ namespace IoTBoxTiles.Devices
             _willSend = resp.WillSend;
             UpdateUI();
 
-            if (resp.Mp3Data != null)
+            if (resp.OggData != null)
             {
-                var pos = _inStream.Position;
-                _inStream.Position = _inStream.Length;
-                await _inStream.WriteAsync(resp.Mp3Data, 0, resp.Mp3Data.Length);
-                _inStream.Position = pos;
+                //var pos = _inStream.Position;
+                //_inStream.Position = _inStream.Length;
+                //await _inStream.WriteAsync(resp.OggData, 0, resp.OggData.Length);
+                //_inStream.Position = pos;
             }
         }
 
@@ -298,9 +278,76 @@ namespace IoTBoxTiles.Devices
         public bool WillSend { get; set; }
 
         [Key(2)]
-        public byte[] Mp3Data { get; set; }
+        public byte[] OggData { get; set; }
 
         [Key(3)]
         public string EOF = "<EOF>";
+    }
+}
+
+class AsyncStreamChunker
+{
+    public delegate void EventHandler<args>(object sender, byte[] data);
+    public event EventHandler<byte[]> DataReceived;
+
+    protected byte[] _buffer;
+    protected int _bufCount = 0;
+
+    private StreamReader _reader;
+
+    public bool Active { get; private set; }
+
+    public void Start()
+    {
+        if (!Active)
+        {
+            Active = true;
+            BeginReadAsync();
+        }
+    }
+
+    public void Stop()
+    {
+        Active = false;
+    }
+
+    public AsyncStreamChunker(StreamReader reader, int chunkSize = 512)
+    {
+        _buffer = new byte[chunkSize];
+        _reader = reader;
+        Active = false;
+    }
+
+    protected void BeginReadAsync()
+    {
+        if (Active)
+            _reader.BaseStream.BeginRead(_buffer, _bufCount, _buffer.Length - _bufCount, new AsyncCallback(ReadCallback), null);
+    }
+
+    private void ReadCallback(IAsyncResult asyncResult)
+    {
+        int bytesRead;
+
+        if (!Active)
+            return;
+
+        bytesRead = _reader.BaseStream.EndRead(asyncResult);
+
+        if (bytesRead <= 0)
+        {
+            Stop();
+            return;
+        }
+
+        _bufCount += bytesRead;
+        if (_bufCount == _buffer.Length)
+        {
+            if (DataReceived != null)
+                DataReceived.Invoke(this, _buffer);
+            _bufCount = 0;
+        }
+
+        // wait for more data from stream
+        BeginReadAsync();
     }
 }
