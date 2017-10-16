@@ -202,6 +202,8 @@ namespace IoTBoxTiles.Devices
         {
             if (_nsClient == null)
                 return;
+            if (oggData == null)
+                return;
 
             byte[] buffer = MessagePackSerializer.Serialize(new AudioPack()
             {
