@@ -32,6 +32,8 @@ namespace IoTBoxTiles.Devices
         private NetworkStream _nsClient;
         private Thread _audioThread = null;
         private Process _oggEncProcess;
+        private WasapiCapture _waveIn;
+        private IWaveSource _finalSource;
 
         //unique properties
         public bool connected { get; set; }
@@ -129,7 +131,6 @@ namespace IoTBoxTiles.Devices
             await tcpClient.ConnectAsync(IPAddress.Parse(connectiondetails.details.ip_address), connectiondetails.details.port);
 
             _nsClient = tcpClient.GetStream();
-            await _nsClient.WriteAsync(Encoding.ASCII.GetBytes("hello"), 0, 5);
             Console.WriteLine("Connected Audio direct: {0}", tcpClient.Client.RemoteEndPoint);
             //_progState = ProgState.Connected;
             connected = true;
@@ -161,6 +162,7 @@ namespace IoTBoxTiles.Devices
 
         private void StartSendingAudio()
         {
+            Console.WriteLine("SIMULATION");
             _oggEncProcess = new Process();
             _oggEncProcess.StartInfo.UseShellExecute = false;
             _oggEncProcess.StartInfo.RedirectStandardInput = true;
@@ -170,21 +172,20 @@ namespace IoTBoxTiles.Devices
             _oggEncProcess.StartInfo.CreateNoWindow = true;
             _oggEncProcess.Start();
 
-            var waveIn = new CSCore.SoundIn.WasapiLoopbackCapture();
-            waveIn.Initialize();
-            var soundInSource = new SoundInSource(waveIn);
+            _waveIn = new CSCore.SoundIn.WasapiLoopbackCapture();
+            _waveIn.Initialize();
+            var soundInSource = new SoundInSource(_waveIn);
             var singleBlockNotificationStream = new SingleBlockNotificationStream(soundInSource.ToSampleSource());
-            var finalSource = singleBlockNotificationStream.ToWaveSource();
+            _finalSource = singleBlockNotificationStream.ToWaveSource();
 
-            byte[] inBuffer = new byte[finalSource.WaveFormat.BytesPerSecond / 2];
+            byte[] inBuffer = new byte[_finalSource.WaveFormat.BytesPerSecond / 2];
             soundInSource.DataAvailable += (s, _) =>
             {
                 int read = 0;
-                do
-                {
+                while ((read = _finalSource.Read(inBuffer, 0, inBuffer.Length)) > 0)
+                { 
                     _oggEncProcess.StandardInput.BaseStream.Write(inBuffer, 0, read);
-                    read = finalSource.Read(inBuffer, 0, inBuffer.Length);
-                } while (read > 0);
+                }
             };
 
             var stdOut = new AsyncStreamChunker(_oggEncProcess.StandardOutput);
@@ -192,6 +193,9 @@ namespace IoTBoxTiles.Devices
             {
                 await SendData(_receiving, _sending, data);
             };
+            stdOut.Start();
+            
+            _waveIn.Start();
         }
 
         private async Task SendData(bool willReceive, bool willSend, byte[] oggData)
@@ -212,7 +216,8 @@ namespace IoTBoxTiles.Devices
 
         private async Task ReceiveDataAsync()
         {
-            byte[] buffer = new byte[65536];
+            Console.WriteLine("receiving data");
+            byte[] buffer = new byte[1024];
             int bytesRead = 1;
             int totalLen = 0;
             while (bytesRead > 0)
@@ -225,6 +230,8 @@ namespace IoTBoxTiles.Devices
                     break;
             }
 
+           
+
             if (bytesRead < 0)
             {
                 Console.WriteLine("Socket closed?");
@@ -232,12 +239,11 @@ namespace IoTBoxTiles.Devices
                 _nsClient = null;
                 return;
             }
-
+            
             var resp = MessagePackSerializer.Deserialize<AudioPack>(buffer.Take(totalLen).ToArray());
             _willRecv = resp.WillReceive;
             _willSend = resp.WillSend;
             UpdateUI();
-
             if (resp.OggData != null)
             {
                 //var pos = _inStream.Position;

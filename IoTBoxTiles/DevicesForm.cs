@@ -140,8 +140,6 @@ namespace IoTBoxTiles
                 return;
 
             List<JObject> newJDevs = JsonConvert.DeserializeObject<List<JObject>>(jsonStr);
-            Console.WriteLine("newJDevs size: {0}", newJDevs.Count);
-            Console.WriteLine("Devices size: {0}", _devices.Count);
             
             //remove deleted devices
             foreach (var dev in _devices.Reverse<Device>())
