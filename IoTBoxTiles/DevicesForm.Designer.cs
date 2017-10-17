@@ -52,24 +52,24 @@
             this.toolStripStatusLabel1,
             this.toolStripDropDownButton1,
             this.toolStripStatusLabel2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 1151);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 481);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(3, 0, 27, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(2379, 48);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 10, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(892, 22);
             this.statusStrip1.TabIndex = 0;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // lbl_status
             // 
             this.lbl_status.Name = "lbl_status";
-            this.lbl_status.Size = new System.Drawing.Size(96, 42);
+            this.lbl_status.Size = new System.Drawing.Size(38, 17);
             this.lbl_status.Text = "status";
             // 
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.BackColor = System.Drawing.SystemColors.Control;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(2075, 42);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(771, 17);
             this.toolStripStatusLabel1.Spring = true;
             // 
             // toolStripDropDownButton1
@@ -79,21 +79,21 @@
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
             this.toolStripDropDownButton1.ShowDropDownArrow = false;
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(120, 45);
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(50, 20);
             this.toolStripDropDownButton1.Text = "Refresh";
             this.toolStripDropDownButton1.Click += new System.EventHandler(this.toolStripDropDownButton1_Click);
             // 
             // toolStripStatusLabel2
             // 
             this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-            this.toolStripStatusLabel2.Size = new System.Drawing.Size(58, 42);
+            this.toolStripStatusLabel2.Size = new System.Drawing.Size(22, 17);
             this.toolStripStatusLabel2.Text = "     ";
             // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(5);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.splitContainer1.Name = "splitContainer1";
             // 
             // splitContainer1.Panel1
@@ -105,8 +105,9 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.deviceFlowLayout);
             this.splitContainer1.Panel2MinSize = 320;
-            this.splitContainer1.Size = new System.Drawing.Size(2379, 1151);
-            this.splitContainer1.SplitterDistance = 618;
+            this.splitContainer1.Size = new System.Drawing.Size(892, 481);
+            this.splitContainer1.SplitterDistance = 231;
+            this.splitContainer1.SplitterWidth = 2;
             this.splitContainer1.TabIndex = 1;
             // 
             // tv_DeviceList
@@ -116,9 +117,9 @@
             this.tv_DeviceList.FullRowSelect = true;
             this.tv_DeviceList.HideSelection = false;
             this.tv_DeviceList.Location = new System.Drawing.Point(0, 0);
-            this.tv_DeviceList.Margin = new System.Windows.Forms.Padding(5);
+            this.tv_DeviceList.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tv_DeviceList.Name = "tv_DeviceList";
-            this.tv_DeviceList.Size = new System.Drawing.Size(618, 1151);
+            this.tv_DeviceList.Size = new System.Drawing.Size(231, 481);
             this.tv_DeviceList.TabIndex = 0;
             this.tv_DeviceList.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tv_DeviceList_AfterSelect);
             // 
@@ -130,20 +131,20 @@
             this.deviceFlowLayout.Location = new System.Drawing.Point(0, 0);
             this.deviceFlowLayout.Margin = new System.Windows.Forms.Padding(0);
             this.deviceFlowLayout.Name = "deviceFlowLayout";
-            this.deviceFlowLayout.Padding = new System.Windows.Forms.Padding(3);
-            this.deviceFlowLayout.Size = new System.Drawing.Size(1757, 1151);
+            this.deviceFlowLayout.Padding = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.deviceFlowLayout.Size = new System.Drawing.Size(659, 481);
             this.deviceFlowLayout.TabIndex = 0;
             this.deviceFlowLayout.Resize += new System.EventHandler(this.flowLayoutPanel1_Resize);
             // 
             // DevicesForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2379, 1199);
+            this.ClientSize = new System.Drawing.Size(892, 503);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
-            this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.MinimumSize = new System.Drawing.Size(1547, 827);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(522, 327);
             this.Name = "DevicesForm";
             this.Text = "IoTTiles";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form2_FormClosing);
