@@ -162,13 +162,13 @@ namespace IoTBoxTiles.Devices
 
         private void StartSendingAudio()
         {
-            Console.WriteLine("SIMULATION");
             _oggEncProcess = new Process();
             _oggEncProcess.StartInfo.UseShellExecute = false;
             _oggEncProcess.StartInfo.RedirectStandardInput = true;
             _oggEncProcess.StartInfo.RedirectStandardOutput = true;
             _oggEncProcess.StartInfo.FileName = "oggenc2.exe";
-            _oggEncProcess.StartInfo.Arguments = "--raw --raw-format=3 --raw-rate=48000 --resample 44100 -";
+            _oggEncProcess.StartInfo.Arguments = "--raw --raw-format=3 --raw-rate=44100 -";
+            //_oggEncProcess.StartInfo.Arguments = "--raw --raw-format=3 --raw-rate=48000 --resample 000 -";
             _oggEncProcess.StartInfo.CreateNoWindow = true;
             _oggEncProcess.Start();
 
