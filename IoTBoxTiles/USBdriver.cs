@@ -92,14 +92,6 @@ namespace IoTBoxTiles
             public string eof { get; set; }
         }
 
-        public void DoMouseClick()
-        {
-            //Call the imported function with the cursor's current position
-            int X = Cursor.Position.X;
-            int Y = Cursor.Position.Y;
-            mouse_event(MOUSEEVENTF_LEFTDOWN | MOUSEEVENTF_LEFTUP, X, Y, 0, 0);
-        }
-
         public void LMBDown()
         {
             //Call the imported function with the cursor's current position
@@ -132,79 +124,65 @@ namespace IoTBoxTiles
             mouse_event(MOUSEEVENTF_RIGHTUP, X, Y, 0, 0);
         }
 
-        void PressKey(byte keyCode)
-        {
-            keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY, 0);
-            keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-        }
-
-        void KeyDown(byte keyCode)
-        {
-            keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY, 0);
-            //keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-        }
-
-        void KeyUp(byte keyCode)
-        {
-            //keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY, 0);
-            keybd_event(keyCode, 0x45, KEYEVENTF_EXTENDEDKEY | KEYEVENTF_KEYUP, 0);
-        }
-
         public void listen()
         {
+            bool lmb_click_dwn = false, lmb_click_up = true, rmb_click_dwn = false, rmb_click_up = true;
             try
             {
                 while (running)
                 {
                     //Listening for data
+                    int LMB_DWN = 128, RMB_DWN = 64, SCROLL_DWN = 32;
                     int dataread = 0;
-                    byte[] buffer = new byte[1024];
+                    byte[] buffer = new byte[3];
                     List<byte> message = new List<byte>();
                     do
                     {
                         dataread += _ssl.Read(buffer, dataread, buffer.Length-dataread);
-                        //message.AddRange(buffer.Take(dataread));
-                        string test = System.Text.Encoding.UTF8.GetString(buffer.Take(dataread).ToArray());
-                        //Console.WriteLine("test = {0}", test);
-                        if (test.Contains("<EOF>"))
-                        {
-                            break;
-                        }
-                    } while (dataread != 0);
-
-                    //Deserialize data
-                    USBData usbdata = MessagePackSerializer.Deserialize<USBData>(buffer.Take(dataread).ToArray());
-                    //Console.WriteLine("X: {0},  Y: {1}, MB: {2}\nKey: {3}\n", usbdata.x, usbdata.y, usbdata.mb, usbdata.key);
-
+                    } while (dataread < 3);
+                    
                     //update cursor from data
-                    int x = (usbdata.x * Screen.PrimaryScreen.Bounds.Width) / 10000;
-                    int y = (usbdata.y * Screen.PrimaryScreen.Bounds.Height) / 10000;
-                    Cursor.Position = new Point(x, y);
-                    switch (usbdata.mb)
+                    Cursor.Position = new Point(Cursor.Position.X+buffer[1],Cursor.Position.Y+buffer[2]);
+                    
+                    // LMB
+                    if ((buffer[0] & LMB_DWN) != 0)
                     {
-                        case 1:
+                        if (!lmb_click_dwn)
+                        {
+                            lmb_click_dwn = true;
+                            lmb_click_up = false;
                             LMBDown();
-                            break;
-                        case 2:
+                        }
+                    }
+                    else
+                    {
+                        if (!lmb_click_up)
+                        {
+                            lmb_click_dwn = false;
+                            lmb_click_up = true;
                             LMBUp();
-                            break;
-                        case 3:
-                            RMBDown();
-                            break;
-                        case 4:
-                            RMBUp();
-                            break;
+                        }
                     }
 
-                    //update key from data
-                    //SendKeys.Send(usbdata.keys); // or //SendKeys.SendWait(_keys);
-                    if (usbdata.key != 0)
-                        if (usbdata.down)
-                            KeyDown(usbdata.key);
-                        else
-                            KeyUp(usbdata.key);
-                    
-                    //Maybe send back feedback, such as CAPSLOCK, NUMLOCK, etc
+                    // RMB
+                    if ((buffer[0] & RMB_DWN) != 0)
+                    {
+                        if (!rmb_click_dwn)
+                        {
+                            rmb_click_dwn = true;
+                            rmb_click_up = false;
+                            RMBDown();
+                        }
+                    }
+                    else
+                    {
+                        if (!rmb_click_dwn)
+                        {
+                            rmb_click_dwn = false;
+                            rmb_click_up = true;
+                            RMBUp();
+                        }
+                    }
                 }
             }
             catch (Exception e)
