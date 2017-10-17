@@ -132,7 +132,7 @@ namespace IoTBoxTiles
                 while (running)
                 {
                     //Listening for data
-                    int LMB_DWN = 128, RMB_DWN = 64, SCROLL_DWN = 32;
+                    int LMB_DWN = 128, RMB_DWN = 64; // SCROLL_DWN = 32;
                     int dataread = 0;
                     byte[] buffer = new byte[3];
                     List<byte> message = new List<byte>();
@@ -176,7 +176,7 @@ namespace IoTBoxTiles
                     }
                     else
                     {
-                        if (!rmb_click_dwn)
+                        if (!rmb_click_up)
                         {
                             rmb_click_dwn = false;
                             rmb_click_up = true;
